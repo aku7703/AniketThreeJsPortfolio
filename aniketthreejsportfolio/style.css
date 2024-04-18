@@ -7,6 +7,7 @@
 body,html {
   overflow-x: hidden;
   font-family: "Poppins", sans-serif;
+  background-color: black;
 }
 
 .webgl{
@@ -20,7 +21,7 @@ nav {
   color: white;
   z-index: 2;
   position: relative;
-  padding: 3rem 2rem;
+  padding: 3rem 1.5rem;
   display: flex;
   justify-content: space-between;
 }
@@ -28,6 +29,7 @@ nav {
 nav a{
   text-decoration: none;
   color: white;
+  
   /* font-size: 1.5rem; */
   
 }
@@ -39,5 +41,5 @@ nav a{
 nav ul {
   list-style: none;
   display: flex;
-  gap: 3rem;
+  gap: 2rem;
 }
