@@ -29,6 +29,10 @@ nav a{
   text-decoration: none;
   color: white;
   /* font-size: 1.5rem; */
+  
+}
+
+.title {
   font-weight: bold;
 }
 
@@ -36,15 +40,4 @@ nav ul {
   list-style: none;
   display: flex;
   gap: 3rem;
-}
-
-.title {
-  color: white;
-  z-index: 3;
-  position: absolute;
-  font-size: 3rem;
-  text-align: center;
-  /*left: 50%;*/
-  /*top: 75%;*/
-  /*transform: translate(-50%, -75%);*/
 }
