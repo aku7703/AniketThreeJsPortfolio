@@ -7,9 +7,13 @@ import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls'
 const scene = new THREE.Scene()
 
 //Create globe
-const geometry = new THREE.SphereGeometry(3, 10, 10);
+const geometry = new THREE.SphereGeometry(4.5, 32, 32);
+const textureLoader = new THREE.TextureLoader()
+const earthTexture = textureLoader.load('2k_earth_nightmap.jpg')
+//const earthNormalMap = textureLoader.load('2k_earth_normal_map.jpg')
 const material = new THREE.MeshStandardMaterial({ 
-  color: "#00ff83", 
+  map: earthTexture, 
+  //normalMap: earthNormalMap,
 });
 const mesh = new THREE.Mesh(geometry, material)
 scene.add(mesh)
@@ -22,9 +26,9 @@ const sizes = {
 }
 
 //Light
-const light1 = new THREE.PointLight(0xffffff, 200, 15)
+const light1 = new THREE.PointLight(0xffffff, 700, 15)
 light1.position.set(0, 10, 10)
-const light2 = new THREE.AmbientLight(0xffffff, 0.4)
+const light2 = new THREE.AmbientLight(0xffffff, 0.8)
 scene.add(light1)
 scene.add(light2)
 
