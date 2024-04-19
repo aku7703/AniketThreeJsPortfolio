@@ -6,6 +6,8 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 
 //Scene
 const scene = new THREE.Scene()
+const pointer = new THREE.Vector2()
+const raycaster = new THREE.Raycaster()
 
 //Create globe
 const earthGeometry = new THREE.SphereGeometry(4.5, 32, 32);
@@ -20,27 +22,35 @@ const earthMesh = new THREE.Mesh(earthGeometry, material)
 scene.add(earthMesh)
 
 // Load Satellite
-/*const loader = new GLTFLoader()
+const loader = new GLTFLoader()
 loader.load(
   'generated_1ru-genericcubesat.glb',
   function (gltf) {
     const satellite = gltf.scene
-    satellite.scale.set(0.1, 0.1, 0.1) // Scale the satellite as needed
+    satellite.scale.set(0.3, 0.3, 0.3) // Scale the satellite as needed
+    satellite.name = 'satelliteMesh'; // Add a name to the satellite object
+    satellite.addEventListener('click', () => {
+      console.log('Satellite clicked!')
+    }
+  )
     scene.add(satellite)
+
   },
   undefined,
   function (error) {
     console.error('Error loading satellite GLB model', error)
   }
-)*/
-const satelliteGeometry = new THREE.SphereGeometry(0.1, 8, 8)
+)
+
+
+const satelliteGeometry = new THREE.SphereGeometry(0.1, 4, 4)
 const satelliteMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 })
 const satelliteMesh = new THREE.Mesh(satelliteGeometry, satelliteMaterial)
 scene.add(satelliteMesh)
 
 // Satellite orbit parameters
-const orbitRadius = 5
-const orbitSpeed = 0.01
+const orbitRadius = 6
+const orbitSpeed = 0.4
 
 
 //Sizes
@@ -68,10 +78,7 @@ const renderer = new THREE.WebGLRenderer({canvas})
 renderer.setSize(sizes.width, sizes.height)
 renderer.render(scene, camera)
 
-// Renderer
-/*const renderer = new THREE.WebGLRenderer()
-renderer.setSize(window.innerWidth, window.innerHeight)
-document.body.appendChild(renderer.domElement)*/
+
 
 //Controls
 const controls = new OrbitControls(camera, renderer.domElement)
@@ -81,16 +88,6 @@ controls.enableZoom = false;
 controls.autoRotate = true;
 controls.autoRotateSpeed = 0.8;
 
-//Resize
-/*window.addEventListener('resize', () => {
-  //Update Sizes
-  sizes.width = window.innerWidth
-  sizes.height = window.innerHeight
-  //Update Camera
-  camera.aspect = sizes.width / sizes.height
-  camera.updateProjectionMatrix()
-  renderer.setSize(sizes.width, sizes.height)
-})*/
 
 //Resize
 window.addEventListener('resize', () => {
@@ -108,19 +105,29 @@ loop()*/
 
 // Animation loop
 const animate = () => {
-  requestAnimationFrame(animate)
+  window.requestAnimationFrame(animate)
   controls.update()
 
-  // Update satellite position
+  // Update satellite position and rotation
   const time = Date.now() * 0.001
+  const orbitAngle = time * orbitSpeed
+  const orbitTiltAngle = Math.PI / 4; // Example: tilt the orbit by 45 degrees
+
+  // Calculate the position of the satellite with tilt
   const satellitePosition = new THREE.Vector3(
-    Math.cos(time * orbitSpeed) * orbitRadius,
-    0,
-    Math.sin(time * orbitSpeed) * orbitRadius
+    Math.cos(orbitAngle) * orbitRadius,
+    Math.sin(orbitAngle) * Math.sin(orbitTiltAngle) * orbitRadius, // Tilt the orbit
+    Math.sin(orbitAngle) * Math.cos(orbitTiltAngle) * orbitRadius // Tilt the orbit
   )
-  if (scene.getObjectByName('satellite')) {
-    const satellite = scene.getObjectByName('satellite')
+  
+  const satellite = scene.getObjectByName('satelliteMesh')
+  if (satellite) {
     satellite.position.copy(satellitePosition)
+
+    // Rotate the satellite along its axis
+    satellite.rotation.y = orbitAngle * 2 // Rotate around y-axis
+    satellite.rotation.x = orbitAngle // Rotate around x-axis
+    satellite.rotation.z = orbitAngle * 1.5 // Rotate around z-axis
   }
 
   renderer.render(scene, camera)
@@ -128,7 +135,49 @@ const animate = () => {
 animate()
 
 
+
+
+
+
 //Timeline
 const tl = gsap.timeline({defaults: {duration: 1}})
 tl.fromTo(earthMesh.scale, {z:0, x:0, y:0}, {z: 1, x: 1, y: 1})
+
+// Mouse move event listener
+window.addEventListener('mousemove', (event) => {
+  pointer.x = (event.clientX / sizes.width) * 2 - 1
+  pointer.y = -(event.clientY / sizes.height) * 2 + 1
+
+  raycaster.setFromCamera(pointer, camera)
+  const intersects = raycaster.intersectObject(earthMesh)
+
+  if (intersects.length > 0) {
+    // Filter out the Earth mesh from the intersects
+    const filteredIntersects = intersects.filter(intersect => intersect.object !== earthMesh)
+    
+    if (filteredIntersects.length > 0) {
+      const [intersect] = filteredIntersects
+      const { point } = intersect
+      satelliteMesh.position.copy(point)
+    }
+  }
+})
+
+
+// Click event listener
+window.addEventListener('click', (event) => {
+  raycaster.setFromCamera(pointer, camera)
+  const intersects = raycaster.intersectObject(scene, true) // Intersect with the entire scene
+
+  // Log information about clicked objects
+  if (intersects.length > 0) {
+    console.log('Clicked object:', intersects[0].object)
+    if (intersects[0].object.name.includes("imagetostl")) {
+      console.log('Satellite clicked!')
+      window.location.href = 'https://www.horizonsat.org/';
+    }
+  } else {
+    console.log('No object clicked.')
+  }
+})
 
