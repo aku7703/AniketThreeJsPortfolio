@@ -16,30 +16,47 @@ body,html {
   left: 0;
   z-index: 1;
 }
-
+/* Common styles for navigation */
 nav {
   color: white;
   z-index: 2;
   position: relative;
-  padding: 3rem 1.5rem;
+  padding: 3rem 2rem;
   display: flex;
   justify-content: space-between;
 }
 
-nav a{
+nav a {
   text-decoration: none;
   color: white;
-  
-  /* font-size: 1.5rem; */
-  
-}
-
-.title {
-  font-weight: bold;
+  font-style: bold;
 }
 
 nav ul {
   list-style: none;
   display: flex;
   gap: 2rem;
+}
+
+.title {
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+/* Styles for mobile-sized screens */
+@media only screen and (max-width: 768px) {
+  nav {
+    flex-direction: column; /* Arrange elements vertically */
+    align-items: center; /* Center items horizontally */
+    text-align: center; /* Center text within the container */
+  }
+
+  .links-container {
+    margin-top: 1rem; /* Add space between title and links */
+  }
+}
+
+
+nav a:hover {
+  color: grey; /* Change the color to grey when hovered */
 }

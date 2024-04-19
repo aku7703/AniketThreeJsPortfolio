@@ -181,3 +181,23 @@ window.addEventListener('click', (event) => {
   }
 })
 
+// JavaScript code to adjust navbar text size for mobile-sized screens
+function adjustNavbarTextSize() {
+  const viewportWidth = window.innerWidth;
+  const navbarLinks = document.querySelectorAll('nav li');
+  
+  if (viewportWidth <= 768) {
+    navbarLinks.forEach(link => {
+      link.style.fontSize = '0.85rem'; // Adjust the font size as needed
+    });
+  } else {
+    navbarLinks.forEach(link => {
+      link.style.fontSize = ''; // Reset to default font size
+    });
+  }
+}
+
+// Call the function initially and whenever the window is resized
+window.addEventListener('resize', adjustNavbarTextSize);
+adjustNavbarTextSize(); // Call initially
+
