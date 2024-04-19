@@ -10,13 +10,15 @@ const pointer = new THREE.Vector2()
 const raycaster = new THREE.Raycaster()
 
 //Create globe
-const earthGeometry = new THREE.SphereGeometry(4.5, 32, 32);
+const earthGeometry = new THREE.SphereGeometry(4.5, 32, 323);
 const textureLoader = new THREE.TextureLoader()
 const earthTexture = textureLoader.load('2k_earth_nightmap.jpg')
-//const earthNormalMap = textureLoader.load('2k_earth_normal_map.jpg')
+const earthNormalMap = textureLoader.load('normal.png')
+const earthSpecularMap = textureLoader.load('specular.png')
 const material = new THREE.MeshStandardMaterial({ 
   map: earthTexture, 
   //normalMap: earthNormalMap,
+  specularMap: earthSpecularMap,
 });
 const earthMesh = new THREE.Mesh(earthGeometry, material)
 scene.add(earthMesh)
@@ -43,7 +45,7 @@ loader.load(
 )
 
 
-const satelliteGeometry = new THREE.SphereGeometry(0.1, 4, 4)
+const satelliteGeometry = new THREE.SphereGeometry(0.1, 1, 1)
 const satelliteMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 })
 const satelliteMesh = new THREE.Mesh(satelliteGeometry, satelliteMaterial)
 scene.add(satelliteMesh)
@@ -76,6 +78,7 @@ scene.add(camera)
 const canvas = document.querySelector('.webgl')
 const renderer = new THREE.WebGLRenderer({canvas})
 renderer.setSize(sizes.width, sizes.height)
+renderer.setClearColor(0x000000, 0); // Set clear color to transparent
 renderer.render(scene, camera)
 
 
