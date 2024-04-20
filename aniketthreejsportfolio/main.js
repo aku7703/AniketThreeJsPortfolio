@@ -10,9 +10,9 @@ const pointer = new THREE.Vector2()
 const raycaster = new THREE.Raycaster()
 
 //Create globe
-const earthGeometry = new THREE.SphereGeometry(4.5, 32, 323);
+const earthGeometry = new THREE.SphereGeometry(4.5, 32, 32);
 const textureLoader = new THREE.TextureLoader()
-const earthTexture = textureLoader.load('2k_earth_nightmap.jpg')
+const earthTexture = textureLoader.load('8k_earth_nightmap.jpg')
 const earthNormalMap = textureLoader.load('normal.png')
 const earthSpecularMap = textureLoader.load('specular.png')
 const material = new THREE.MeshStandardMaterial({ 
