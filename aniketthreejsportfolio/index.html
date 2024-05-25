@@ -1,23 +1,25 @@
 <!doctype html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <link rel="icon" type="image/svg+xml" href="/aclogo.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Aniket's Portfolio</title>
   <meta name="description" content="Welcome to my portfolio!">
-    <meta property="og:title" content="Aniket Chaudhry's Portfolio Site">
+  <meta property="og:title" content="Aniket Chaudhry's Portfolio Site">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
 </head>
-
 <body>
   <canvas class="webgl"></canvas>
-  <!-- <h1 class="title">Aniket Chaudhry</h1> -->
+  
+  <div class="button-container" id="buttonContainer">
+    <button class="interactive-button" id="aboutButton">About</button>
+    <button class="interactive-button" id="projectsButton">Projects</button>
+    <button class="interactive-button" id="blogButton">Blog</button>
+  </div>
+
   <nav>
     <div class="title-container">
       <a class="title" style="font-style: bold;" href="/">Aniket Chaudhry</a>
@@ -30,11 +32,8 @@
       </ul>
     </div>
   </nav>
-  
-  
+
   <script type="module" src="/main.js"></script>
   <div id="satelliteOverlay" style="position: absolute; top: 0; left: 0; width: 100px; height: 100px; opacity: 0; z-index: 40;"></div>
-
 </body>
-
 </html>

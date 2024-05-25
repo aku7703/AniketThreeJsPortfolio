@@ -1,25 +1,25 @@
 import * as THREE from 'three'
 import './style.css'
 import gsap from 'gsap'
-import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls'
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 
-//Scene
+// Scene
 const scene = new THREE.Scene()
 const pointer = new THREE.Vector2()
 const raycaster = new THREE.Raycaster()
 
-//Create globe
-const earthGeometry = new THREE.SphereGeometry(4.5, 32, 32);
+// Create globe
+const earthGeometry = new THREE.SphereGeometry(4.5, 32, 32)
 const textureLoader = new THREE.TextureLoader()
 const earthTexture = textureLoader.load('8k_earth_nightmap.jpg')
 const earthNormalMap = textureLoader.load('normal.png')
 const earthSpecularMap = textureLoader.load('specular.png')
 const material = new THREE.MeshStandardMaterial({ 
   map: earthTexture, 
-  //normalMap: earthNormalMap,
+  // normalMap: earthNormalMap,
   specularMap: earthSpecularMap,
-});
+})
 const earthMesh = new THREE.Mesh(earthGeometry, material)
 scene.add(earthMesh)
 
@@ -30,20 +30,18 @@ loader.load(
   function (gltf) {
     const satellite = gltf.scene
     satellite.scale.set(0.3, 0.3, 0.3) // Scale the satellite as needed
-    satellite.name = 'satelliteMesh'; // Add a name to the satellite object
+    satellite.name = 'satelliteMesh' // Add a name to the satellite object
     satellite.addEventListener('click', () => {
       console.log('Satellite clicked!')
-    }
-  )
+    })
     scene.add(satellite)
-
+    document.getElementById('buttonContainer').style.display = 'flex' // Show the buttons after model is loaded
   },
   undefined,
   function (error) {
     console.error('Error loading satellite GLB model', error)
   }
 )
-
 
 const satelliteGeometry = new THREE.SphereGeometry(0.1, 1, 1)
 const satelliteMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 })
@@ -54,57 +52,45 @@ scene.add(satelliteMesh)
 const orbitRadius = 6
 const orbitSpeed = 0.4
 
-
-//Sizes
+// Sizes
 const sizes = {
   width: window.innerWidth,
   height: window.innerHeight,
 }
 
-//Light
+// Light
 const light1 = new THREE.PointLight(0xffffff, 700, 15)
 light1.position.set(0, 10, 10)
 const light2 = new THREE.AmbientLight(0xffffff, 0.8)
 scene.add(light1)
 scene.add(light2)
 
-//Camera
-const camera = new THREE.PerspectiveCamera(45, sizes.width / sizes.height,
- 0.1, 100)
+// Camera
+const camera = new THREE.PerspectiveCamera(45, sizes.width / sizes.height, 0.1, 100)
 camera.position.z = 20
 scene.add(camera)
 
-//Renderer
+// Renderer
 const canvas = document.querySelector('.webgl')
 const renderer = new THREE.WebGLRenderer({canvas})
 renderer.setSize(sizes.width, sizes.height)
-renderer.setClearColor(0x000000, 0); // Set clear color to transparent
+renderer.setClearColor(0x000000, 0) // Set clear color to transparent
 renderer.render(scene, camera)
 
-
-
-//Controls
+// Controls
 const controls = new OrbitControls(camera, renderer.domElement)
 controls.enableDamping = true
-controls.enablePan = false;
-controls.enableZoom = false;
-controls.autoRotate = true;
-controls.autoRotateSpeed = 0.8;
+controls.enablePan = false
+controls.enableZoom = false
+controls.autoRotate = true
+controls.autoRotateSpeed = 0.8
 
-
-//Resize
+// Resize
 window.addEventListener('resize', () => {
   camera.aspect = window.innerWidth / window.innerHeight
   camera.updateProjectionMatrix()
   renderer.setSize(window.innerWidth, window.innerHeight)
 })
-
-/*const loop = () => {
-  controls.update()
-  renderer.render(scene, camera)
-  window.requestAnimationFrame(loop)
-}
-loop()*/
 
 // Animation loop
 const animate = () => {
@@ -114,7 +100,7 @@ const animate = () => {
   // Update satellite position and rotation
   const time = Date.now() * 0.001
   const orbitAngle = time * orbitSpeed
-  const orbitTiltAngle = Math.PI / 4; // Example: tilt the orbit by 45 degrees
+  const orbitTiltAngle = Math.PI / 4 // Example: tilt the orbit by 45 degrees
 
   // Calculate the position of the satellite with tilt
   const satellitePosition = new THREE.Vector3(
@@ -137,12 +123,7 @@ const animate = () => {
 }
 animate()
 
-
-
-
-
-
-//Timeline
+// Timeline
 const tl = gsap.timeline({defaults: {duration: 1}})
 tl.fromTo(earthMesh.scale, {z:0, x:0, y:0}, {z: 1, x: 1, y: 1})
 
@@ -166,7 +147,6 @@ window.addEventListener('mousemove', (event) => {
   }
 })
 
-
 // Click event listener
 window.addEventListener('click', (event) => {
   raycaster.setFromCamera(pointer, camera)
@@ -177,30 +157,44 @@ window.addEventListener('click', (event) => {
     console.log('Clicked object:', intersects[0].object)
     if (intersects[0].object.name.includes("imagetostl")) {
       console.log('Satellite clicked!')
-      window.location.href = 'https://www.horizonsat.org/';
+      window.location.href = 'https://www.horizonsat.org/'
     }
   } else {
     console.log('No object clicked.')
   }
 })
 
+// Add event listeners for the buttons
+document.getElementById('aboutButton').addEventListener('click', () => {
+  window.location.href = '/about' // Replace with the actual URL of the About page
+})
+
+document.getElementById('projectsButton').addEventListener('click', () => {
+  window.location.href = '/projects' // Replace with the actual URL of the Projects page
+})
+
+document.getElementById('blogButton').addEventListener('click', () => {
+  window.location.href = '/blog' // Replace with the actual URL of the About page
+})
+
+
+
 // JavaScript code to adjust navbar text size for mobile-sized screens
 function adjustNavbarTextSize() {
-  const viewportWidth = window.innerWidth;
-  const navbarLinks = document.querySelectorAll('nav li');
+  const viewportWidth = window.innerWidth
+  const navbarLinks = document.querySelectorAll('nav li')
   
   if (viewportWidth <= 768) {
     navbarLinks.forEach(link => {
-      link.style.fontSize = '0.85rem'; // Adjust the font size as needed
-    });
+      link.style.fontSize = '0.85rem' // Adjust the font size as needed
+    })
   } else {
     navbarLinks.forEach(link => {
-      link.style.fontSize = ''; // Reset to default font size
-    });
+      link.style.fontSize = '' // Reset to default font size
+    })
   }
 }
 
 // Call the function initially and whenever the window is resized
-window.addEventListener('resize', adjustNavbarTextSize);
-adjustNavbarTextSize(); // Call initially
-
+window.addEventListener('resize', adjustNavbarTextSize)
+adjustNavbarTextSize() // Call initially
