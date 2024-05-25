@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Projects</title>
+        <!-- Link Google Fonts -->
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+        <!-- Link your CSS file -->
+        <link rel="stylesheet" href="blog.css">
+      </head>
+<body>
+  <nav>
+    <div class="title-container">
+      <a class="title" href="/">Aniket Chaudhry</a>
+    </div>
+    <div class="links-container">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="Resume-AniketChaudhry.pdf">Download Resume</a></li>
+            <li><a href="https://www.linkedin.com/in/aniketchaudhry/">LinkedIn</a></li>
+            <li><a href="https://github.com/aku7703">GitHub</a></li>
+        </ul>
+    </div>
+  </nav>
+
+  <main class="blog-content">
+    <div class="blog-preview">
+      <h2>Blog Title 1</h2>
+      <p>This is a preview of Blog 1. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+      <button class="read-more-button" onclick="openModal('Blog 1 Details')">Read More</button>
+    </div>
+
+    <div class="blog-preview">
+      <h2>Blog Title 2</h2>
+      <p>Another preview of Blog 2. Fusce quis risus non ante gravida sagittis.</p>
+      <button class="read-more-button" onclick="openModal('Blog 2 Details')">Read More</button>
+    </div>
+
+    <!-- Add more blog preview boxes as needed -->
+  </main>
+
+  <div id="blog-modal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <h2 id="blog-title"></h2>
+      <div id="blog-details">
+        <!-- Blog details content will be loaded here -->
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2024 Aniket Chaudhry. All rights reserved.</p>
+  </footer>
+
+  <script>
+    function openModal(title) {
+      document.getElementById("blog-title").textContent = title;
+      document.getElementById("blog-modal").style.display = "block";
+    }
+
+    function closeModal() {
+      document.getElementById("blog-modal").style.display = "none";
+    }
+
+    // Close the modal if the user clicks outside of it
+    window.onclick = function(event) {
+      var modal = document.getElementById("blog-modal");
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
+  </script>
+</body>
+</html>

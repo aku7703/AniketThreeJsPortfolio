@@ -1,0 +1,84 @@
+body, html {
+  overflow-x: hidden;
+  font-family: "Poppins", sans-serif;
+  background-color: black;
+  color: white;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+nav {
+  color: white;
+  z-index: 2;
+  position: relative;
+  padding: 2rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+nav a {
+  text-decoration: none;
+  color: white;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 2rem;
+}
+
+nav a:hover {
+  color: grey;
+}
+
+.title {
+  font-weight: bold;
+}
+
+.about-content {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 1rem;
+  background-color: rgba(0, 0, 0, 0.8);
+  border-radius: 10px;
+}
+
+.bio-image {
+  display: block;
+  max-width: 75%;
+  height: auto;
+  border-radius: 50%;
+  margin: 0 auto 2rem;
+  border: 5px solid #00ff00; /* Light green border */
+}
+
+.introduction, .skills, .interests {
+  margin-bottom: 2rem;
+}
+
+h1, h2 {
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+p {
+  line-height: 1.6;
+}
+
+ul {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+}
+
+footer {
+  text-align: center;
+  padding: 1rem 0;
+  font-size: 0.8rem;
+  color: #ccc;
+  background-color: rgba(0, 0, 0, 0.8);
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+}
