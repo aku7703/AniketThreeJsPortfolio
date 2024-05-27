@@ -166,6 +166,14 @@ window.addEventListener('click', (event) => {
 
 // Add event listeners for the buttons
 document.getElementById('aboutButton').addEventListener('click', () => {
+  //const currentContainer = document.getElementById('container');
+  //  currentContainer.classList.add('fade-out');
+
+  //  currentContainer.addEventListener('transitionend', function onTransitionEnd() {
+  //      currentContainer.removeEventListener('transitionend', onTransitionEnd);
+  //      window.location.href = '/about';
+  //  });
+  
   window.location.href = '/about' // Replace with the actual URL of the About page
 })
 
@@ -198,3 +206,21 @@ function adjustNavbarTextSize() {
 // Call the function initially and whenever the window is resized
 window.addEventListener('resize', adjustNavbarTextSize)
 adjustNavbarTextSize() // Call initially
+
+
+function navigateTo(page) {
+  const currentContainer = document.getElementById('container');
+  currentContainer.classList.add('fade-out');
+
+  currentContainer.addEventListener('transitionend', function onTransitionEnd() {
+      currentContainer.removeEventListener('transitionend', onTransitionEnd);
+      window.location.href = page;
+  });
+}
+
+// Handle incoming page transitions
+window.addEventListener('load', function() {
+  const newContainer = document.getElementById('container');
+  newContainer.classList.add('fade-in');
+});
+
