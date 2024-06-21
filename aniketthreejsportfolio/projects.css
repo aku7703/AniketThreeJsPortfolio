@@ -6,40 +6,20 @@ body, html {
     margin: 0;
     padding: 0;
     height: 100%;
+    overflow: hidden; /* Hide scrollbars */
+
   }
   
-  nav {
-    color: white;
-    z-index: 2;
-    position: relative;
-    padding: 2rem;
-    display: flex;
-    justify-content: space-between;
-  }
   
-  nav a {
-    text-decoration: none;
-    color: white;
-  }
   
-  nav ul {
-    list-style: none;
-    display: flex;
-    gap: 2rem;
-  }
   
-  nav a:hover {
-    color: grey;
-  }
   
-  .title {
-    font-weight: bold;
-  }
+  
   
   .projects-content {
     max-width: 800px;
-    margin: 2rem auto;
-    padding: 1rem;
+    margin: 1rem auto;
+    padding: 1cap;
   }
   
   .project-preview {
@@ -121,4 +101,53 @@ body, html {
     color: black;
     text-decoration: none;
     cursor: pointer;
+  }
+
+
+  nav {
+    color: white;
+    z-index: 2;
+    position: relative;
+    padding: 3rem 2rem;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  nav a {
+    text-decoration: none;
+    color: white;
+    font-style: bold;
+  }
+  
+  nav ul {
+    list-style: none;
+    display: flex;
+    gap: 2rem;
+  }
+  
+  .title {
+    font-weight: bold;
+    font-size: 1.2rem;
+  }
+
+  .links-container {
+    margin-top: -1rem;
+  }
+  
+  @media only screen and (max-width: 768px) {
+    nav {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+  
+    .links-container {
+      margin-top: 0rem;
+      margin-left: -2.55rem;
+    }
+
+  }
+  
+  nav a:hover {
+    color: grey;
   }
