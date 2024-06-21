@@ -187,7 +187,7 @@ document.getElementById('blogButton').addEventListener('click', () => {
 
 
 
-// JavaScript code to adjust navbar text size for mobile-sized screens
+// Adjust navbar text size for mobile-sized screens
 function adjustNavbarTextSize() {
   const viewportWidth = window.innerWidth
   const navbarLinks = document.querySelectorAll('nav li')
