@@ -6,40 +6,20 @@ body, html {
     margin: 0;
     padding: 0;
     height: 100%;
+    overflow: hidden; /* Hide scrollbars */
+
   }
   
-  nav {
-    color: white;
-    z-index: 2;
-    position: relative;
-    padding: 2rem;
-    display: flex;
-    justify-content: space-between;
-  }
   
-  nav a {
-    text-decoration: none;
-    color: white;
-  }
   
-  nav ul {
-    list-style: none;
-    display: flex;
-    gap: 2rem;
-  }
   
-  nav a:hover {
-    color: grey;
-  }
   
-  .title {
-    font-weight: bold;
-  }
+  
   
   .projects-content {
     max-width: 800px;
-    margin: 2rem auto;
-    padding: 1rem;
+    margin: 1rem auto;
+    padding: 1cap;
   }
   
   .project-preview {
@@ -123,6 +103,37 @@ body, html {
     cursor: pointer;
   }
 
+
+  nav {
+    color: white;
+    z-index: 2;
+    position: relative;
+    padding: 3rem 2rem;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  nav a {
+    text-decoration: none;
+    color: white;
+    font-style: bold;
+  }
+  
+  nav ul {
+    list-style: none;
+    display: flex;
+    gap: 2rem;
+  }
+  
+  .title {
+    font-weight: bold;
+    font-size: 1.2rem;
+  }
+
+  .links-container {
+    margin-top: -1rem;
+  }
+  
   @media only screen and (max-width: 768px) {
     nav {
       flex-direction: column;
@@ -131,36 +142,12 @@ body, html {
     }
   
     .links-container {
-      margin-top: 1rem;
+      margin-top: 0rem;
+      margin-left: -2.55rem;
     }
+
   }
-
-  .title {
-    font-weight: bold;
-    font-size: 1.2rem;
+  
+  nav a:hover {
+    color: grey;
   }
-
-  .page {
-    position: absolute;
-    width: 100vw;
-    height: 100vh;
-    top: 0;
-    left: 0;
-    transition: opacity 0.5s ease;
-    opacity: 1;
-}
-
-.fade-out {
-    opacity: 0;
-}
-
-.fade-in {
-    opacity: 0;
-    animation: fadeIn 0.5s forwards;
-}
-
-@keyframes fadeIn {
-    to {
-        opacity: 1;
-    }
-}

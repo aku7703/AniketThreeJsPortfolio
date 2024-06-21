@@ -122,7 +122,6 @@ body, html {
     text-decoration: none;
     cursor: pointer;
   }
-  
 
   @media only screen and (max-width: 768px) {
     nav {
@@ -136,32 +135,3 @@ body, html {
     }
   }
   
-  .title {
-    font-weight: bold;
-    font-size: 1.2rem;
-  }
-  
-  .page {
-    position: absolute;
-    width: 100vw;
-    height: 100vh;
-    top: 0;
-    left: 0;
-    transition: opacity 0.5s ease;
-    opacity: 1;
-}
-
-.fade-out {
-    opacity: 0;
-}
-
-.fade-in {
-    opacity: 0;
-    animation: fadeIn 0.5s forwards;
-}
-
-@keyframes fadeIn {
-    to {
-        opacity: 1;
-    }
-}

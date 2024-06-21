@@ -6,11 +6,7 @@ body, html {
   margin: 0;
   padding: 0;
   height: 100%;
-}
-
-.title {
-  font-weight: bold;
-  font-size: 1.2rem;
+  overflow: hidden; /* Hide scrollbars */
 }
 
 nav {
@@ -37,8 +33,10 @@ nav a:hover {
   color: grey;
 }
 
-.title {
+.title-container {
   font-weight: bold;
+  font-size: 1.2rem;
+  margin-top: 1rem;
 }
 
 .about-content {
@@ -71,14 +69,6 @@ p {
   line-height: 1.6;
 }
 
-p a {
-  color: white;
-}
-
-p a:hover {
-  color: gray;
-}
-
 ul {
   list-style-type: disc;
   padding-left: 1.5rem;
@@ -104,31 +94,12 @@ footer {
   }
 
   .links-container {
-    margin-top: 1rem;
+    margin-top: 0rem;
+    margin-left: -0.5rem;
   }
-}
 
-.page {
-  position: absolute;
-  width: 100vw;
-  height: 100vh;
-  top: 0;
-  left: 0;
-  transition: opacity 0.5s ease;
-  opacity: 1;
-}
-
-.fade-out {
-  opacity: 0;
-}
-
-.fade-in {
-  opacity: 0;
-  animation: fadeIn 4s forwards;
-}
-
-@keyframes fadeIn {
-  to {
-      opacity: 1;
+  .title-container {
+    margin-top: 1rem;
+    margin-left: 1rem;
   }
 }
