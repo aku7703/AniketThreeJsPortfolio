@@ -1,55 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Projects</title>
-        <!-- Link Google Fonts -->
-        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
-        <!-- Link your CSS file -->
-        <link rel="stylesheet" href="projects.css">
-      </head>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projects</title>
+  <!-- Link Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+  <!-- Link CSS file -->
+  <link rel="stylesheet" href="projects.css">
+</head>
+
 <body>
   <nav>
     <div class="title-container">
       <a class="title" href="/">Aniket Chaudhry</a>
     </div>
     <div class="links-container">
-        <ul>
-            <li><a href="Resume-AniketChaudhry.pdf">Download Resume</a></li>
-            <li><a href="https://www.linkedin.com/in/aniketchaudhry/">LinkedIn</a></li>
-            <li><a href="https://github.com/aku7703">GitHub</a></li>
-        </ul>
+      <ul>
+        <li><a href="Resume-AniketChaudhry.pdf">Download Resume</a></li>
+        <li><a href="https://www.linkedin.com/in/aniketchaudhry/">LinkedIn</a></li>
+        <li><a href="https://github.com/aku7703">GitHub</a></li>
+      </ul>
     </div>
   </nav>
 
   <main class="projects-content">
     <div class="project-preview">
+      <img src="horizongif.gif" alt="Aniket Chaudhry" class="bio-image" width="90%" style="border-radius: 15px; display: block;
+      margin-left: auto;
+      margin-right: auto;">
       <h2>Project Horizon Website</h2>
       <p>Skills: </p>
-        <ul>
-            <li>React</li>
-            <li>TypeScript</li>
-            <li>Tailwind CSS</li>
-        </ul>
-        <p>The website for the undergraduate satellite team at Northeastern University! I also serve on the team as the External Affairs Lead!</p>
+      <ul>
+        <li>React</li>
+        <li>TypeScript</li>
+        <li>Tailwind CSS</li>
+      </ul>
+      <p>The website for the undergraduate satellite team at Northeastern University! I also serve on the team as the
+        External Affairs Lead!</p>
 
-        <button class="read-more-button" onclick="location.href='https://www.horizonsat.org'">View Here</button>
+      <button class="read-more-button" onclick="location.href='https://www.horizonsat.org'">View Website</button>
       <!-- <button class="read-more-button" onclick="openModal('Project 1 Details')">Read More</button> --->
     </div>
 
     <div class="project-preview">
+      <img src="mapapp.gif" alt="Aniket Chaudhry" class="bio-image" width="90%" style="border-radius: 15px; display: block;
+      margin-left: auto;
+      margin-right: auto;">
+      <h2>Northeastern Map App</h2>
+      <p>Skills: </p>
+      <ul>
+        <li>TypeScript</li>
+        <li>Node.js</li>
+        <li>MongoDB</li>
+      </ul>
+      <p>Node.js API implementing Dijkstra's Algorithm to facilitate campus navigation for students! Allows students to navigate campus, even through tunnels & uses a MongoDB database to store campus locations.</p>
+
+      <button class="read-more-button" onclick="location.href='https://github.com/Oasis-NEU/s24-group5'">View on
+        GitHub</button>
+      <!-- <button class="read-more-button" onclick="openModal('Project 1 Details')">Read More</button> --->
+    </div>
+
+    <div class="project-preview">
+      <img src="occupEYE.png" alt="Aniket Chaudhry" class="bio-image" width="90%" style="border-radius: 15px; display: block;
+      margin-left: auto;
+      margin-right: auto;">
+      <h2>OccupEYE</h2>
+      <p>Skills: </p>
+      <ul>
+        <li>Python</li>
+        <li>MySQL</li>
+        <li>Appsmith</li>
+        <li>Database Design</li>
+        <li>Docker</li>
+      </ul>
+      <p>University space management app built for my CS3200 class! Students can book spaces for studying, teachers can
+        manage classes, and building managers can manage spaces & bookings!</p>
+
+      <button class="read-more-button" onclick="location.href='https://github.com/wayfarer4/SKAAM-Project-Repo'">View on
+        GitHub</button>
+      <!-- <button class="read-more-button" onclick="openModal('Project 1 Details')">Read More</button> --->
+    </div>
+
+    <div class="project-preview">
+      <img src="sitephoto.png" alt="Aniket Chaudhry" class="bio-image" width="90%" style="border-radius: 15px; display: block;
+      margin-left: auto;
+      margin-right: auto;">
       <h2>Personal Website</h2>
       <p>Skills: </p>
-        <ul>
-            <li>HTML</li>
-            <li>CSS</li>
-            <li>JavaScript</li>
-            <li>Three.js</li>
-        </ul>
-        <p>My personal website which you are currently on!</p>
+      <ul>
+        <li>HTML</li>
+        <li>CSS</li>
+        <li>JavaScript</li>
+        <li>Three.js</li>
+      </ul>
+      <p>My personal website which you are currently on!</p>
 
-        <!--<button class="read-more-button" onclick="">View on GitHub</button>-->
+      <button class="read-more-button" onclick="location.href='https://github.com/aku7703/AniketThreeJsPortfolio'">View
+        on GitHub</button>
       <!-- <button class="read-more-button" onclick="openModal('Project 1 Details')">Read More</button> --->
     </div>
 
@@ -87,7 +136,7 @@
     }
 
     // Close the modal if the user clicks outside of it
-    window.onclick = function(event) {
+    window.onclick = function (event) {
       var modal = document.getElementById("project-modal");
       if (event.target == modal) {
         modal.style.display = "none";
@@ -95,4 +144,5 @@
     }
   </script>
 </body>
+
 </html>

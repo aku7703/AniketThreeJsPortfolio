@@ -10,7 +10,7 @@ const pointer = new THREE.Vector2()
 const raycaster = new THREE.Raycaster()
 
 // Create globe
-const earthGeometry = new THREE.SphereGeometry(4.5, 32, 32)
+const earthGeometry = new THREE.SphereGeometry(4.8, 32, 32)
 const textureLoader = new THREE.TextureLoader()
 const earthTexture = textureLoader.load('8k_earth_nightmap.jpg')
 const earthNormalMap = textureLoader.load('normal.png')
@@ -187,7 +187,7 @@ document.getElementById('blogButton').addEventListener('click', () => {
 
 
 
-// JavaScript code to adjust navbar text size for mobile-sized screens
+// Adjust navbar text size for mobile-sized screens
 function adjustNavbarTextSize() {
   const viewportWidth = window.innerWidth
   const navbarLinks = document.querySelectorAll('nav li')
