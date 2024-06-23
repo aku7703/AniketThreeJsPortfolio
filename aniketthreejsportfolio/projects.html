@@ -9,6 +9,15 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
   <!-- Link CSS file -->
   <link rel="stylesheet" href="projects.css">
+  <style>
+    #particles-js {
+      position: relative;
+      height: 40vh;
+      width: 100%;
+      background-color: #050505;
+      z-index: 2;
+    }
+  </style>
 </head>
 
 <body>
@@ -24,7 +33,15 @@
       </ul>
     </div>
   </nav>
-
+  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+  <script> 
+      particlesJS.load('particles-js', "particlesjs-config.json");
+  </script>
+  <div id="particles-js" style="text-align: center;">
+    <h1 style="color:white; z-index: 10; position: absolute; padding-left: 2rem; padding-top: 1rem; text-align: center; font-size: xxx-large;">Projects</h1>
+    <p style="color:white; z-index: 10; position: absolute; padding-left: 2rem; padding-top: 7rem; text-align: center; font-size: large;">Here you can look at the projects I made!</p>
+    <button class="back-button" onclick="location.href='/'">&#8592; Go back</button>
+  </div>
   <main class="projects-content">
     <div class="project-preview">
       <img src="horizongif.gif" alt="Aniket Chaudhry" class="bio-image" width="90%" style="border-radius: 15px; display: block;

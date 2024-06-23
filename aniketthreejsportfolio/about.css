@@ -16,6 +16,23 @@ body::-webkit-scrollbar {
   display: none;
 }
 
+.back-button {
+  background-color: transparent;
+  color: white;
+  font: inherit;
+  z-index: 10;
+  position: absolute;
+  padding-left: 2rem !important;
+  padding-top: 14rem;
+  font-size: 20px;
+  border-style: none;
+}
+
+.back-button:hover {
+
+  color: grey;
+}
+
 nav {
   color: white;
   z-index: 2;
