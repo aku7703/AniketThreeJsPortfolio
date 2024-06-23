@@ -22,8 +22,8 @@ body::-webkit-scrollbar {
   font: inherit;
   z-index: 10;
   position: absolute;
-  margin-left: 2rem;
-  margin-top: 14rem;
+  padding-left: 2rem !important;
+  padding-top: 14rem;
   font-size: 20px;
   border-style: none;
 }
