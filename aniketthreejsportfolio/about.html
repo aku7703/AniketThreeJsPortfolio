@@ -16,7 +16,7 @@
       position: relative;
       height: 40vh;
       width: 100%;
-      background-color: #050505;
+      background-color: #000000;
       z-index: 2;
     }
   </style>
@@ -37,7 +37,7 @@
   </nav>
 
   <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
-  <script> 
+  <script>
       particlesJS.load('particles-js', "particlesjs-config.json");
   </script>
   <div id="particles-js" style="text-align: center;">
@@ -46,41 +46,108 @@
     <button class="back-button" onclick="location.href='/'">&#8592; Go back</button>
   </div>
   <main class="about-content">
-    <img src="aniket-c.jpg" alt="Aniket Chaudhry" class="bio-image">
+    <div class="content-container">
+      <img src="aniket-c.jpg" alt="Aniket Chaudhry" class="bio-image">
 
-    <section class="introduction">
-      <h2>Introduction</h2>
-      <p> Hey there! I'm Aniket Chaudhry, a Computer Science student at Northeastern University. Currently, I'm diving
-        into the exciting world of satellite mission concepting as an intern at the Ultrabroadband Nanonetworking
-        Laboratory. My work involves crafting mission concepts for terahertz satellite communications alongside experts
-        from NASA, the Air Force Research Laboratory, and other organizations. It's thrilling to be part of projects that
-        push the boundaries of space technology!
+      <section class="introduction">
+        <h2>Introduction</h2>
+        <p> Hey there! I'm Aniket Chaudhry, a Computer Science student at Northeastern University. Currently, I'm diving
+          into the exciting world of satellite mission concepting as an intern at the Ultrabroadband Nanonetworking
+          Laboratory. My work involves crafting mission concepts for terahertz satellite communications alongside experts
+          from NASA, the Air Force Research Laboratory, and other organizations. It's thrilling to be part of projects that
+          push the boundaries of space technology!
+        </p>
+      </section>
 
-      </p>
-    </section>
+      <section class="skills">
+        <h2>Top Skills</h2>
+        <ul>
+          <li>Java</li>
+          <li>C/C++</li>
+          <li>Node.js</li>
+          <li>React.js</li>
+          <li>Systems Engineering</li>
+        </ul>
+      </section>
 
-    <section class="skills">
-      <h2>Top Skills</h2>
-      <ul>
-        <li>Java</li>
-        <li>C/C++</li>
-        <li>Node.js</li>
-        <li>React.js</li>
-        <li>Systems Engineering</li>
-      </ul>
-    </section>
+      <section class="interests">
+        <h2>Interests</h2>
+        <p>I'm deeply interested in software development, satellite making, and emerging technologies. Beyond academics,
+          I'm actively involved in leadership roles, including being on the E-Board of Project Horizon. I love to dance
+          and am learning how to cook!</p>
+      </section>
 
-    <section class="interests">
-      <h2>Interests</h2>
-      <p>I'm deeply interested in software development, satellite making, and emerging technologies. Beyond academics,
-        I'm actively involved in leadership roles, including being on the E-Board of Project Horizon. I love to dance
-        and am learning how to cook!</p>
-    </section>
+      <section class="experience">
+        <h2>Experience</h2>
+        <div class="timeline-container">
+          <div class="timeline-item">
+            <div class="timeline-content">
+              <h3> May 2024 - Present</h3>
+              <p>Mission Concept Intern at Ultrabroadband Nanonetworking Laboratory, Northeastern University</p>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-content">
+              <h3>Sept. 2023 - Present</h3>
+              <p>Software Engineer & MEA Lead at Project Horizon, Northeastern University</p>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-content">
+              <h3>May 2022 - Dec. 2022</h3>
+              <p>Lead Software Development Tutor at Code Ninjas San Ramon</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="education">
+        <h2>Education</h2>
+        <div class="timeline-container">
+          <div class="timeline-item">
+            <div class="timeline-content">
+              <h3>Sept. 2023 - Present</h3>
+              <p>Bachelor of Science in Computer Science - Artificial Intelligence, Northeastern University</p>
+              <p style="font-size: 1px; padding-top: 10px;"> . </p>
+              <p>Awards: Dean's List x2</p>
+              <p>Activities: Project Horizon Satellite Team, AerospaceNU, Oasis @ SandboxNU, Bollywood Dance</p>
+
+
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-content">
+              <h3>2019 - 2023</h3>
+              <p>High School Diploma, Dougherty Valley High School</p>
+              <p style="font-size: 1px; padding-top: 10px;"> . </p>
+              <p>Awards: Google Play Change The Game, Games For Change Student Challenge, AP Scholar with Distinction</p>
+              <p>Activities: XREdu Club President, Game Development Club President, ASB</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="contact">
+        <h2>Contact Me</h2>
+        <p>You can contact me at my email: <span id="email">chaudhryaniket@gmail.com</span>!</p>
+        <!--<button class="copy-button" onclick="copyEmail()">Copy Email</button>-->
+      </section>
+    </div>
   </main>
 
   <!--<footer>
     <p>&copy; 2024 Aniket Chaudhry. All rights reserved.</p>
   </footer>-->
+  <!--<script>
+    function copyEmail() {
+      const email = document.getElementById('email').textContent;
+      navigator.clipboard.writeText(email).then(() => {
+        alert('Email copied to clipboard!');
+      }).catch(err => {
+        console.error('Failed to copy email: ', err);
+      });
+    }
+  </script>-->
 </body>
 
 </html>
