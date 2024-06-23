@@ -10,6 +10,17 @@
   <title>About Aniket Chaudhry</title>
 
   <link rel="stylesheet" href="about.css">
+
+  <style>
+    #particles-js {
+      position: relative;
+      height: 40vh;
+      width: 100%;
+      background-color: #050505;
+      z-index: 2;
+      backdrop-filter: blur(20px);
+    }
+  </style>
 </head>
 
 <body>
@@ -26,11 +37,19 @@
     </div>
   </nav>
 
+  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+  <script> 
+      particlesJS.load('particles-js', "particlesjs-config.json");
+  </script>
+  <div id="particles-js" style="text-align: center;">
+    <h1 style="color:white; z-index: 10; position: absolute; padding-left: 2rem; padding-top: 1rem; text-align: center; font-size: xxx-large;">About Me</h1>
+    <p style="color:white; z-index: 10; position: absolute; padding-left: 2rem; padding-top: 7rem; text-align: center; font-size: large;">Here you can learn more about me!</p>
+    <button class="back-button" onclick="location.href='/'">&#8592; Go back</button>
+  </div>
   <main class="about-content">
     <img src="aniket-c.jpg" alt="Aniket Chaudhry" class="bio-image">
 
     <section class="introduction">
-      <h1>About Me</h1>
       <p> Hey there! I'm Aniket Chaudhry, a Computer Science student at Northeastern University. Currently, I'm diving
         into the exciting world of satellite mission concepting as an intern at the Ultrabroadband Nanonetworking
         Laboratory. My work involves crafting mission concepts for terahertz satellite communications alongside experts

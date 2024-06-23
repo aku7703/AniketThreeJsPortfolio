@@ -10,6 +10,7 @@ body, html {
   background-color: black;
 }
 
+
 .webgl {
   position: absolute;
   top: 0;
@@ -97,8 +98,6 @@ footer {
   padding: 1rem 0;
   font-size: 0.8rem;
   color: #ccc;
-  background-color: rgba(0, 0, 0, 0.8);
-  z-index: 3;
 }
 
 
@@ -110,6 +109,7 @@ footer {
   left: 0;
   transition: opacity 0.5s ease;
   opacity: 1;
+  
 }
 
 .fade-out {
