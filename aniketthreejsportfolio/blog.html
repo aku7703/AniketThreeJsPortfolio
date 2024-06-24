@@ -4,11 +4,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Projects</title>
   <!-- Link Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
-  <!-- Link CSS file -->
+
+  <title>Aniket Chaudhry's Blog</title>
+
   <link rel="stylesheet" href="blog.css">
+
+  <style>
+    #particles-js {
+      position: relative;
+      height: 40vh;
+      width: 100%;
+      background-color: #000000;
+      z-index: 2;
+    }
+
+  </style>
 </head>
 
 <body>
@@ -18,61 +30,105 @@
     </div>
     <div class="links-container">
       <ul>
-        <li><a href="index.html">Home</a></li>
         <li><a href="Resume-AniketChaudhry.pdf">Download Resume</a></li>
         <li><a href="https://www.linkedin.com/in/aniketchaudhry/">LinkedIn</a></li>
         <li><a href="https://github.com/aku7703">GitHub</a></li>
       </ul>
     </div>
   </nav>
-  
 
-  <main class="blog-content">
-    <div class="blog-preview">
-      <h2>Blog Title 1</h2>
-      <p>This is a preview of Blog 1. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-      <button class="read-more-button" onclick="openModal('Blog 1 Details')">Read More</button>
-    </div>
-
-    <div class="blog-preview">
-      <h2>Blog Title 2</h2>
-      <p>Another preview of Blog 2. Fusce quis risus non ante gravida sagittis.</p>
-      <button class="read-more-button" onclick="openModal('Blog 2 Details')">Read More</button>
-    </div>
-
-    <!-- Add more blog preview boxes as needed -->
-  </main>
-
-  <div id="blog-modal" class="modal">
-    <div class="modal-content">
-      <span class="close" onclick="closeModal()">&times;</span>
-      <h2 id="blog-title"></h2>
-      <div id="blog-details">
-        <!-- Blog details content will be loaded here -->
-      </div>
-    </div>
+  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+  <script>
+    particlesJS.load('particles-js', "particlesjs-config.json");
+  </script>
+  <div id="particles-js" style="text-align: center;">
+    <h1 style="color:white; z-index: 10; position: absolute; padding-left: 2rem; padding-top: 1rem; text-align: center; font-size: xxx-large;">Blog</h1>
+    <p style="color:white; z-index: 10; position: absolute; padding-left: 2rem; padding-top: 7rem; text-align: center; font-size: large;">Read my latest posts!</p>
+    <button class="back-button" onclick="location.href='/'">&#8592; Go back</button>
   </div>
 
-  <footer>
-    <p>&copy; 2024 Aniket Chaudhry. All rights reserved.</p>
-  </footer>
+  <main class="blog-content">
+    <div id="posts-list">
+      <div class="post-preview" onclick="showPost('post2')">
+        <h2>Creating My Portfolio Website!</h2>
+        <p>Learn about my journey of creating my portfolio website using new tools like Three.js and Particle.js, and how this project has been a significant learning experience for me!</p>
+        <p>6/19/24</p>
+      </div>
+      <div class="post-preview" onclick="showPost('post1')">
+        <h2>University Nanosatellite Program Kick-Off!</h2>
+        <p>I, along with colleagues from the Ultrabroadband Nanonetworking Laboratory, recently represented Northeastern University at NASA’s Kennedy Space Center for the University Nanosatellite Program Mission Concept Kickoff event. We presented the THIS-SAT satellite mission and received satellite systems engineering training from NASA and other professionals.</p>
+        <p>5/20/24</p>
+      </div>
+      <!--<div class="post-preview" onclick="showPost('post2')">
+        <h2>University Nanosatellite Program Kick-Off!</h2>
+        <p>-05/20/24</p>
+      </div>-->
+      <!--<div class="post-preview" onclick="showPost('post3')">
+        <h2>Post Title 3</h2>
+        <p>Post summary or first few lines...</p>
+      </div>-->
+    </div>
+
+    <div id="post1" class="post-content" style="display: none;">
+      <h2>University Nanosatellite Program Kick-Off!</h2>
+      <p>5/20/24</p>
+      <p>Hello everyone! I'm Aniket Chaudhry, and I recently had the incredible opportunity to represent Northeastern University at the University Nanosatellite Program Mission Concept Kickoff event at NASA’s Kennedy Space Center. Alongside my dedicated teammate Jacob Oshinsky, and with the support of Andrew Benincasa and Sergi Aliaga from the Ultrabroadband Nanonetworking Laboratory, we embarked on a journey that was both educational and inspiring.</p>
+
+      <p>At the event, we had the privilege of presenting our THIS-SAT satellite mission to an audience of professionals from NASA, the Air Force Office of Scientific Research (AFOSR), the Air Force Research Laboratory (AFRL/RV), and the Space Dynamics Laboratory (SDL). It was an exhilarating experience to stand before experts in the field and share the work we have been so passionate about. Our mission focuses on advancing satellite systems engineering and pushing the boundaries of what’s possible in space exploration.</p>
+
+      <p>One of the highlights of the event was the intensive satellite systems engineering training we received. This training was invaluable as it provided us with the tools and knowledge to create well-scoped, feasible, and meaningful satellite missions. The skills we acquired are already being put to use during our internships this summer, helping us contribute more effectively to ongoing projects and innovations in space technology.</p>
+
+      <p>Beyond the formal presentations and training, we had the unique opportunity to explore areas of Kennedy Space Center that are not normally accessible to the public. Walking through NASA’s Vehicle Assembly Building (VAB) and visiting several cutting-edge laboratories was nothing short of awe-inspiring. These experiences not only deepened our understanding of space technology but also fueled our passion for aerospace and STEM.</p>
+
+      <p>Our adventure didn’t stop at the labs and presentations. We stayed in a space-themed hotel room, which added a fun and immersive element to our trip. Every detail of the room was designed to make us feel like we were living in a space station, making our stay at Kennedy Space Center even more memorable.</p>
+
+      <p>I am incredibly proud of the work we did and the experiences we gained at the University Nanosatellite Program Mission Concept Kickoff event. I would like to extend my heartfelt congratulations to all my fellow team members who continue to inspire and push the boundaries of space exploration. We are part of something truly special, and I can’t wait to see where our efforts will take us next.</p>
+
+      <p>Join me in celebrating the achievements of our team and the bright future of space exploration. The sky is not the limit – it’s just the beginning.</p>
+
+      <p>Stay curious and keep reaching for the stars!</p>
+
+      <p>-Aniket Chaudhry</p>
+
+      <button onclick="hidePost()">Back to Blog</button>
+    </div>
+
+    <div id="post2" class="post-content" style="display: none;">
+      <h2>Creating My Portfolio Website!</h2>
+      <p>6/19/24</p>
+      <p>Hello everyone! I’m thrilled to share with you the journey of creating my portfolio website. This project has been an exciting exploration into new tools and technologies, pushing my boundaries and expanding my skill set.</p>
+
+      <p>One of the highlights of this project was integrating Three.js, a powerful JavaScript library, to create an interactive 3D Earth model on the homepage. The ability to manipulate and visualize the Earth and simulate a satellite orbiting around it was not only challenging but immensely rewarding. It allowed me to delve into the world of 3D graphics and interactive web development in a meaningful way.</p>
+
+      <p>Additionally, I utilized Particle.js to enhance the visual appeal of the website. The particle effects added a dynamic and modern touch, creating an engaging visual experience for visitors.</p>
+
+      <p>Throughout the process, I learned valuable lessons in web development, from design principles to implementation details. It was a journey of continuous learning and problem-solving, where each challenge presented an opportunity to grow.</p>
+
+      <p>This project has ignited my passion for building high-effort, innovative projects. I am excited about the possibilities ahead and look forward to creating more impactful projects that showcase my skills and creativity.</p>
+
+      <p>Thank you for joining me on this journey. Stay tuned for more updates and projects!</p>
+
+      <p>-Aniket Chaudhry</p>
+
+      <button onclick="hidePost()">Back to Blog</button>
+    </div>
+
+    <div id="post3" class="post-content">
+      <h2>Post Title 3</h2>
+      <p>Full content of the third post goes here...</p>
+      <button onclick="hidePost()">Back to Blog</button>
+    </div>
+  </main>
 
   <script>
-    function openModal(title) {
-      document.getElementById("blog-title").textContent = title;
-      document.getElementById("blog-modal").style.display = "block";
+    function showPost(postId) {
+      document.getElementById('posts-list').style.display = 'none';
+      document.getElementById(postId).style.display = 'block';
     }
 
-    function closeModal() {
-      document.getElementById("blog-modal").style.display = "none";
-    }
-
-    // Close the modal if the user clicks outside of it
-    window.onclick = function (event) {
-      var modal = document.getElementById("blog-modal");
-      if (event.target == modal) {
-        modal.style.display = "none";
-      }
+    function hidePost() {
+      document.querySelectorAll('.post-content').forEach(post => post.style.display = 'none');
+      document.getElementById('posts-list').style.display = 'block';
     }
   </script>
 </body>
