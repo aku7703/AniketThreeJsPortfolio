@@ -7,7 +7,6 @@ html {
   margin: 0;
   padding: 0;
   height: 100%;
-
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
@@ -29,7 +28,6 @@ body::-webkit-scrollbar {
 }
 
 .back-button:hover {
-
   color: grey;
 }
 
@@ -71,18 +69,28 @@ nav a:hover {
   border-radius: 10px;
 }
 
+.content-container {
+  background-color: #333333; /* Updated grey background */
+  padding: 2rem;
+  border-radius: 10px;
+}
+
 .bio-image {
   display: block;
-  max-width: 60%;
+  max-width: 90%;
   height: auto;
-  border-radius: 5%;
+  border-radius: 5%; /* Make the image circular */
   margin: 0 auto 2rem;
-  border: 2px solid #00ff00; /* Light green border */
+  border: 0px solid #000000; /* Light green border */
+  box-shadow: 8px 8px 5px #1d1f1d9a;
 }
 
 .introduction,
 .skills,
-.interests {
+.interests,
+.experience,
+.education,
+.contact {
   margin-bottom: 2rem;
 }
 
@@ -110,11 +118,64 @@ ul {
 
   .links-container {
     margin-top: 0rem;
-    margin-left: -0.5rem;
+    margin-left: -1rem;
   }
 
   .title-container {
     margin-top: 1rem;
-    margin-left: 1rem;
   }
+}
+
+.timeline-container {
+  position: relative;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 1rem 0;
+}
+
+.timeline-item {
+  padding: 10px 40px;
+  position: relative;
+  background-color: rgba(255, 255, 255, 0.1);
+  margin-bottom: 20px;
+  border-radius: 6px;
+}
+
+.timeline-item::after {
+  content: '';
+  position: absolute;
+  width: 6px;
+  height: 100%;
+  background-color: #00ff00;
+  left: 30px;
+  top: 0;
+  border-radius: 6px;
+}
+
+.timeline-content {
+  margin-left: 70px;
+}
+
+.timeline-content h3 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.timeline-content p {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.copy-button {
+  padding: 0.5rem 1rem;
+  background-color: #00ff00;
+  color: black;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.copy-button:hover {
+  background-color: #00cc00;
 }
