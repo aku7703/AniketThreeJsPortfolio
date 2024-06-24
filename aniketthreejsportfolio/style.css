@@ -16,6 +16,8 @@ body, html {
   top: 0;
   left: 0;
   z-index: 1;
+  background: linear-gradient(to bottom, #000000, #000219); /* Linear gradient from black to dark purple */
+  
 }
 
 .button-container {
@@ -39,6 +41,7 @@ body, html {
   cursor: pointer;
   border-radius: 20px;
   transition: background-color 0.3s, color 0.3s, transform 0.3s;
+  box-shadow: 6px 6px 3px #0b0b0b9a;
 }
 
 .interactive-button:hover {
