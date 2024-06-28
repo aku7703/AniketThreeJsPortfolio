@@ -133,6 +133,13 @@ ul {
   
 }
 
+@keyframes rotate {
+  0% { transform: rotate(0deg); }
+  25% { transform: rotate(3deg); }
+  75% { transform: rotate(-3deg); }
+  100% { transform: rotate(0deg); }
+}
+
 .timeline-item {
   padding: 10px 40px;
   position: relative;
@@ -140,6 +147,11 @@ ul {
   margin-bottom: 20px;
   border-radius: 6px;
   box-shadow: 8px 8px 5px #1d1f1d9a;
+  transition: transform 0.3s ease-in-out;
+}
+
+.timeline-item:hover {
+  animation: rotate 0.5s ease-in-out;
 }
 
 .timeline-item::after {

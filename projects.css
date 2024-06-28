@@ -58,6 +58,17 @@ img {
   margin-bottom: 1rem;
 }
 
+@keyframes rotate {
+  0% { transform: rotate(0deg); }
+  25% { transform: rotate(3deg); }
+  75% { transform: rotate(-3deg); }
+  100% { transform: rotate(0deg); }
+}
+
+.project-preview:hover {
+  animation: rotate 0.5s ease-in-out;
+}
+
 .read-more-button {
   background-color: #00ff00;
   color: black;

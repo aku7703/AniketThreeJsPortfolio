@@ -12,13 +12,13 @@ const raycaster = new THREE.Raycaster()
 // Create globe
 const earthGeometry = new THREE.SphereGeometry(4.8, 32, 32)
 const textureLoader = new THREE.TextureLoader()
-const earthTexture = textureLoader.load('2k_earth_nightmap.jpg')
-const earthNormalMap = textureLoader.load('normal.png')
-const earthSpecularMap = textureLoader.load('specular.png')
+const earthTexture = textureLoader.load('2k_earth_nightmap.webp')
+//const earthNormalMap = textureLoader.load('normal.png')
+//const earthSpecularMap = textureLoader.load('specular.png')
 const material = new THREE.MeshStandardMaterial({ 
   map: earthTexture, 
   // normalMap: earthNormalMap,
-  specularMap: earthSpecularMap,
+  // specularMap: earthSpecularMap,
 })
 const earthMesh = new THREE.Mesh(earthGeometry, material)
 scene.add(earthMesh)

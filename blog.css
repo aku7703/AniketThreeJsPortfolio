@@ -107,6 +107,7 @@ p {
 
 .post-preview:hover {
   background-color: rgba(255, 255, 255, 0.2);
+  animation: rotate 0.5s ease-in-out;
 }
 
 .post-content {
@@ -123,3 +124,9 @@ button {
   margin-top: 1rem;
 }
 
+@keyframes rotate {
+  0% { transform: rotate(0deg); }
+  25% { transform: rotate(3deg); }
+  75% { transform: rotate(-3deg); }
+  100% { transform: rotate(0deg); }
+}
