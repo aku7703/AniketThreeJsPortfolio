@@ -19,6 +19,9 @@
       background-color: transparent;
       z-index: 2;
     }
+    .back-button {
+      display: none; /* Hide the button by default */
+    }
   </style>
 </head>
 
@@ -38,11 +41,13 @@
 
   <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
   <script>
-      particlesJS.load('particles-js', "particlesjs-config.json");
+      particlesJS.load('particles-js', "particlesjs-config.json", function() {
+        document.querySelector('.back-button').style.display = 'block';
+      });
   </script>
   <div id="particles-js" style="text-align: center;">
-    <h1 style="color:white; z-index: 10; position: absolute; padding-left: 2rem; padding-top: 1rem; text-align: center; font-size: xxx-large;">About Me</h1>
-    <p style="color:white; z-index: 10; position: absolute; padding-left: 2rem; padding-top: 7rem; text-align: center; font-size: large;">Here you can learn more about me!</p>
+    <h1 style="color:white; z-index: 10; position: absolute; padding-left: 4rem; padding-top: 1rem; text-align: center; font-size: xxx-large;">About Me</h1>
+    <p style="color:white; z-index: 10; position: absolute; padding-left: 4rem; padding-top: 7rem; text-align: center; font-size: large;">Here you can learn more about me!</p>
     <button class="back-button" onclick="location.href='/'">&#8592; Go back</button>
   </div>
   <main class="about-content">
