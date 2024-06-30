@@ -16,7 +16,6 @@ body, html {
   top: 0;
   left: 0;
   z-index: 1;
-  background: linear-gradient(to bottom, #000000, #000219); /* Linear gradient from black to dark purple */
   
 }
 

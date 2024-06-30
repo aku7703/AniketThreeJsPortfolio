@@ -20,32 +20,16 @@ img {
 }
 
 .projects-content {
-  max-width: 800px;
+  max-width: 1200px;
   margin: 1rem auto;
-  padding: 1cap;
-}
-
-.back-button {
-  background-color: transparent;
-  color: white;
-  font: inherit;
-  z-index: 10;
-  position: absolute;
-  padding-left: 4rem !important;
-  padding-top: 14rem;
-  font-size: 20px;
-  border-style: none;
-}
-
-.back-button:hover {
-
-  color: grey;
+  padding: 1rem;
+  display: grid;
+  gap: 2rem;
 }
 
 .project-preview {
   background-color: rgba(58, 58, 58, 0.877);
   padding: 1rem;
-  margin-bottom: 2rem;
   border-radius: 10px;
   cursor: pointer;
 }
@@ -92,7 +76,7 @@ img {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+  background-color: rgba(0, 0, 0, 0.5);
   overflow: auto;
 }
 
@@ -132,7 +116,6 @@ nav {
 nav a {
   text-decoration: none;
   color: white;
-  font-style: bold;
 }
 
 nav ul {
@@ -165,4 +148,10 @@ nav ul {
 
 nav a:hover {
   color: grey;
+}
+
+@media only screen and (min-width: 1280px) {
+  .projects-content {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
