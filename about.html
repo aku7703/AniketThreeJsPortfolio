@@ -5,28 +5,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- Link Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
-
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
   <title>About Aniket Chaudhry</title>
 
+  <link rel="stylesheet" href="shared-header.css">
   <link rel="stylesheet" href="about.css">
-
-  <style>
-    #particles-js {
-      position: relative;
-      height: 40vh;
-      width: 100%;
-      background-color: #001124a0;
-      z-index: 2;
-    }
-    .back-button {
-      display: none; /* Hide the button by default */
-    }
-  </style>
+  <link rel="stylesheet" href="global.css">
 </head>
 
 <body>
-  <nav>
+  <nav class="sleek-nav">
     <div class="title-container">
       <a class="title" href="/">Aniket Chaudhry</a>
     </div>
@@ -41,14 +31,19 @@
 
   <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
   <script>
-      particlesJS.load('particles-js', "particlesjs-config.json", function() {
-        document.querySelector('.back-button').style.display = 'block';
-      });
+    particlesJS.load('particles-js', "particlesjs-config.json", function() {
+      // Remove the line that displays the back button
+    });
   </script>
-  <div id="particles-js" style="text-align: center;">
-    <h1 style="color:white; z-index: 10; position: absolute; padding-left: 4rem; padding-top: 1rem; text-align: center; font-size: xxx-large;">About Me</h1>
-    <p style="color:white; z-index: 10; position: absolute; padding-left: 4rem; padding-top: 7rem; text-align: center; font-size: large;">Here you can learn more about me!</p>
-    <button class="back-button" onclick="location.href='/'">&#8592; Go back</button>
+  <div id="particles-js">
+    <div class="page-banner">
+      <div class="banner-content">
+        <h1 class="banner-title">About Me</h1>
+        <p class="banner-subtitle">Discover my background, skills, and journey in the world of technology and software development.</p>
+        <!-- Removed the "Return to Home" button -->
+      </div>
+    </div>
+    <div class="banner-curve"></div>
   </div>
   <main class="about-content">
     <div class="content-container">
@@ -99,7 +94,7 @@
               <p>Software Engineer & MEA Lead at Project Horizon, Northeastern University</p>
               <ul>
                 <li>
-                  Developing project website displaying the team’s accomplishments and projects using Next.js, React.js, & Tailwind CSS.
+                  Developing project website displaying the team's accomplishments and projects using Next.js, React.js, & Tailwind CSS.
                 </li>
                 <li>
                   Running several social media campaigns across LinkedIn, Instagram, Discord, Snapchat, and our website!
@@ -131,7 +126,7 @@
                   Assembled a comprehensive mission design document (MDD) and requirements verification matrix (RVM).
                 </li>
                 <li>
-                  Operated and sent commands to AFRL’s XVI satellite under a subject-matter expert.
+                  Operated and sent commands to AFRL's XVI satellite under a subject-matter expert.
                 </li>
               </ul>
             </div>
@@ -145,6 +140,7 @@
                 <li>
                   Taught students aged 7-14 how to code in Unity (C#), Java, and Lua.
                 </li>
+              </ul>
             </div>
           </div>
         </div>
@@ -155,41 +151,46 @@
         <div class="timeline-container">
           <div class="timeline-item">
             <div class="timeline-content">
-              <h3>Sept. 2023 - Present</h3>
-              <p>Bachelor of Science in Computer Science - Artificial Intelligence, Northeastern University</p>
-              <ul>
-                <li>
-                  CyberCorps Scholarship for Service recipient.
-                </li>
-                <li>
-                  Dean's List x2.
-                </li>
-              </ul>
-            </div>
-              <!--<p style="font-size: 1px; padding-top: 10px;"> . </p>
-              <p>Awards: Dean's List x2</p>
-              <p>Activities: Project Horizon Satellite Team, AerospaceNU, Oasis @ SandboxNU, Bollywood Dance</p>
-            -->
-
+              <div class="education-header">
+                <div class="education-title">
+                  <h3>Sept. 2023 - Present</h3>
+                  <span class="education-degree">B.S. in Computer Science</span>
+                </div>
+                <div class="education-school">
+                  <i class="fas fa-university"></i>
+                  <p class="education-institution">&nbsp; Northeastern University</p>
+                </div>
+              </div>
+              <div class="education-details">
+                <div class="achievements">
+                  <h4><i class="fas fa-award"></i> Achievements</h4>
+                  <ul>
+                    <li><span class="highlight">CyberCorps</span> Scholarship for Service recipient</li>
+                    <li><span class="highlight">Dean's List</span> (Fall 2023, Spring 2024)</li>
+                  </ul>
+                </div>
+                <div class="activities">
+                  <h4><i class="fas fa-users"></i> Activities</h4>
+                  <ul>
+                    <li>Project Horizon Satellite Team</li>
+                    <li>AerospaceNU</li>
+                    <li>Oasis @ SandboxNU</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="relevant-coursework">
+                <h4><i class="fas fa-book"></i> Relevant Coursework</h4>
+                <div class="course-tags">
+                  <span class="course-tag">Data Structures & Algorithms</span>
+                  <span class="course-tag">Object-Oriented Design</span>
+                  <span class="course-tag">Database Design</span>
+                  <span class="course-tag">Computer Systems</span>
+                </div>
+              </div>
             </div>
           </div>
-          <!--<div class="timeline-item">
-            <div class="timeline-content">
-              <h3>2019 - 2023</h3>
-              <p>High School Diploma, Dougherty Valley High School</p>
-              <p style="font-size: 1px; padding-top: 10px;"> . </p>
-              <p>Awards: Google Play Change The Game, Games For Change Student Challenge, AP Scholar with Distinction</p>
-              <p>Activities: XREdu Club President, Game Development Club President, ASB</p>
-            </div>
-          </div>-->
         </div>
       </section>
-
-      <!--<section class="contact">
-        <h2>Contact Me</h2>
-        <p>You can contact me at my email: <span id="email">chaudhryaniket@gmail.com</span>!</p>
-        <button class="copy-button" onclick="copyEmail()">Copy Email</button>
-      </section> -->
     </div>
   </main>
 

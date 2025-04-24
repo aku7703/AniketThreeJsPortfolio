@@ -5,42 +5,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- Link Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
-
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
   <title>Aniket Chaudhry's Blog</title>
-
+  <link rel="stylesheet" href="shared-header.css">
   <link rel="stylesheet" href="blog.css">
-
-  <style>
-    #particles-js {
-      position: relative;
-      height: 40vh;
-      width: 100%;
-      background-color: #001124a0;
-      z-index: 2;
-    }
-
-    .back-button {
-      background-color: transparent;
-      color: white;
-      font: inherit;
-      z-index: 10;
-      position: absolute;
-      padding-left: 4rem !important;
-      padding-top: 14rem;
-      font-size: 20px;
-      border-style: none;
-      display: none; /* Hide button initially */
-    }
-
-    .back-button:hover {
-      color: grey;
-    }
-  </style>
+  <link rel="stylesheet" href="global.css">
 </head>
 
 <body>
-  <nav>
+  <nav class="sleek-nav">
     <div class="title-container">
       <a class="title" href="/">Aniket Chaudhry</a>
     </div>
@@ -56,13 +29,18 @@
   <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
   <script>
     particlesJS.load('particles-js', "particlesjs-config.json", function() {
-      document.querySelector('.back-button').style.display = 'block'; // Show button after particles.js is loaded
+      // Remove the line that displays the back button
     });
   </script>
-  <div id="particles-js" style="text-align: center;">
-    <h1 style="color:white; z-index: 10; position: absolute; padding-left: 4rem; padding-top: 1rem; text-align: center; font-size: xxx-large;">Blog</h1>
-    <p style="color:white; z-index: 10; position: absolute; padding-left: 4rem; padding-top: 7rem; text-align: center; font-size: large;">Read my latest posts!</p>
-    <button class="back-button" onclick="location.href='/'">&#8592; Go back</button>
+  <div id="particles-js">
+    <div class="page-banner">
+      <div class="banner-content">
+        <h1 class="banner-title">Blog</h1>
+        <p class="banner-subtitle">Read my thoughts and experiences on technology, space, and software development.</p>
+        <!-- Removed the "Return to Home" button -->
+      </div>
+    </div>
+    <div class="banner-curve"></div>
   </div>
 
   <main class="blog-content">

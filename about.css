@@ -15,46 +15,6 @@ body::-webkit-scrollbar {
   display: none;
 }
 
-.back-button {
-  background-color: transparent;
-  color: white;
-  font: inherit;
-  z-index: 10;
-  position: absolute;
-  padding-left: 4rem !important;
-  padding-top: 14rem;
-  font-size: 20px;
-  border-style: none;
-}
-
-.back-button:hover {
-  color: grey;
-}
-
-nav {
-  color: white;
-  z-index: 2;
-  position: relative;
-  padding: 2rem;
-  display: flex;
-  justify-content: space-between;
-}
-
-nav a {
-  text-decoration: none;
-  color: white;
-}
-
-nav ul {
-  list-style: none;
-  display: flex;
-  gap: 2rem;
-}
-
-nav a:hover {
-  color: grey;
-}
-
 .title-container {
   font-weight: bold;
   font-size: 1.2rem;
@@ -62,26 +22,51 @@ nav a:hover {
 }
 
 .about-content {
-  max-width: 800px;
-  margin: 2rem auto;
-  padding: 1rem;
-  border-radius: 10px;
+  max-width: 900px;
+  margin: 1rem auto 3rem; /* Changed from -3rem to 1rem to add more space */
+  padding: 0 2rem;
+  position: relative;
+  z-index: 5;
 }
 
 .content-container {
-  background-color: #333333; /* Updated grey background */
-  padding: 2rem;
-  border-radius: 10px;
+  background: linear-gradient(135deg, rgba(30, 30, 30, 0.95), rgba(20, 20, 20, 0.9));
+  padding: 3.5rem;
+  border-radius: 16px;
+  animation: fadeIn 0.8s ease-in-out;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(70, 70, 70, 0.3);
+  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
+}
+
+.content-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, rgba(0, 255, 0, 0.7), transparent);
+  z-index: 1;
 }
 
 .bio-image {
   display: block;
-  max-width: 90%;
+  max-width: 85%;
   height: auto;
-  border-radius: 5%; /* Make the image circular */
-  margin: 0 auto 2rem;
-  border: 0px solid #000000; /* Light green border */
-  box-shadow: 8px 8px 5px #1d1f1d9a;
+  border-radius: 12px;
+  margin: 0.5rem auto 2.5rem;
+  border: none;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+  transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+  filter: brightness(1.05) contrast(1.05);
+}
+
+.bio-image:hover {
+  transform: scale(1.02);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 15px rgba(0, 255, 0, 0.2);
 }
 
 .introduction,
@@ -90,7 +75,9 @@ nav a:hover {
 .experience,
 .education,
 .contact {
-  margin-bottom: 2rem;
+  margin-bottom: 3rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid rgba(70, 70, 70, 0.3);
 }
 
 h1,
@@ -109,12 +96,6 @@ ul {
 }
 
 @media only screen and (max-width: 768px) {
-  nav {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-
   .links-container {
     margin-top: 0rem;
     margin-left: -1rem;
@@ -130,7 +111,6 @@ ul {
   max-width: 800px;
   margin: 0 auto;
   padding: 1rem 0;
-  
 }
 
 @keyframes rotate {
@@ -140,33 +120,31 @@ ul {
   100% { transform: rotate(0deg); }
 }
 
+/* Enhance timeline items */
 .timeline-item {
-  padding: 10px 40px;
+  padding: 20px 40px;
   position: relative;
-  background-color: rgba(255, 255, 255, 0.1);
-  margin-bottom: 20px;
-  border-radius: 6px;
-  box-shadow: 8px 8px 5px #1d1f1d9a;
-  transition: transform 0.3s ease-in-out;
+  background-color: rgba(35, 35, 35, 0.8);
+  margin-bottom: 25px;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-left: 4px solid #00ff00;
 }
 
 .timeline-item:hover {
-  animation: rotate 0.5s ease-in-out;
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
 }
 
+/* Remove the vertical line and replace with sleeker design */
 .timeline-item::after {
-  content: '';
-  position: absolute;
-  width: 6px;
-  height: 100%;
-  background-color: #00ff00;
-  left: 30px;
-  top: 0;
-  border-radius: 6px;
+  content: none;
 }
 
+/* Improve timeline content spacing */
 .timeline-content {
-  margin-left: 70px;
+  margin-left: 10px;
 }
 
 .timeline-content h3 {
@@ -174,10 +152,46 @@ ul {
   font-size: 1.2rem;
 }
 
+.timeline-content h4 {
+  color: #00ff00;
+  margin-bottom: 12px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+}
+
+.timeline-content h4 i {
+  margin-right: 10px;
+  opacity: 0.8;
+}
+
 .timeline-content p {
   margin: 0;
   font-size: 1rem;
   line-height: 1.6;
+}
+
+.timeline-content ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.timeline-content li {
+  margin-bottom: 10px;
+  position: relative;
+  padding-left: 20px;
+  line-height: 1.5;
+}
+
+.timeline-content li::before {
+  content: '•';
+  color: #00ff00;
+  font-size: 1.5em;
+  position: absolute;
+  left: 0;
+  top: -5px;
 }
 
 .copy-button {
@@ -191,4 +205,138 @@ ul {
 
 .copy-button:hover {
   background-color: #00cc00;
+}
+
+.education-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+  border-bottom: 1px solid rgba(0, 255, 0, 0.2);
+  padding-bottom: 15px;
+}
+
+.education-title h3 {
+  margin: 0;
+  font-size: 1.3rem;
+  color: #00ff00;
+  margin-bottom: 5px;
+}
+
+.education-degree {
+  font-size: 1.1rem;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.education-school {
+  display: flex;
+  align-items: center;
+}
+
+.education-institution {
+  margin: 0;
+  font-size: 1.1rem;
+  margin-left: 8px;
+  color: #cccccc;
+}
+
+.education-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin-top: 1.5rem;
+}
+
+.achievements, .activities {
+  flex: 1;
+  min-width: 220px;
+}
+
+.relevant-coursework {
+  margin-top: 2rem;
+}
+
+.course-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.course-tag {
+  display: inline-block;
+  background-color: rgba(0, 0, 0, 0.4);
+  color: #ffffff;
+  padding: 8px 15px;
+  margin: 0;
+  border-radius: 25px;
+  font-size: 0.9rem;
+  border: 1px solid rgba(0, 255, 0, 0.3);
+  transition: all 0.3s ease;
+  letter-spacing: 0.5px;
+}
+
+.course-tag:hover {
+  background-color: rgba(0, 255, 0, 0.2);
+  transform: translateY(-3px);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Highlight key achievements */
+.highlight {
+  color: #00ff00;
+  font-weight: 600;
+}
+
+/* Improve responsive design */
+@media only screen and (max-width: 600px) {
+  .education-details {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  #particles-js h1 {
+    font-size: xx-large !important;
+    padding-left: 1rem !important;
+  }
+  
+  #particles-js p {
+    padding-left: 1rem !important;
+  }
+  
+  .about-content {
+    margin-top: 1rem; /* Add margin-top for smaller screens */
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .education-header {
+    flex-direction: column;
+  }
+  
+  .education-school {
+    margin-top: 10px;
+  }
+  
+  .content-container {
+    padding: 1.5rem;
+  }
+}
+
+/* Add smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Improve contrast for accessibility */
+a {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* Add fade-in animation for content */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
 }

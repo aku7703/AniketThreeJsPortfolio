@@ -6,40 +6,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Projects</title>
   <!-- Link Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
-  <!-- Link CSS file -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Link CSS files -->
+  <link rel="stylesheet" href="shared-header.css">
   <link rel="stylesheet" href="projects.css">
-  <style>
-    #particles-js {
-      position: relative;
-      height: 40vh;
-      width: 100%;
-      background-color: #001124a0;
-      z-index: 2;
-    }
-
-    .back-button {
-      background-color: transparent;
-      color: white;
-      font: inherit;
-      z-index: 10;
-      position: absolute;
-      padding-left: 4rem !important;
-      padding-top: 14rem;
-      font-size: 20px;
-      border-style: none;
-      display: none; /* Hide button initially */
-    }
-
-    .back-button:hover {
-      color: grey;
-    }
-  </style>
+  <link rel="stylesheet" href="global.css">
   <meta name="google-site-verification" content="BQqmTpRPn8ysZsU5r267dZr8ToOHS5i45z4U8a5_Fy4" />
 </head>
 
 <body>
-  <nav>
+  <nav class="sleek-nav">
     <div class="title-container">
       <a class="title" href="/">Aniket Chaudhry</a>
     </div>
@@ -55,13 +31,17 @@
   <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
   <script>
     particlesJS.load('particles-js', "particlesjs-config.json", function() {
-      document.querySelector('.back-button').style.display = 'block'; // Show button after particles.js is loaded
+      // Remove the line that displays the back button
     });
   </script>
-  <div id="particles-js" style="text-align: center;">
-    <h1 style="color:white; z-index: 10; position: absolute; padding-left: 4rem; padding-top: 1rem; text-align: center; font-size: xxx-large;">Projects</h1>
-    <p style="color:white; z-index: 10; position: absolute; padding-left: 4rem; padding-top: 7rem; font-size: large;">View my projects!</p>
-    <button class="back-button" onclick="location.href='/'">&#8592; Go back</button>
+  <div id="particles-js">
+    <div class="page-banner">
+      <div class="banner-content">
+        <h1 class="banner-title">Projects</h1>
+        <p class="banner-subtitle">Explore my portfolio of work across web development, software engineering, and satellite systems.</p>
+      </div>
+    </div>
+    <div class="banner-curve"></div>
   </div>
   
   <main class="projects-content">
