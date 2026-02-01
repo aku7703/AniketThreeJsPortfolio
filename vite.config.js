@@ -7,10 +7,16 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: './index.html',
-        about: './about.html',
-        projects: './projects.html',
         blog: './blog.html',
       }
+    }
+  },
+  // Copy content folder to dist for blog posts
+  publicDir: 'public',
+  // Ensure content folder is accessible in dev
+  server: {
+    fs: {
+      allow: ['content', 'public', '.']
     }
   }
 });

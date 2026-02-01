@@ -12,7 +12,9 @@
     "vite": "^5.3.1"
   },
   "dependencies": {
+    "gray-matter": "^4.0.3",
     "gsap": "^3.12.5",
+    "marked": "^17.0.1",
     "three": "^0.163.0"
   }
 }

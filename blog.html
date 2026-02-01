@@ -4,128 +4,188 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Link Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <title>Aniket Chaudhry's Blog</title>
-  <link rel="stylesheet" href="shared-header.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <title>Blog | Aniket Chaudhry</title>
   <link rel="stylesheet" href="blog.css">
-  <link rel="stylesheet" href="global.css">
 </head>
 
 <body>
-  <nav class="sleek-nav">
-    <div class="title-container">
-      <a class="title" href="/">Aniket Chaudhry</a>
-    </div>
-    <div class="links-container">
-      <ul>
-        <li><a href="Resume-AniketChaudhry.pdf">Resume</a></li>
-        <li><a href="https://www.linkedin.com/in/aniketchaudhry/">LinkedIn</a></li>
-        <li><a href="https://github.com/aku7703">GitHub</a></li>
+  <!-- Navigation -->
+  <nav id="blog-nav">
+    <div class="nav-container">
+      <a class="nav-logo" href="/">Aniket Chaudhry</a>
+      <ul class="nav-links">
+        <li><a href="/#about">About</a></li>
+        <li><a href="/#projects">Projects</a></li>
+        <li><a href="/blog" class="active">Blog</a></li>
+        <li><a href="Resume-AniketChaudhry.pdf" class="nav-cta">Resume</a></li>
       </ul>
     </div>
   </nav>
 
-  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
-  <script>
-    particlesJS.load('particles-js', "particlesjs-config.json", function() {
-      // Remove the line that displays the back button
-    });
-  </script>
-  <div id="particles-js">
-    <div class="page-banner">
-      <div class="banner-content">
-        <h1 class="banner-title">Blog</h1>
-        <!--<p class="banner-subtitle">Read my thoughts and experiences on technology, space, and software development.</p>-->
-        <!-- Removed the "Return to Home" button -->
+  <!-- Hero Banner -->
+  <header class="blog-hero">
+    <div class="hero-content">
+      <h1>Blog</h1>
+      <p>Thoughts on technology, space exploration, and software engineering</p>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="blog-main">
+    <!-- Post List View -->
+    <div id="posts-list" class="posts-container">
+      <div class="posts-grid">
+        <!-- Posts will be loaded dynamically -->
       </div>
     </div>
-    <div class="banner-curve"></div>
-  </div>
 
-  <main class="blog-content">
-    <div id="posts-list">
-      <div class="post-preview" onclick="showPost('post2')">
-        <h2>Creating My Portfolio Website!</h2>
-        <p>Learn about my journey of creating my portfolio website using new tools like Three.js and Particle.js, and how this project has been a significant learning experience for me!</p>
-        <p>6/19/24</p>
+    <!-- Single Post View -->
+    <article id="post-view" class="article-container" style="display: none;">
+      <button class="back-btn" onclick="hidePost()">
+        <i class="fas fa-arrow-left"></i> All Posts
+      </button>
+      <div class="article-header">
+        <img id="post-cover" class="article-cover" src="" alt="" style="display: none;">
+        <time id="post-date" class="article-date"></time>
+        <h1 id="post-title" class="article-title"></h1>
       </div>
-      <div class="post-preview" onclick="showPost('post1')">
-        <h2>University Nanosatellite Program Kick-Off!</h2>
-        <p>I, along with colleagues from the Ultrabroadband Nanonetworking Laboratory, recently represented Northeastern University at NASA’s Kennedy Space Center for the University Nanosatellite Program Mission Concept Kickoff event. We presented the THIS-SAT satellite mission and received satellite systems engineering training from NASA and other professionals.</p>
-        <p>5/20/24</p>
+      <div id="post-content" class="article-body">
+        <!-- Content loaded dynamically -->
       </div>
-      <!--<div class="post-preview" onclick="showPost('post2')">
-        <h2>University Nanosatellite Program Kick-Off!</h2>
-        <p>-05/20/24</p>
-      </div>-->
-      <!--<div class="post-preview" onclick="showPost('post3')">
-        <h2>Post Title 3</h2>
-        <p>Post summary or first few lines...</p>
-      </div>-->
-    </div>
-
-    <div id="post1" class="post-content" style="display: none;">
-      <h2>University Nanosatellite Program Kick-Off!</h2>
-      <p>5/20/24</p>
-      <p>Hello everyone! I'm Aniket Chaudhry, and I recently had the incredible opportunity to represent Northeastern University at the University Nanosatellite Program Mission Concept Kickoff event at NASA’s Kennedy Space Center. Alongside my dedicated teammate Jacob Oshinsky, and with the support of Andrew Benincasa and Sergi Aliaga from the Ultrabroadband Nanonetworking Laboratory, we embarked on a journey that was both educational and inspiring.</p>
-
-      <p>At the event, we had the privilege of presenting our THIS-SAT satellite mission to an audience of professionals from NASA, the Air Force Office of Scientific Research (AFOSR), the Air Force Research Laboratory (AFRL/RV), and the Space Dynamics Laboratory (SDL). It was an exhilarating experience to stand before experts in the field and share the work we have been so passionate about. Our mission focuses on advancing satellite systems engineering and pushing the boundaries of what’s possible in space exploration.</p>
-
-      <p>One of the highlights of the event was the intensive satellite systems engineering training we received. This training was invaluable as it provided us with the tools and knowledge to create well-scoped, feasible, and meaningful satellite missions. The skills we acquired are already being put to use during our internships this summer, helping us contribute more effectively to ongoing projects and innovations in space technology.</p>
-
-      <p>Beyond the formal presentations and training, we had the unique opportunity to explore areas of Kennedy Space Center that are not normally accessible to the public. Walking through NASA’s Vehicle Assembly Building (VAB) and visiting several cutting-edge laboratories was nothing short of awe-inspiring. These experiences not only deepened our understanding of space technology but also fueled our passion for aerospace and STEM.</p>
-
-      <p>Our adventure didn’t stop at the labs and presentations. We stayed in a space-themed hotel room, which added a fun and immersive element to our trip. Every detail of the room was designed to make us feel like we were living in a space station, making our stay at Kennedy Space Center even more memorable.</p>
-
-      <p>I am incredibly proud of the work we did and the experiences we gained at the University Nanosatellite Program Mission Concept Kickoff event. I would like to extend my heartfelt congratulations to all my fellow team members who continue to inspire and push the boundaries of space exploration. We are part of something truly special, and I can’t wait to see where our efforts will take us next.</p>
-
-      <p>Join me in celebrating the achievements of our team and the bright future of space exploration. The sky is not the limit – it’s just the beginning.</p>
-
-      <p>Stay curious and keep reaching for the stars!</p>
-
-      <p>-Aniket Chaudhry</p>
-
-      <button onclick="hidePost()">Back to Blog</button>
-    </div>
-
-    <div id="post2" class="post-content" style="display: none;">
-      <h2>Creating My Portfolio Website!</h2>
-      <p>6/19/24</p>
-      <p>Hello everyone! I’m thrilled to share with you the journey of creating my portfolio website. This project has been an exciting exploration into new tools and technologies, pushing my boundaries and expanding my skill set.</p>
-
-      <p>One of the highlights of this project was integrating Three.js, a powerful JavaScript library, to create an interactive 3D Earth model on the homepage. The ability to manipulate and visualize the Earth and simulate a satellite orbiting around it was not only challenging but immensely rewarding. It allowed me to delve into the world of 3D graphics and interactive web development in a meaningful way.</p>
-
-      <p>Additionally, I utilized Particle.js to enhance the visual appeal of the website. The particle effects added a dynamic and modern touch, creating an engaging visual experience for visitors.</p>
-
-      <p>Throughout the process, I learned valuable lessons in web development, from design principles to implementation details. It was a journey of continuous learning and problem-solving, where each challenge presented an opportunity to grow.</p>
-
-      <p>This project has ignited my passion for building high-effort, innovative projects. I am excited about the possibilities ahead and look forward to creating more impactful projects that showcase my skills and creativity.</p>
-
-      <p>Thank you for joining me on this journey. Stay tuned for more updates and projects!</p>
-
-      <p>-Aniket Chaudhry</p>
-
-      <button onclick="hidePost()">Back to Blog</button>
-    </div>
-
-    <div id="post3" class="post-content">
-      <h2>Post Title 3</h2>
-      <p>Full content of the third post goes here...</p>
-      <button onclick="hidePost()">Back to Blog</button>
-    </div>
+      <footer class="article-footer">
+        <button class="back-btn" onclick="hidePost()">
+          <i class="fas fa-arrow-left"></i> Back to all posts
+        </button>
+      </footer>
+    </article>
   </main>
 
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-content">
+      <p>&copy; 2025 Aniket Chaudhry</p>
+      <div class="footer-links">
+        <a href="https://linkedin.com/in/aniketchaudhry" target="_blank"><i class="fab fa-linkedin"></i></a>
+        <a href="https://github.com/aku7703" target="_blank"><i class="fab fa-github"></i></a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Marked.js for Markdown rendering -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
   <script>
-    function showPost(postId) {
-      document.getElementById('posts-list').style.display = 'none';
-      document.getElementById(postId).style.display = 'block';
+    // Blog posts data (will be loaded from markdown files)
+    // For static hosting, we use a manifest approach
+    const postsManifest = [
+      {
+        slug: 'creating-portfolio-website',
+        title: 'Creating My Portfolio Website!',
+        date: '2024-06-19',
+        excerpt: 'Learn about my journey of creating my portfolio website using new tools like Three.js and Particle.js.',
+        cover: ''
+      },
+      {
+        slug: 'university-nanosatellite-program',
+        title: 'University Nanosatellite Program Kick-Off!',
+        date: '2024-05-20',
+        excerpt: 'I represented Northeastern University at NASA\'s Kennedy Space Center for the University Nanosatellite Program.',
+        cover: ''
+      }
+    ];
+
+    let currentPosts = [];
+
+    // Format date
+    function formatDate(dateString) {
+      const options = { year: 'numeric', month: 'long', day: 'numeric' };
+      return new Date(dateString).toLocaleDateString('en-US', options);
     }
 
-    function hidePost() {
-      document.querySelectorAll('.post-content').forEach(post => post.style.display = 'none');
-      document.getElementById('posts-list').style.display = 'block';
+    // Calculate read time
+    function getReadTime(content) {
+      const words = content.split(/\s+/).length;
+      const minutes = Math.ceil(words / 200);
+      return `${minutes} min read`;
     }
+
+    // Render posts list
+    function renderPostsList() {
+      const grid = document.querySelector('.posts-grid');
+
+      // Sort by date descending
+      const sorted = [...postsManifest].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+      grid.innerHTML = sorted.map((post, index) => `
+        <article class="post-card ${index === 0 ? 'featured' : ''}" onclick="showPost('${post.slug}')">
+          ${post.cover ? `<img src="${post.cover}" alt="${post.title}" class="post-cover">` : ''}
+          <div class="post-content">
+            <time class="post-meta">${formatDate(post.date)}</time>
+            <h2 class="post-title">${post.title}</h2>
+            <p class="post-excerpt">${post.excerpt}</p>
+            <span class="read-more">Read article <i class="fas fa-arrow-right"></i></span>
+          </div>
+        </article>
+      `).join('');
+    }
+
+    // Show single post
+    async function showPost(slug) {
+      try {
+        // Fetch the markdown file
+        const response = await fetch(`/content/blog/${slug}.md`);
+        const text = await response.text();
+
+        // Parse frontmatter and content
+        const parts = text.split('---');
+        const frontmatter = parts[1];
+        const content = parts.slice(2).join('---');
+
+        // Extract metadata
+        const meta = {};
+        frontmatter.split('\n').forEach(line => {
+          const [key, ...value] = line.split(':');
+          if (key && value.length) {
+            meta[key.trim()] = value.join(':').trim().replace(/^["']|["']$/g, '');
+          }
+        });
+
+        // Render
+        document.getElementById('post-title').textContent = meta.title || '';
+        document.getElementById('post-date').textContent = formatDate(meta.date);
+
+        const coverImg = document.getElementById('post-cover');
+        if (meta.cover) {
+          coverImg.src = meta.cover;
+          coverImg.style.display = 'block';
+        } else {
+          coverImg.style.display = 'none';
+        }
+
+        // Render markdown content
+        document.getElementById('post-content').innerHTML = marked.parse(content);
+
+        // Switch views
+        document.getElementById('posts-list').style.display = 'none';
+        document.getElementById('post-view').style.display = 'block';
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } catch (error) {
+        console.error('Error loading post:', error);
+      }
+    }
+
+    // Hide post
+    function hidePost() {
+      document.getElementById('post-view').style.display = 'none';
+      document.getElementById('posts-list').style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', renderPostsList);
   </script>
 </body>
 

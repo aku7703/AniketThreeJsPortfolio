@@ -1,0 +1,46 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <title>Blog Admin | Aniket Chaudhry</title>
+    <script src="https://unpkg.com/@staticcms/app@^4.0.0/dist/static-cms-app.js"></script>
+</head>
+
+<body>
+    <script>
+        StaticCmsApp.init({
+            config: {
+                backend: {
+                    name: 'github',
+                    repo: 'aku7703/AniketThreeJsPortfolio',
+                    branch: 'main',
+                    base_url: 'https://api.netlify.com',
+                    auth_endpoint: '/auth'
+                },
+                media_folder: 'public/uploads',
+                public_folder: '/uploads',
+                collections: [
+                    {
+                        name: 'blog',
+                        label: 'Blog Posts',
+                        folder: 'content/blog',
+                        create: true,
+                        slug: '{{slug}}',
+                        fields: [
+                            { label: 'Title', name: 'title', widget: 'string' },
+                            { label: 'Publish Date', name: 'date', widget: 'datetime' },
+                            { label: 'Cover Image', name: 'cover', widget: 'image', required: false },
+                            { label: 'Excerpt', name: 'excerpt', widget: 'text' },
+                            { label: 'Body', name: 'body', widget: 'markdown' }
+                        ]
+                    }
+                ]
+            }
+        });
+    </script>
+</body>
+
+</html>
