@@ -203,7 +203,7 @@ body::-webkit-scrollbar {
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
+    height: 100vh;
     z-index: 999;
     background: #000000;
     flex-direction: column;
@@ -241,7 +241,27 @@ body::-webkit-scrollbar {
     padding: 0.8rem 1.2rem;
   }
 
+  /* When menu is open, expand nav to cover full viewport */
+  #main-nav.menu-open {
+    bottom: 0;
+    background: #000000;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
   .webgl {
     pointer-events: none;
+  }
+
+  /* Hide canvas when mobile menu is open to prevent WebGL compositing over menu */
+  body.menu-open .webgl,
+  body.menu-open .starfield,
+  body.menu-open .hero-content,
+  body.menu-open .scroll-indicator {
+    visibility: hidden;
+  }
+
+  body.menu-open {
+    overflow: hidden;
   }
 }

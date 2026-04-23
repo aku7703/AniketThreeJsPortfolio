@@ -26,6 +26,7 @@
   padding: 60px 0 45px;
   position: relative;
   overflow: hidden;
+  scroll-margin-top: 60px;
 }
 
 .section-container {

@@ -208,6 +208,8 @@ if (mobileMenuBtn) {
   mobileMenuBtn.addEventListener('click', () => {
     mobileMenuBtn.classList.toggle('active')
     navLinks.classList.toggle('active')
+    document.body.classList.toggle('menu-open')
+    nav.classList.toggle('menu-open')
   })
 }
 
@@ -216,6 +218,8 @@ document.querySelectorAll('.nav-links a').forEach(link => {
   link.addEventListener('click', () => {
     mobileMenuBtn.classList.remove('active')
     navLinks.classList.remove('active')
+    document.body.classList.remove('menu-open')
+    nav.classList.remove('menu-open')
   })
 })
 
