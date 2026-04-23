@@ -613,7 +613,7 @@ footer p {
 .game-hud {
   display: none;
   position: absolute;
-  top: 60px;
+  bottom: 20px;
   left: 0;
   right: 0;
   z-index: 5;
@@ -790,12 +790,12 @@ footer p {
   }
 
   .game-trigger-btn {
-    bottom: 70px;
+    bottom: 20px;
     left: 15px;
   }
 
   .game-hud {
-    top: 50px;
+    bottom: 15px;
     gap: 8px;
     flex-wrap: wrap;
   }
