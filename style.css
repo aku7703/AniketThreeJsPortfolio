@@ -200,9 +200,12 @@ body::-webkit-scrollbar {
 
   .nav-links {
     position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.97);
-    backdrop-filter: blur(30px);
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 999;
+    background: #000000;
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -216,6 +219,10 @@ body::-webkit-scrollbar {
   .nav-links.active {
     opacity: 1;
     visibility: visible;
+  }
+
+  .mobile-menu-btn {
+    z-index: 1000;
   }
 
   .nav-links a {
