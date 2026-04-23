@@ -5,7 +5,7 @@
 /* CSS Variables */
 :root {
   --bg-primary: #000000;
-  --bg-secondary: rgba(15, 15, 15, 1);
+  --bg-secondary: #0a0a0a;
   --bg-card: rgba(25, 25, 25, 0.95);
   --accent-primary: #00ff88;
   --accent-secondary: #00cc6a;
@@ -38,7 +38,7 @@
   font-size: 2.2rem;
   font-weight: 700;
   color: var(--text-primary);
-  margin-bottom: 2rem;
+  margin-bottom: 1.2rem;
   position: relative;
   display: inline-block;
 }
@@ -47,7 +47,7 @@
   content: '';
   position: absolute;
   left: 0;
-  bottom: -10px;
+  bottom: -8px;
   width: 60px;
   height: 4px;
   background: linear-gradient(90deg, var(--accent-primary), transparent);
@@ -64,6 +64,33 @@
   justify-content: center;
   position: relative;
   padding: 0;
+}
+
+/* Starfield behind globe */
+.starfield {
+  position: absolute;
+  top: 0;
+  left: -30px;
+  width: calc(100% + 60px);
+  height: calc(100% + 60px);
+  z-index: 0;
+  overflow: hidden;
+}
+
+.hero-section {
+  overflow: hidden;
+}
+
+.starfield .star {
+  position: absolute;
+  border-radius: 50%;
+  background: #ffffff;
+  animation: twinkle ease-in-out infinite alternate;
+}
+
+@keyframes twinkle {
+  0% { opacity: 0.15; }
+  100% { opacity: 1; }
 }
 
 .hero-section .webgl {
@@ -268,8 +295,6 @@
 
 .timeline {
   position: relative;
-  max-width: 800px;
-  margin: 0 auto 2rem;
 }
 
 .timeline-item {
@@ -292,7 +317,8 @@
   color: var(--accent-primary);
   font-weight: 500;
   font-size: 0.9rem;
-  min-width: 140px;
+  min-width: 155px;
+  flex-shrink: 0;
 }
 
 .timeline-content h3 {
@@ -306,9 +332,15 @@
   font-size: 0.95rem;
 }
 
+.timeline-desc {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  line-height: 1.5;
+  margin-top: 0.4rem;
+}
+
 .education-highlight {
-  max-width: 800px;
-  margin: 0 auto;
+  margin: 0 0 1rem;
 }
 
 .education-badge {
@@ -509,7 +541,7 @@
 
 footer {
   background: var(--bg-secondary);
-  padding: 2rem 0;
+  padding: 1.5rem 0;
   border-top: 1px solid var(--border-subtle);
 }
 
@@ -520,24 +552,22 @@ footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 1rem;
 }
 
 footer p {
   color: var(--text-muted);
-  font-size: 0.9rem;
+  font-size: 0.85rem;
 }
 
 .footer-links {
   display: flex;
-  gap: 2rem;
+  gap: 1.5rem;
 }
 
 .footer-links a {
   color: var(--text-secondary);
   text-decoration: none;
-  font-size: 0.9rem;
+  font-size: 1.2rem;
   transition: var(--transition-fast);
 }
 
@@ -605,11 +635,8 @@ footer p {
   
   .footer-container {
     flex-direction: column;
+    gap: 1rem;
     text-align: center;
-  }
-  
-  .footer-links {
-    gap: 1.5rem;
   }
 }
 

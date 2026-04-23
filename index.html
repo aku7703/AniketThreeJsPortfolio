@@ -5,14 +5,14 @@
   <meta charset="UTF-8" />
   <link rel="icon" type="image/svg+xml" href="/aclogo.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Aniket Chaudhry | Software Engineer</title>
+  <title>Aniket Chaudhry — Software Engineer & Space Enthusiast</title>
   <meta name="description"
-    content="Welcome to Aniket Chaudhry's portfolio! Explore Aniket's projects, blog, and more. Download his resume and connect with him on LinkedIn and GitHub.">
+    content="Aniket Chaudhry's portfolio — Software Engineer & Space Enthusiast. Currently at Blue Origin. Explore projects, blog, and more.">
 
   <meta name="author" content="Aniket Chaudhry">
   <meta property="og:title" content="Aniket Chaudhry's Portfolio Site">
   <meta property="og:description"
-    content="Welcome to Aniket Chaudhry's portfolio! Explore Aniket's projects, blog, and more. Download his resume and connect with him on LinkedIn and GitHub.">
+    content="Aniket Chaudhry's portfolio — Software Engineer & Space Enthusiast. Currently at Blue Origin.">
   <meta property="og:image" content="/sitephoto.png">
   <meta property="og:url" content="https://aniketc.tech">
   <!-- Additional SEO Meta Tags -->
@@ -56,6 +56,7 @@
 
   <!-- Hero Section with 3D Globe -->
   <section id="hero" class="hero-section">
+    <div class="starfield" id="starfield"></div>
     <canvas class="webgl"></canvas>
     <div class="hero-content">
       <h1 class="hero-title">Aniket Chaudhry</h1>
@@ -82,9 +83,9 @@
         </div>
         <div class="about-content">
           <p class="about-intro">
-            Hey there! I'm <strong>Aniket Chaudhry</strong>, a Computer Science student at Northeastern University.
-            I have most recently interned at <strong>General Dynamics Electric Boat</strong> as a Software Engineer!
-            I love programming and am passionate about software development, satellite making, and emerging
+            Hey there! I'm <strong>Aniket Chaudhry</strong>, a Computer Science student at Northeastern University
+            concentrating in AI. I most recently interned at <strong>Blue Origin</strong> as an Avionics Software Engineer!
+            I love programming and am passionate about software development, space systems, and emerging
             technologies.
           </p>
           <div class="skills-container">
@@ -94,12 +95,14 @@
               <span class="skill-tag">Python</span>
               <span class="skill-tag">Go</span>
               <span class="skill-tag">Rust</span>
+              <span class="skill-tag">SQL</span>
               <span class="skill-tag">JavaScript</span>
-              <span class="skill-tag">TypeScript</span>
               <span class="skill-tag">React</span>
-              <span class="skill-tag">Node.js</span>
-              <span class="skill-tag">Three.js</span>
-              <span class="skill-tag">PostgreSQL</span>
+              <span class="skill-tag">gRPC</span>
+              <span class="skill-tag">AWS</span>
+              <span class="skill-tag">Grafana</span>
+              <span class="skill-tag">Prometheus</span>
+              <span class="skill-tag">Docker</span>
             </div>
           </div>
         </div>
@@ -111,26 +114,46 @@
   <section id="experience" class="section experience-section">
     <div class="section-container">
       <h2 class="section-title">Experience</h2>
+      <div class="education-highlight">
+        <div class="education-badge">
+          <i class="fas fa-graduation-cap"></i>
+          <div>
+            <h4>B.S. in Computer Science, AI Concentration</h4>
+            <p>Northeastern University • Expected Spring 2027 • 3.92 GPA • CyberCorps Scholar • Dean's List</p>
+          </div>
+        </div>
+      </div>
       <div class="timeline">
         <div class="timeline-item">
-          <div class="timeline-date">Jan 2025 - Jul 2025</div>
+          <div class="timeline-date">Jan 2026 - Apr 2026</div>
           <div class="timeline-content">
-            <h3>Software Engineering Co-op</h3>
-            <p class="timeline-company">General Dynamics Electric Boat</p>
+            <h3>Avionics Software Engineering Intern</h3>
+            <p class="timeline-company">Blue Origin</p>
+            <p class="timeline-desc">Built observability tooling, an autonomous engineering agent, and a PagerDuty MCP server for mission operations software.</p>
           </div>
         </div>
         <div class="timeline-item">
-          <div class="timeline-date">Sept 2023 - Present</div>
+          <div class="timeline-date">Jan 2025 - Jul 2025</div>
+          <div class="timeline-content">
+            <h3>Tactical Software Engineering Co-op</h3>
+            <p class="timeline-company">General Dynamics Electric Boat</p>
+            <p class="timeline-desc">Created a YAML-configurable tracing service in Go with gRPC, slashing network traffic by 90%. Wrote exhaustive Rust test suites.</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">Aug 2023 - Dec 2025</div>
           <div class="timeline-content">
             <h3>Project Lead & Software Engineer</h3>
-            <p class="timeline-company">Project Horizon, Northeastern University</p>
+            <p class="timeline-company">Northeastern University Satellite Lab</p>
+            <p class="timeline-desc">Led a 20+ student team building two satellites. Co-developed ground station software with AWS and delivered updates to NASA/AFRL.</p>
           </div>
         </div>
         <div class="timeline-item">
           <div class="timeline-date">Jul 2024 - Sept 2024</div>
           <div class="timeline-content">
-            <h3>Software Engineering Intern</h3>
+            <h3>Full-Stack Software Engineer Intern</h3>
             <p class="timeline-company">Sprouts.ai</p>
+            <p class="timeline-desc">Built a CMS with Strapi and implemented a PostgreSQL schema on Azure handling 5,000+ daily queries.</p>
           </div>
         </div>
         <div class="timeline-item">
@@ -138,15 +161,7 @@
           <div class="timeline-content">
             <h3>Mission Concept Intern</h3>
             <p class="timeline-company">Space Dynamics Laboratory</p>
-          </div>
-        </div>
-      </div>
-      <div class="education-highlight">
-        <div class="education-badge">
-          <i class="fas fa-graduation-cap"></i>
-          <div>
-            <h4>B.S. in Computer Science</h4>
-            <p>Northeastern University • CyberCorps Scholar • Dean's List</p>
+            <p class="timeline-desc">Assembled mission design documents and requirements verification matrices for a sub-THz satellite communication experiment.</p>
           </div>
         </div>
       </div>
@@ -208,9 +223,20 @@
         </article>
 
         <article class="project-card">
-          <div class="project-image">
-            <img src="sitephoto.png" alt="Personal Website" />
+          <div class="project-info">
+            <h3>Chess Tutor Agent</h3>
+            <p>An AI chess coach that explains why moves are good or bad in beginner-friendly language. A coached 1.5B model beat a 32B model 62% of the time.</p>
+            <div class="project-tech">
+              <span>Python</span>
+              <span>Stockfish</span>
+              <span>LoRA</span>
+              <span>Hugging Face</span>
+            </div>
+            <a href="https://github.com/aku7703/chess-tutor-agent" class="project-link" target="_blank">View on GitHub →</a>
           </div>
+        </article>
+
+        <article class="project-card">
           <div class="project-info">
             <h3>This Portfolio</h3>
             <p>My personal portfolio with an interactive 3D globe. (Easter egg: Click the orbiting satellite!)</p>
@@ -250,12 +276,10 @@
   <!-- Footer -->
   <footer>
     <div class="footer-container">
-      <p>&copy; 2025 Aniket Chaudhry. Built with Three.js & ☕</p>
+      <p>&copy; 2026 Aniket Chaudhry</p>
       <div class="footer-links">
-        <a href="#hero">Home</a>
-        <a href="#about">About</a>
-        <a href="#projects">Projects</a>
-        <a href="/blog">Blog</a>
+        <a href="https://www.linkedin.com/in/aniketchaudhry/" target="_blank"><i class="fab fa-linkedin"></i></a>
+        <a href="https://github.com/aku7703" target="_blank"><i class="fab fa-github"></i></a>
       </div>
     </div>
   </footer>

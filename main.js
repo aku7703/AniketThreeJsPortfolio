@@ -248,6 +248,44 @@ style.textContent = `
 document.head.appendChild(style)
 
 // ========================================
+// STARFIELD GENERATION
+// ========================================
+
+const starfield = document.getElementById('starfield')
+if (starfield) {
+  const count = 120
+  for (let i = 0; i < count; i++) {
+    const star = document.createElement('div')
+    star.classList.add('star')
+    const size = Math.random() * 2.5 + 1
+    star.style.width = `${size}px`
+    star.style.height = `${size}px`
+    star.style.left = `${Math.random() * 100}%`
+    star.style.top = `${Math.random() * 100}%`
+    star.style.animationDuration = `${Math.random() * 3 + 2}s`
+    star.style.animationDelay = `${Math.random() * 5}s`
+    starfield.appendChild(star)
+  }
+
+  // Parallax: shift stars opposite to mouse movement
+  let starX = 0, starY = 0
+  let targetX = 0, targetY = 0
+
+  window.addEventListener('mousemove', (event) => {
+    targetX = ((event.clientX / window.innerWidth) - 0.5) * -30
+    targetY = ((event.clientY / window.innerHeight) - 0.5) * -30
+  })
+
+  const updateStarfield = () => {
+    starX += (targetX - starX) * 0.05
+    starY += (targetY - starY) * 0.05
+    starfield.style.transform = `translate(${starX}px, ${starY}px)`
+    requestAnimationFrame(updateStarfield)
+  }
+  updateStarfield()
+}
+
+// ========================================
 // LUNAR LANDER SCROLL INDICATOR
 // ========================================
 
