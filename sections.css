@@ -790,8 +790,7 @@ footer p {
   }
 
   .game-trigger-btn {
-    bottom: 20px;
-    left: 15px;
+    display: none;
   }
 
   .game-hud {
