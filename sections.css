@@ -585,23 +585,23 @@ footer p {
   color: var(--accent-primary);
 }
 
-/* ============ SPACE INVADERS GAME ============ */
+/* ============ ASTEROID DEFENSE GAME ============ */
 
 .game-trigger-btn {
   position: absolute;
   bottom: 30px;
-  right: 25px;
+  left: 25px;
   z-index: 5;
-  width: 40px;
-  height: 40px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
   background: rgba(0, 255, 136, 0.1);
-  border: 1px solid rgba(0, 255, 136, 0.25);
+  border: 1px solid rgba(0, 255, 136, 0.2);
   color: var(--accent-primary);
-  font-size: 0.95rem;
+  font-size: 0.85rem;
   cursor: pointer;
   transition: var(--transition-fast);
-  opacity: 0.5;
+  opacity: 0.4;
 }
 
 .game-trigger-btn:hover {
@@ -610,94 +610,69 @@ footer p {
   transform: scale(1.1);
 }
 
-.game-overlay {
+.game-hud {
   display: none;
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 10;
-  background: rgba(0, 0, 0, 0.95);
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.game-overlay.active {
-  display: flex;
-}
-
-#game-canvas {
-  max-width: 100%;
-  max-height: 70vh;
-  image-rendering: pixelated;
-}
-
-.game-hud {
-  position: absolute;
-  top: 12px;
+  top: 60px;
   left: 0;
   right: 0;
-  display: flex;
-  justify-content: space-between;
+  z-index: 5;
   padding: 0 20px;
-  z-index: 11;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  pointer-events: none;
+}
+
+.game-hud.active {
+  display: flex;
 }
 
 #game-score {
   color: var(--accent-primary);
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   font-family: monospace;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 4px 10px;
+  border-radius: 12px;
+}
+
+#game-lives {
+  font-size: 0.85rem;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 4px 10px;
+  border-radius: 12px;
+}
+
+#game-prompt {
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 4px 10px;
+  border-radius: 12px;
 }
 
 .game-exit-btn {
   background: rgba(255, 50, 50, 0.15);
-  border: 1px solid rgba(255, 50, 50, 0.4);
+  border: 1px solid rgba(255, 50, 50, 0.35);
   color: #ff5555;
-  padding: 5px 12px;
-  border-radius: 20px;
+  padding: 4px 10px;
+  border-radius: 15px;
   cursor: pointer;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   transition: var(--transition-fast);
+  pointer-events: auto;
 }
 
 .game-exit-btn:hover {
   background: rgba(255, 50, 50, 0.35);
 }
 
-.game-mobile-controls {
+/* Hide hero text and other UI during game */
+.hero-section.game-active .hero-content,
+.hero-section.game-active .scroll-indicator,
+.hero-section.game-active .game-trigger-btn {
   display: none;
-  position: absolute;
-  bottom: 25px;
-  left: 0;
-  right: 0;
-  justify-content: center;
-  gap: 12px;
-  padding: 0 20px;
-}
-
-.game-ctrl-btn {
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  color: white;
-  font-size: 1.1rem;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-  touch-action: manipulation;
-}
-
-.game-ctrl-btn:active {
-  background: rgba(0, 255, 136, 0.3);
-}
-
-#ctrl-fire {
-  width: 72px;
-  font-size: 0.8rem;
-  font-weight: 600;
 }
 
 /* ============ RESPONSIVE DESIGN ============ */
@@ -808,13 +783,19 @@ footer p {
     text-align: center;
   }
 
-  .game-mobile-controls {
-    display: flex;
-  }
-
   .game-trigger-btn {
     bottom: 70px;
-    right: 15px;
+    left: 15px;
+  }
+
+  .game-hud {
+    top: 50px;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  #game-prompt {
+    display: none;
   }
 }
 

@@ -97,7 +97,7 @@ window.addEventListener('resize', () => {
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 })
 
-// Animation loop
+// Animation loop (also handles asteroid game when active)
 const animate = () => {
   window.requestAnimationFrame(animate)
   controls.update()
@@ -120,6 +120,9 @@ const animate = () => {
     satellite.rotation.x = orbitAngle
     satellite.rotation.z = orbitAngle * 1.5
   }
+
+  // Asteroid game update
+  if (typeof updateAsteroidGame === 'function') updateAsteroidGame()
 
   renderer.render(scene, camera)
 }
@@ -358,227 +361,192 @@ if (lunarLander) {
 }
 
 // ========================================
-// SPACE INVADERS MINI-GAME
+// ASTEROID DEFENSE GAME
 // ========================================
 
-class SpaceInvadersGame {
-  constructor(canvas, scoreEl) {
-    this.canvas = canvas
-    this.ctx = canvas.getContext('2d')
-    this.scoreEl = scoreEl
-    this.running = false
-    this.animFrameId = null
-    this.W = 400
-    this.H = 600
-    canvas.width = this.W
-    canvas.height = this.H
-    this.keys = { left: false, right: false, fire: false }
-    this.lastFireTime = 0
-    this.reset()
-  }
-
-  reset() {
-    this.score = 0
-    this.gameOver = false
-    this.player = { x: this.W / 2, y: this.H - 40, w: 30, h: 20, speed: 4 }
-    this.bullets = []
-    this.enemyBullets = []
-    this.invaders = []
-    this.invaderDir = 1
-    this.invaderSpeed = 0.5
-    this.invaderDropAmount = 20
-    this.spawnWave()
-  }
-
-  spawnWave() {
-    for (let row = 0; row < 3; row++) {
-      for (let col = 0; col < 7; col++) {
-        this.invaders.push({
-          x: 55 + col * 45,
-          y: 50 + row * 40,
-          w: 28, h: 20, alive: true
-        })
-      }
-    }
-  }
-
-  start() {
-    this.running = true
-    this.reset()
-    this.loop()
-  }
-
-  stop() {
-    this.running = false
-    if (this.animFrameId) cancelAnimationFrame(this.animFrameId)
-  }
-
-  loop() {
-    if (!this.running) return
-    this.update()
-    this.draw()
-    this.animFrameId = requestAnimationFrame(() => this.loop())
-  }
-
-  update() {
-    if (this.gameOver) return
-
-    if (this.keys.left) this.player.x = Math.max(this.player.w / 2, this.player.x - this.player.speed)
-    if (this.keys.right) this.player.x = Math.min(this.W - this.player.w / 2, this.player.x + this.player.speed)
-
-    const now = Date.now()
-    if (this.keys.fire && now - this.lastFireTime > 300) {
-      this.bullets.push({ x: this.player.x, y: this.player.y - this.player.h / 2, speed: 6 })
-      this.lastFireTime = now
-    }
-
-    this.bullets = this.bullets.filter(b => { b.y -= b.speed; return b.y > 0 })
-    this.enemyBullets = this.enemyBullets.filter(b => { b.y += b.speed; return b.y < this.H })
-
-    let hitEdge = false
-    const alive = this.invaders.filter(i => i.alive)
-    alive.forEach(inv => {
-      inv.x += this.invaderSpeed * this.invaderDir
-      if (inv.x <= 20 || inv.x >= this.W - 20) hitEdge = true
-    })
-    if (hitEdge) {
-      this.invaderDir *= -1
-      alive.forEach(inv => inv.y += this.invaderDropAmount)
-    }
-
-    if (alive.length > 0 && Math.random() < 0.02) {
-      const shooter = alive[Math.floor(Math.random() * alive.length)]
-      this.enemyBullets.push({ x: shooter.x, y: shooter.y + 10, speed: 3 })
-    }
-
-    this.bullets.forEach(bullet => {
-      alive.forEach(inv => {
-        if (Math.abs(bullet.x - inv.x) < inv.w / 2 && Math.abs(bullet.y - inv.y) < inv.h / 2) {
-          inv.alive = false
-          bullet.y = -10
-          this.score += 100
-          this.scoreEl.textContent = `Score: ${this.score}`
-        }
-      })
-    })
-
-    this.enemyBullets.forEach(bullet => {
-      if (Math.abs(bullet.x - this.player.x) < this.player.w / 2 &&
-          Math.abs(bullet.y - this.player.y) < this.player.h / 2) {
-        this.gameOver = true
-      }
-    })
-
-    alive.forEach(inv => {
-      if (inv.y + inv.h / 2 >= this.player.y) this.gameOver = true
-    })
-
-    if (alive.length === 0) {
-      this.invaderSpeed += 0.3
-      this.spawnWave()
-    }
-  }
-
-  draw() {
-    const ctx = this.ctx
-    ctx.clearRect(0, 0, this.W, this.H)
-
-    ctx.fillStyle = '#00ff88'
-    ctx.beginPath()
-    ctx.moveTo(this.player.x, this.player.y - this.player.h / 2)
-    ctx.lineTo(this.player.x - this.player.w / 2, this.player.y + this.player.h / 2)
-    ctx.lineTo(this.player.x + this.player.w / 2, this.player.y + this.player.h / 2)
-    ctx.closePath()
-    ctx.fill()
-
-    this.invaders.filter(i => i.alive).forEach(inv => {
-      ctx.fillStyle = '#ff6666'
-      ctx.fillRect(inv.x - inv.w / 2, inv.y - inv.h / 2, inv.w, inv.h)
-      ctx.fillStyle = '#000'
-      ctx.fillRect(inv.x - 6, inv.y - 4, 4, 4)
-      ctx.fillRect(inv.x + 2, inv.y - 4, 4, 4)
-    })
-
-    ctx.fillStyle = '#00ff88'
-    this.bullets.forEach(b => ctx.fillRect(b.x - 1.5, b.y - 5, 3, 10))
-
-    ctx.fillStyle = '#ff4444'
-    this.enemyBullets.forEach(b => ctx.fillRect(b.x - 1.5, b.y - 5, 3, 10))
-
-    if (this.gameOver) {
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.7)'
-      ctx.fillRect(0, 0, this.W, this.H)
-      ctx.fillStyle = '#ff4444'
-      ctx.font = '28px Poppins, sans-serif'
-      ctx.textAlign = 'center'
-      ctx.fillText('GAME OVER', this.W / 2, this.H / 2 - 20)
-      ctx.fillStyle = '#ffffff'
-      ctx.font = '16px Poppins, sans-serif'
-      ctx.fillText(`Score: ${this.score}`, this.W / 2, this.H / 2 + 15)
-      ctx.fillStyle = '#888'
-      ctx.font = '13px Poppins, sans-serif'
-      ctx.fillText('Press SPACE or tap FIRE to restart', this.W / 2, this.H / 2 + 45)
-    }
-  }
-}
-
-// Game wiring
+const heroSection = document.getElementById('hero')
 const gameTrigger = document.getElementById('game-trigger')
-const gameOverlay = document.getElementById('game-overlay')
-const gameCanvas = document.getElementById('game-canvas')
-const gameScore = document.getElementById('game-score')
+const gameHud = document.getElementById('game-hud')
+const gameScoreEl = document.getElementById('game-score')
+const gameLivesEl = document.getElementById('game-lives')
 const gameExit = document.getElementById('game-exit')
-let game = null
 
-if (gameTrigger && gameOverlay && gameCanvas) {
-  gameTrigger.addEventListener('click', () => {
-    gameOverlay.classList.add('active')
-    game = new SpaceInvadersGame(gameCanvas, gameScore)
-    game.start()
-  })
+let gameActive = false
+let gameScore = 0
+let gameLives = 3
+let asteroids = []
+let lastSpawnTime = 0
+let spawnInterval = 2000
+const asteroidMaterial = new THREE.MeshStandardMaterial({ color: 0x886644, roughness: 0.8 })
+const asteroidGeometries = [
+  new THREE.IcosahedronGeometry(0.3, 0),
+  new THREE.IcosahedronGeometry(0.4, 1),
+  new THREE.IcosahedronGeometry(0.5, 0),
+]
 
-  gameExit.addEventListener('click', () => {
-    if (game) game.stop()
-    game = null
-    gameOverlay.classList.remove('active')
-    gameScore.textContent = 'Score: 0'
-  })
+function spawnAsteroid() {
+  const geo = asteroidGeometries[Math.floor(Math.random() * asteroidGeometries.length)]
+  const mesh = new THREE.Mesh(geo, asteroidMaterial.clone())
 
-  // Keyboard controls
-  window.addEventListener('keydown', (e) => {
-    if (!game || !game.running) return
-    if (e.key === 'ArrowLeft' || e.key === 'a') game.keys.left = true
-    if (e.key === 'ArrowRight' || e.key === 'd') game.keys.right = true
-    if (e.key === ' ') {
-      e.preventDefault()
-      game.keys.fire = true
-      if (game.gameOver) { game.reset(); game.scoreEl.textContent = 'Score: 0' }
+  // Spawn from random direction far from Earth
+  const angle = Math.random() * Math.PI * 2
+  const elevation = (Math.random() - 0.5) * Math.PI * 0.8
+  const dist = 14 + Math.random() * 4
+  mesh.position.set(
+    Math.cos(angle) * Math.cos(elevation) * dist,
+    Math.sin(elevation) * dist,
+    Math.sin(angle) * Math.cos(elevation) * dist
+  )
+
+  // Direction toward Earth with slight randomness
+  const target = new THREE.Vector3(
+    (Math.random() - 0.5) * 2,
+    (Math.random() - 0.5) * 2,
+    (Math.random() - 0.5) * 2
+  )
+  const dir = target.clone().sub(mesh.position).normalize()
+  const speed = 0.02 + Math.random() * 0.015
+
+  mesh.userData = { dir, speed, alive: true }
+  mesh.rotation.set(Math.random() * 6, Math.random() * 6, Math.random() * 6)
+  scene.add(mesh)
+  asteroids.push(mesh)
+}
+
+function destroyAsteroid(mesh) {
+  mesh.userData.alive = false
+  // Quick scale-down animation
+  gsap.to(mesh.scale, {
+    x: 0, y: 0, z: 0,
+    duration: 0.2,
+    onComplete: () => {
+      scene.remove(mesh)
+      mesh.geometry.dispose()
+      mesh.material.dispose()
     }
   })
+}
 
-  window.addEventListener('keyup', (e) => {
-    if (!game) return
-    if (e.key === 'ArrowLeft' || e.key === 'a') game.keys.left = false
-    if (e.key === 'ArrowRight' || e.key === 'd') game.keys.right = false
-    if (e.key === ' ') game.keys.fire = false
+function startGame() {
+  gameActive = true
+  gameScore = 0
+  gameLives = 3
+  asteroids = []
+  lastSpawnTime = Date.now()
+  spawnInterval = 2000
+  heroSection.classList.add('game-active')
+  gameHud.classList.add('active')
+  gameScoreEl.textContent = 'Score: 0'
+  gameLivesEl.textContent = '❤️'.repeat(gameLives)
+  canvas.style.cursor = 'crosshair'
+}
+
+function endGame() {
+  gameActive = false
+  heroSection.classList.remove('game-active')
+  gameHud.classList.remove('active')
+  canvas.style.cursor = ''
+  // Clean up remaining asteroids
+  asteroids.forEach(a => {
+    scene.remove(a)
+    a.geometry.dispose()
+    a.material.dispose()
   })
+  asteroids = []
+}
 
-  // Mobile controls
-  const ctrlLeft = document.getElementById('ctrl-left')
-  const ctrlRight = document.getElementById('ctrl-right')
-  const ctrlFire = document.getElementById('ctrl-fire')
+// Game update function called from the main animate loop
+window.updateAsteroidGame = function () {
+  if (!gameActive) return
 
-  if (ctrlLeft && ctrlRight && ctrlFire) {
-    const bind = (el, key) => {
-      el.addEventListener('touchstart', (e) => { e.preventDefault(); if (game) game.keys[key] = true }, { passive: false })
-      el.addEventListener('touchend', () => { if (game) game.keys[key] = false })
+  const now = Date.now()
+
+  // Spawn asteroids
+  if (now - lastSpawnTime > spawnInterval) {
+    spawnAsteroid()
+    lastSpawnTime = now
+    spawnInterval = Math.max(600, spawnInterval - 30)
+  }
+
+  // Move asteroids
+  for (let i = asteroids.length - 1; i >= 0; i--) {
+    const a = asteroids[i]
+    if (!a.userData.alive) {
+      asteroids.splice(i, 1)
+      continue
     }
-    bind(ctrlLeft, 'left')
-    bind(ctrlRight, 'right')
-    bind(ctrlFire, 'fire')
 
-    ctrlFire.addEventListener('touchstart', () => {
-      if (game && game.gameOver) { game.reset(); game.scoreEl.textContent = 'Score: 0' }
-    })
+    a.position.add(a.userData.dir.clone().multiplyScalar(a.userData.speed))
+    a.rotation.x += 0.02
+    a.rotation.y += 0.01
+
+    // Hit Earth
+    if (a.position.length() < 5.2) {
+      destroyAsteroid(a)
+      asteroids.splice(i, 1)
+      gameLives--
+      gameLivesEl.textContent = '❤️'.repeat(Math.max(0, gameLives))
+      earthMesh.material.color.set(0xff4444)
+      setTimeout(() => earthMesh.material.color.set(0xffffff), 200)
+
+      if (gameLives <= 0) {
+        gameScoreEl.textContent = `Game Over! Score: ${gameScore}`
+        setTimeout(endGame, 2000)
+      }
+    }
+
+    // Too far, remove
+    if (a.position.length() > 25) {
+      scene.remove(a)
+      a.geometry.dispose()
+      a.material.dispose()
+      asteroids.splice(i, 1)
+    }
   }
 }
+
+const gameRaycaster = new THREE.Raycaster()
+const gamePointer = new THREE.Vector2()
+
+// Click/tap to destroy asteroids
+function handleGameClick(clientX, clientY) {
+  if (!gameActive) return
+
+  gamePointer.x = (clientX / sizes.width) * 2 - 1
+  gamePointer.y = -(clientY / sizes.height) * 2 + 1
+  gameRaycaster.setFromCamera(gamePointer, camera)
+
+  const hits = gameRaycaster.intersectObjects(asteroids)
+  if (hits.length > 0) {
+    const hit = hits[0].object
+    if (hit.userData.alive) {
+      destroyAsteroid(hit)
+      gameScore += 10
+      gameScoreEl.textContent = `Score: ${gameScore}`
+    }
+  }
+}
+
+canvas.addEventListener('click', (e) => handleGameClick(e.clientX, e.clientY))
+canvas.addEventListener('touchend', (e) => {
+  if (e.changedTouches.length > 0) {
+    const t = e.changedTouches[0]
+    handleGameClick(t.clientX, t.clientY)
+  }
+})
+
+// Wire up buttons
+if (gameTrigger) {
+  gameTrigger.addEventListener('click', (e) => {
+    e.stopPropagation()
+    startGame()
+  })
+}
+
+if (gameExit) {
+  gameExit.addEventListener('click', (e) => {
+    e.stopPropagation()
+    endGame()
+  })
+}
+
