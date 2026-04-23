@@ -70,6 +70,22 @@
       <span>Scroll</span>
       <div class="scroll-arrow"></div>
     </div>
+    <!-- Space Invaders Easter Egg -->
+    <button class="game-trigger-btn" id="game-trigger" aria-label="Play Space Invaders">
+      <i class="fas fa-gamepad"></i>
+    </button>
+    <div class="game-overlay" id="game-overlay">
+      <canvas id="game-canvas"></canvas>
+      <div class="game-hud">
+        <span id="game-score">Score: 0</span>
+        <button class="game-exit-btn" id="game-exit">✕ Exit</button>
+      </div>
+      <div class="game-mobile-controls" id="game-mobile-controls">
+        <button class="game-ctrl-btn" id="ctrl-left">◀</button>
+        <button class="game-ctrl-btn" id="ctrl-fire">FIRE</button>
+        <button class="game-ctrl-btn" id="ctrl-right">▶</button>
+      </div>
+    </div>
   </section>
 
   <!-- About Section -->
