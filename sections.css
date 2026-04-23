@@ -656,12 +656,18 @@ footer p {
   background: rgba(255, 50, 50, 0.15);
   border: 1px solid rgba(255, 50, 50, 0.35);
   color: #ff5555;
-  padding: 4px 10px;
+  padding: 6px 14px;
   border-radius: 15px;
   cursor: pointer;
-  font-size: 0.75rem;
+  font-size: 0.8rem;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
   transition: var(--transition-fast);
   pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  letter-spacing: 0.3px;
 }
 
 .game-exit-btn:hover {

@@ -377,37 +377,67 @@ let gameLives = 3
 let asteroids = []
 let lastSpawnTime = 0
 let spawnInterval = 2000
-const asteroidMaterial = new THREE.MeshStandardMaterial({ color: 0x886644, roughness: 0.8 })
-const asteroidGeometries = [
-  new THREE.IcosahedronGeometry(0.3, 0),
-  new THREE.IcosahedronGeometry(0.4, 1),
-  new THREE.IcosahedronGeometry(0.5, 0),
-]
+// Rocky asteroid colors
+const asteroidColors = [0x8B7355, 0x6B5B45, 0x9C8A6E, 0x5C4E3C, 0x7A6B55]
+
+function createAsteroidGeometry() {
+  // Start with icosahedron, then distort vertices for rocky look
+  const detail = Math.floor(Math.random() * 2) + 1
+  const baseSize = 0.25 + Math.random() * 0.3
+  const geo = new THREE.IcosahedronGeometry(baseSize, detail)
+
+  // Distort each vertex randomly to make it lumpy/rocky
+  const pos = geo.attributes.position
+  for (let i = 0; i < pos.count; i++) {
+    const vertex = new THREE.Vector3(pos.getX(i), pos.getY(i), pos.getZ(i))
+    const dist = vertex.length()
+    // Push vertices in/out randomly for craters and bumps
+    const noise = 1 + (Math.random() - 0.5) * 0.5
+    vertex.normalize().multiplyScalar(dist * noise)
+    pos.setXYZ(i, vertex.x, vertex.y, vertex.z)
+  }
+  geo.computeVertexNormals()
+  return geo
+}
+
+function createAsteroidMaterial() {
+  const color = asteroidColors[Math.floor(Math.random() * asteroidColors.length)]
+  return new THREE.MeshStandardMaterial({
+    color,
+    roughness: 0.9,
+    metalness: 0.1,
+    flatShading: true,
+  })
+}
 
 function spawnAsteroid() {
-  const geo = asteroidGeometries[Math.floor(Math.random() * asteroidGeometries.length)]
-  const mesh = new THREE.Mesh(geo, asteroidMaterial.clone())
+  const geo = createAsteroidGeometry()
+  const mat = createAsteroidMaterial()
+  const mesh = new THREE.Mesh(geo, mat)
 
-  // Spawn from random direction far from Earth
-  const angle = Math.random() * Math.PI * 2
-  const elevation = (Math.random() - 0.5) * Math.PI * 0.8
+  // Spawn only from the camera-facing hemisphere (positive z)
+  // so asteroids are always visible, never hidden behind Earth
+  const angle = (Math.random() - 0.5) * Math.PI * 1.2  // spread across front
+  const elevation = (Math.random() - 0.5) * Math.PI * 0.6
   const dist = 14 + Math.random() * 4
   mesh.position.set(
-    Math.cos(angle) * Math.cos(elevation) * dist,
+    Math.sin(angle) * Math.cos(elevation) * dist,
     Math.sin(elevation) * dist,
-    Math.sin(angle) * Math.cos(elevation) * dist
+    Math.abs(Math.cos(angle) * Math.cos(elevation)) * dist  // always positive z (toward camera)
   )
 
-  // Direction toward Earth with slight randomness
+  // Direction toward Earth center with slight offset
   const target = new THREE.Vector3(
-    (Math.random() - 0.5) * 2,
-    (Math.random() - 0.5) * 2,
-    (Math.random() - 0.5) * 2
+    (Math.random() - 0.5) * 1.5,
+    (Math.random() - 0.5) * 1.5,
+    0
   )
   const dir = target.clone().sub(mesh.position).normalize()
   const speed = 0.02 + Math.random() * 0.015
+  const tumbleX = (Math.random() - 0.5) * 0.06
+  const tumbleY = (Math.random() - 0.5) * 0.06
 
-  mesh.userData = { dir, speed, alive: true }
+  mesh.userData = { dir, speed, alive: true, tumbleX, tumbleY }
   mesh.rotation.set(Math.random() * 6, Math.random() * 6, Math.random() * 6)
   scene.add(mesh)
   asteroids.push(mesh)
@@ -477,8 +507,8 @@ window.updateAsteroidGame = function () {
     }
 
     a.position.add(a.userData.dir.clone().multiplyScalar(a.userData.speed))
-    a.rotation.x += 0.02
-    a.rotation.y += 0.01
+    a.rotation.x += a.userData.tumbleX
+    a.rotation.y += a.userData.tumbleY
 
     // Hit Earth
     if (a.position.length() < 5.2) {
