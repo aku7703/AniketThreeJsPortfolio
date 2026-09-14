@@ -5,25 +5,27 @@
   <meta charset="UTF-8" />
   <link rel="icon" type="image/svg+xml" href="/aclogo.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Aniket Chaudhry — Software Engineer & Space Enthusiast</title>
+  <title>Aniket Chaudhry — Software Engineer | AI, Infrastructure & Space Systems</title>
   <meta name="description"
-    content="Aniket Chaudhry's portfolio — Software Engineer & Space Enthusiast. Currently at Blue Origin. Explore projects, blog, and more.">
+    content="Aniket Chaudhry is a software engineer building AI-powered developer tools, observability infrastructure, and software for complex engineering systems.">
 
   <meta name="author" content="Aniket Chaudhry">
-  <meta property="og:title" content="Aniket Chaudhry's Portfolio Site">
+  <link rel="canonical" href="https://aniketc.tech/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Aniket Chaudhry — Software Engineer">
   <meta property="og:description"
-    content="Aniket Chaudhry's portfolio — Software Engineer & Space Enthusiast. Currently at Blue Origin.">
-  <meta property="og:image" content="/sitephoto.png">
-  <meta property="og:url" content="https://aniketc.tech">
+    content="AI-powered developer tools, observability infrastructure, and software for complex engineering systems.">
+  <meta property="og:image" content="https://aniketc.tech/sitephoto.png">
+  <meta property="og:url" content="https://aniketc.tech/">
   <!-- Additional SEO Meta Tags -->
   <meta name="keywords"
     content="Aniket Chaudhry, portfolio, software engineer, computer science, Northeastern University, web development, satellite, projects">
   <meta name="robots" content="index, follow">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Aniket Chaudhry's Portfolio">
+  <meta name="twitter:title" content="Aniket Chaudhry — Software Engineer">
   <meta name="twitter:description"
-    content="Welcome to Aniket Chaudhry's portfolio! Explore Aniket's projects, blog, and more.">
-  <meta name="twitter:image" content="/sitephoto.png">
+    content="AI-powered developer tools, observability infrastructure, and software for complex engineering systems.">
+  <meta name="twitter:image" content="https://aniketc.tech/sitephoto.png">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -33,6 +35,25 @@
 
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="sections.css">
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Aniket Chaudhry",
+      "url": "https://aniketc.tech/",
+      "image": "https://aniketc.tech/aniket-c.jpg",
+      "jobTitle": "Software Engineer",
+      "alumniOf": {
+        "@type": "CollegeOrUniversity",
+        "name": "Northeastern University"
+      },
+      "sameAs": [
+        "https://www.linkedin.com/in/aniketchaudhry/",
+        "https://github.com/aku7703"
+      ],
+      "knowsAbout": ["Software Engineering", "Artificial Intelligence", "Observability", "Space Systems"]
+    }
+  </script>
 </head>
 
 <body>
@@ -40,16 +61,17 @@
   <nav id="main-nav">
     <div class="nav-container">
       <a class="nav-logo" href="#hero">Aniket Chaudhry</a>
-      <button class="mobile-menu-btn" aria-label="Toggle menu">
+      <button class="mobile-menu-btn" aria-label="Open navigation" aria-expanded="false" aria-controls="primary-navigation">
         <span></span>
         <span></span>
         <span></span>
       </button>
-      <ul class="nav-links">
+      <ul class="nav-links" id="primary-navigation">
         <li><a href="#about">About</a></li>
+        <li><a href="#experience">Experience</a></li>
         <li><a href="#projects">Projects</a></li>
         <li><a href="/blog">Blog</a></li>
-        <li><a href="Resume-AniketChaudhry.pdf" class="nav-cta">Resume</a></li>
+        <li><a href="/Resume-AniketChaudhry.pdf" class="nav-cta" target="_blank" rel="noopener">Resume</a></li>
       </ul>
     </div>
   </nav>
@@ -57,13 +79,14 @@
   <!-- Hero Section with 3D Globe -->
   <section id="hero" class="hero-section">
     <div class="starfield" id="starfield"></div>
-    <canvas class="webgl"></canvas>
+    <canvas class="webgl" aria-hidden="true"></canvas>
     <div class="hero-content">
       <h1 class="hero-title">Aniket Chaudhry</h1>
-      <p class="hero-subtitle">Software Engineer & Space Enthusiast</p>
+      <p class="hero-subtitle">Software Engineer — AI, Infrastructure & Space Systems</p>
+      <p class="hero-summary">Building reliable developer tools, observability systems, and AI-powered software for complex engineering environments.</p>
       <div class="hero-cta">
-        <a href="#about" class="btn-primary">Explore My Work</a>
-        <a href="#contact" class="btn-secondary">Get In Touch</a>
+        <a href="#experience" class="btn-primary">View Experience</a>
+        <a href="#projects" class="btn-secondary">Explore Projects</a>
       </div>
     </div>
     <div class="scroll-indicator">
@@ -82,21 +105,30 @@
     </div>
   </section>
 
+  <section class="proof-strip" aria-label="Selected engineering impact">
+    <div class="proof-grid">
+      <div class="proof-item"><strong>117</strong><span>production alert rules</span></div>
+      <div class="proof-item"><strong>90%</strong><span>reduction in gRPC traffic</span></div>
+      <div class="proof-item"><strong>99%</strong><span>PagerDuty integration test coverage</span></div>
+      <div class="proof-item"><strong>20+</strong><span>students led</span></div>
+    </div>
+  </section>
+
   <!-- About Section -->
   <section id="about" class="section about-section">
     <div class="section-container">
       <h2 class="section-title">About Me</h2>
       <div class="about-grid">
         <div class="about-image">
-          <img src="aniket-c.jpg" alt="Aniket Chaudhry at Kennedy Space Center" />
+          <img src="aniket-c.jpg" alt="Aniket Chaudhry at Kennedy Space Center" loading="lazy" decoding="async" />
           <p class="image-caption">Me at the Kennedy Space Center!</p>
         </div>
         <div class="about-content">
           <p class="about-intro">
-            Hey there! I'm <strong>Aniket Chaudhry</strong>, a Computer Science student at Northeastern University
-            concentrating in AI. I most recently interned at <strong>Blue Origin</strong> as an Avionics Software Engineer!
-            I love programming and am passionate about software development, space systems, and emerging
-            technologies.
+            I'm <strong>Aniket Chaudhry</strong>, a Computer Science student at Northeastern University concentrating in
+            AI. Across the <strong>FBI, Blue Origin, and General Dynamics Electric Boat</strong>, I've built software for
+            data-intensive, security-conscious, and mission-focused environments. I especially enjoy developer tooling,
+            observability, AI systems, and infrastructure that makes complex engineering work more reliable.
           </p>
           <div class="skills-container">
             <h3>Technical Skills</h3>
@@ -135,11 +167,19 @@
       </div>
       <div class="timeline">
         <div class="timeline-item">
+          <div class="timeline-date">Jun 2026 - Aug 2026</div>
+          <div class="timeline-content">
+            <h3>Honors Intern</h3>
+            <p class="timeline-company">Federal Bureau of Investigation · Washington, DC</p>
+            <p class="timeline-desc">Optimized a Python information-aggregation pipeline by 30%, normalized 10,000+ telecommunications records, and built PyQt5 interfaces that made internal tools accessible to non-technical teams.</p>
+          </div>
+        </div>
+        <div class="timeline-item">
           <div class="timeline-date">Jan 2026 - Apr 2026</div>
           <div class="timeline-content">
             <h3>Avionics Software Engineering Intern</h3>
             <p class="timeline-company">Blue Origin</p>
-            <p class="timeline-desc">Built observability tooling, an autonomous engineering agent, and a PagerDuty MCP server for mission operations software.</p>
+            <p class="timeline-desc">Shipped six Grafana dashboards, 117 Prometheus alert rules, Terraform-based AWS infrastructure, an autonomous engineering agent, and a 15-tool PagerDuty MCP integration with 99% test coverage.</p>
           </div>
         </div>
         <div class="timeline-item">
@@ -184,79 +224,56 @@
       <h2 class="section-title">Featured Projects</h2>
       <div class="projects-grid">
         <article class="project-card featured">
-          <div class="project-image">
-            <img src="horizongif.gif" alt="Project Horizon Website" />
+          <div class="project-visual chess-visual" role="img" aria-label="Stylized chessboard with model evaluation results">
+            <span class="chess-piece" aria-hidden="true">♞</span>
+            <div class="chess-metric"><strong>96.4%</strong><span>clean explanations</span></div>
+            <div class="chess-metric"><strong>62/100</strong><span>wins over 32B baseline</span></div>
           </div>
           <div class="project-info">
-            <h3>Project Horizon Website</h3>
-            <p>The website for the undergraduate satellite team at Northeastern University!</p>
-            <div class="project-tech">
-              <span>React</span>
-              <span>TypeScript</span>
-              <span>Tailwind CSS</span>
-            </div>
-            <a href="https://www.horizonsat.org" class="project-link" target="_blank">View Website →</a>
-          </div>
-        </article>
-
-        <article class="project-card">
-          <div class="project-image">
-            <img src="mapapp.gif" alt="Northeastern Map App" />
-          </div>
-          <div class="project-info">
-            <h3>Northeastern Map App</h3>
-            <p>Node.js API implementing Dijkstra's Algorithm for campus navigation, including tunnels!</p>
-            <div class="project-tech">
-              <span>TypeScript</span>
-              <span>Node.js</span>
-              <span>MongoDB</span>
-            </div>
-            <a href="https://github.com/Oasis-NEU/s24-group5" class="project-link" target="_blank">View on GitHub →</a>
-          </div>
-        </article>
-
-        <article class="project-card">
-          <div class="project-image">
-            <img src="occupEYE.png" alt="OccupEYE App" />
-          </div>
-          <div class="project-info">
-            <h3>OccupEYE</h3>
-            <p>University space management app with booking systems for students, teachers, and managers.</p>
-            <div class="project-tech">
-              <span>Python</span>
-              <span>MySQL</span>
-              <span>Docker</span>
-            </div>
-            <a href="https://github.com/wayfarer4/SKAAM-Project-Repo" class="project-link" target="_blank">View on
-              GitHub →</a>
-          </div>
-        </article>
-
-        <article class="project-card">
-          <div class="project-info">
+            <p class="project-eyebrow">AI systems · Evaluation</p>
             <h3>Chess Tutor Agent</h3>
-            <p>An AI chess coach that explains why moves are good or bad in beginner-friendly language. A coached 1.5B model beat a 32B model 62% of the time.</p>
+            <p>Built an AI chess coach that explains engine recommendations in beginner-friendly language, with automated hallucination detection and a fine-tuned 1.5B model that outperformed a 32B baseline on 62 of 100 positions.</p>
             <div class="project-tech">
               <span>Python</span>
               <span>Stockfish</span>
               <span>LoRA</span>
               <span>Hugging Face</span>
             </div>
-            <a href="https://github.com/aku7703/chess-tutor-agent" class="project-link" target="_blank">View on GitHub →</a>
+            <a href="https://github.com/aku7703/chess-tutor-agent" class="project-link" target="_blank" rel="noopener">View on GitHub →</a>
           </div>
         </article>
 
         <article class="project-card">
+          <div class="project-image">
+            <img src="horizongif.gif" alt="Project Horizon satellite team website" loading="lazy" decoding="async" />
+          </div>
           <div class="project-info">
-            <h3>This Portfolio</h3>
-            <p>My personal portfolio with an interactive 3D globe. (Easter egg: Click the orbiting satellite!)</p>
+            <p class="project-eyebrow">Space systems · Web</p>
+            <h3>Project Horizon Website</h3>
+            <p>Developed the public website for Northeastern's undergraduate satellite program and its sub-terahertz communications mission.</p>
             <div class="project-tech">
-              <span>Three.js</span>
-              <span>JavaScript</span>
-              <span>Vite</span>
+              <span>React</span>
+              <span>TypeScript</span>
+              <span>Tailwind CSS</span>
             </div>
-            <a href="https://github.com/aku7703/AniketThreeJsPortfolio" class="project-link" target="_blank">View on
-              GitHub →</a>
+            <a href="https://www.horizonsat.org" class="project-link" target="_blank" rel="noopener">View Website →</a>
+          </div>
+        </article>
+
+        <article class="project-card">
+          <div class="project-image">
+            <img src="mapapp.gif" alt="Northeastern campus navigation app" loading="lazy" decoding="async" />
+          </div>
+          <div class="project-info">
+            <p class="project-eyebrow">Algorithms · Backend</p>
+            <h3>Northeastern Map App</h3>
+            <p>Built a Node.js API using Dijkstra's algorithm to route students across campus, including through the university's tunnel network.</p>
+            <div class="project-tech">
+              <span>TypeScript</span>
+              <span>Node.js</span>
+              <span>MongoDB</span>
+            </div>
+            <a href="https://github.com/Oasis-NEU/s24-group5" class="project-link" target="_blank" rel="noopener">View on GitHub →</a>
           </div>
         </article>
       </div>
@@ -267,17 +284,16 @@
   <section id="contact" class="section contact-section">
     <div class="section-container">
       <h2 class="section-title">Let's Connect</h2>
-      <p class="contact-intro">I'm always open to discussing new opportunities, projects, or just chatting about space
-        and tech!</p>
+      <p class="contact-intro">Interested in working together or talking about AI infrastructure, developer tools, or space systems? LinkedIn is the fastest way to reach me.</p>
       <div class="contact-links">
-        <a href="https://www.linkedin.com/in/aniketchaudhry/" class="contact-btn linkedin" target="_blank">
-          <i class="fab fa-linkedin"></i> LinkedIn
+        <a href="https://www.linkedin.com/in/aniketchaudhry/" class="contact-btn linkedin" target="_blank" rel="noopener">
+          <i class="fab fa-linkedin" aria-hidden="true"></i> Message Me on LinkedIn
         </a>
-        <a href="https://github.com/aku7703" class="contact-btn github" target="_blank">
-          <i class="fab fa-github"></i> GitHub
+        <a href="https://github.com/aku7703" class="contact-btn github" target="_blank" rel="noopener">
+          <i class="fab fa-github" aria-hidden="true"></i> GitHub
         </a>
-        <a href="Resume-AniketChaudhry.pdf" class="contact-btn resume">
-          <i class="fas fa-file-alt"></i> Resume
+        <a href="/Resume-AniketChaudhry.pdf" class="contact-btn resume" target="_blank" rel="noopener">
+          <i class="fas fa-file-alt" aria-hidden="true"></i> View Resume
         </a>
       </div>
     </div>
@@ -288,8 +304,8 @@
     <div class="footer-container">
       <p>&copy; 2026 Aniket Chaudhry</p>
       <div class="footer-links">
-        <a href="https://www.linkedin.com/in/aniketchaudhry/" target="_blank"><i class="fab fa-linkedin"></i></a>
-        <a href="https://github.com/aku7703" target="_blank"><i class="fab fa-github"></i></a>
+        <a href="https://www.linkedin.com/in/aniketchaudhry/" target="_blank" rel="noopener" aria-label="Aniket Chaudhry on LinkedIn"><i class="fab fa-linkedin" aria-hidden="true"></i></a>
+        <a href="https://github.com/aku7703" target="_blank" rel="noopener" aria-label="Aniket Chaudhry on GitHub"><i class="fab fa-github" aria-hidden="true"></i></a>
       </div>
     </div>
   </footer>

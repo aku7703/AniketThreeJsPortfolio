@@ -132,9 +132,18 @@
 .hero-subtitle {
   font-size: 1.15rem;
   color: var(--text-secondary);
-  font-weight: 300;
-  margin-bottom: 2rem;
+  font-weight: 500;
+  margin-bottom: 0.8rem;
   animation: fadeInUp 1s ease-out 0.2s both;
+}
+
+.hero-summary {
+  max-width: 700px;
+  margin: 0 auto 2rem;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.95rem;
+  line-height: 1.7;
+  animation: fadeInUp 1s ease-out 0.3s both;
 }
 
 .hero-cta {
@@ -142,7 +151,47 @@
   gap: 1rem;
   justify-content: center;
   flex-wrap: wrap;
-  animation: fadeInUp 1s ease-out 0.4s both;
+  animation: fadeInUp 1s ease-out 0.5s both;
+}
+
+/* ============ IMPACT STRIP ============ */
+
+.proof-strip {
+  position: relative;
+  z-index: 4;
+  background: #070b09;
+  border-top: 1px solid var(--border-accent);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.proof-grid {
+  max-width: 1060px;
+  margin: 0 auto;
+  padding: 1.4rem 2rem;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.proof-item {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.proof-item strong {
+  color: var(--accent-primary);
+  font-size: 1.45rem;
+  line-height: 1.2;
+}
+
+.proof-item span {
+  margin-top: 0.3rem;
+  color: var(--text-secondary);
+  font-size: 0.74rem;
+  line-height: 1.4;
 }
 
 .btn-primary,
@@ -414,6 +463,68 @@
   height: 260px;
 }
 
+.project-visual {
+  min-height: 220px;
+  padding: 1.5rem;
+}
+
+.chess-visual {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(120px, 1fr) repeat(2, minmax(130px, 0.8fr));
+  align-items: center;
+  gap: 1rem;
+  overflow: hidden;
+  background:
+    linear-gradient(135deg, rgba(0, 255, 136, 0.12), transparent 48%),
+    repeating-conic-gradient(rgba(255, 255, 255, 0.04) 0 25%, transparent 0 50%) 0 / 64px 64px,
+    #0d1210;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.chess-visual::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 20% 50%, rgba(0, 255, 136, 0.18), transparent 35%);
+  pointer-events: none;
+}
+
+.chess-piece {
+  position: relative;
+  z-index: 1;
+  color: var(--text-primary);
+  font-size: clamp(6rem, 13vw, 9rem);
+  line-height: 1;
+  text-align: center;
+  filter: drop-shadow(0 14px 24px rgba(0, 255, 136, 0.2));
+}
+
+.chess-metric {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  min-height: 105px;
+  flex-direction: column;
+  justify-content: center;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.62);
+  border: 1px solid var(--border-accent);
+  border-radius: 12px;
+}
+
+.chess-metric strong {
+  color: var(--accent-primary);
+  font-size: 1.45rem;
+}
+
+.chess-metric span {
+  margin-top: 0.35rem;
+  color: var(--text-secondary);
+  font-size: 0.72rem;
+  line-height: 1.35;
+}
+
 .project-image {
   overflow: hidden;
 }
@@ -437,6 +548,15 @@
   color: var(--text-primary);
   font-size: 1.1rem;
   margin-bottom: 0.4rem;
+}
+
+.project-info .project-eyebrow {
+  margin-bottom: 0.3rem;
+  color: var(--accent-primary);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
 }
 
 .project-info p {
@@ -471,6 +591,12 @@
 
 .project-link:hover {
   color: var(--text-primary);
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 4px;
 }
 
 /* ============ CONTACT SECTION ============ */
@@ -711,6 +837,17 @@ footer p {
     font-size: 1rem;
   }
 
+  .hero-summary {
+    max-width: 34rem;
+    font-size: 0.85rem;
+  }
+
+  .proof-grid {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 1.2rem;
+    gap: 1.25rem 0.75rem;
+  }
+
   .about-grid {
     grid-template-columns: 1fr;
     gap: 1.5rem;
@@ -752,6 +889,17 @@ footer p {
 
   .project-card.featured .project-image img {
     height: 180px;
+  }
+
+  .chess-visual {
+    grid-template-columns: 1fr 1fr;
+    min-height: 200px;
+    padding: 1rem;
+  }
+
+  .chess-piece {
+    grid-column: span 2;
+    font-size: 5rem;
   }
 
   .project-link {
@@ -802,6 +950,21 @@ footer p {
 
   #game-prompt {
     display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
   }
 }
 

@@ -12,6 +12,7 @@ const scene = new THREE.Scene()
 const pointer = new THREE.Vector2()
 const raycaster = new THREE.Raycaster()
 const isMobile = window.matchMedia('(max-width: 768px)').matches
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
 // Create globe
 const earthGeometry = new THREE.SphereGeometry(4.8, 32, 32)
@@ -79,7 +80,7 @@ const controls = new OrbitControls(camera, renderer.domElement)
 controls.enableDamping = true
 controls.enablePan = false
 controls.enableZoom = false
-controls.autoRotate = true
+controls.autoRotate = !prefersReducedMotion
 controls.autoRotateSpeed = 0.8
 
 // Disable orbit controls on mobile to prevent scroll interference
@@ -97,13 +98,23 @@ window.addEventListener('resize', () => {
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 })
 
-// Animation loop (also handles asteroid game when active)
+// Animation loop (also handles asteroid game when active). Pause it once the
+// hero leaves the viewport so WebGL does not consume resources off-screen.
+let animationFrameId = null
+let heroIsVisible = true
+let restartStarfield = null
+
 const animate = () => {
-  window.requestAnimationFrame(animate)
+  if (!heroIsVisible || document.hidden) {
+    animationFrameId = null
+    return
+  }
+
+  animationFrameId = window.requestAnimationFrame(animate)
   controls.update()
 
   // Update satellite position and rotation
-  const time = Date.now() * 0.001
+  const time = prefersReducedMotion ? 0 : Date.now() * 0.001
   const orbitAngle = time * orbitSpeed
   const orbitTiltAngle = Math.PI / 4
 
@@ -126,11 +137,43 @@ const animate = () => {
 
   renderer.render(scene, camera)
 }
-animate()
+
+const startAnimation = () => {
+  if (animationFrameId === null && heroIsVisible && !document.hidden) {
+    animationFrameId = window.requestAnimationFrame(animate)
+  }
+}
+
+const stopAnimation = () => {
+  if (animationFrameId !== null) {
+    window.cancelAnimationFrame(animationFrameId)
+    animationFrameId = null
+  }
+}
+
+const heroElement = document.getElementById('hero')
+if (heroElement) {
+  const heroObserver = new IntersectionObserver(([entry]) => {
+    heroIsVisible = entry.isIntersecting
+    if (heroIsVisible) startAnimation()
+    else stopAnimation()
+    if (heroIsVisible) restartStarfield?.()
+  }, { threshold: 0.01 })
+  heroObserver.observe(heroElement)
+}
+
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) stopAnimation()
+  else startAnimation()
+})
+
+startAnimation()
 
 // Timeline animation for globe
-const tl = gsap.timeline({defaults: {duration: 1}})
-tl.fromTo(earthMesh.scale, {z:0, x:0, y:0}, {z: 1, x: 1, y: 1})
+if (!prefersReducedMotion) {
+  const tl = gsap.timeline({defaults: {duration: 1}})
+  tl.fromTo(earthMesh.scale, {z:0, x:0, y:0}, {z: 1, x: 1, y: 1})
+}
 
 // ========================================
 // SATELLITE CLICK HANDLER
@@ -206,21 +249,32 @@ window.addEventListener('scroll', () => {
 // Mobile menu toggle
 if (mobileMenuBtn) {
   mobileMenuBtn.addEventListener('click', () => {
-    mobileMenuBtn.classList.toggle('active')
-    navLinks.classList.toggle('active')
-    document.body.classList.toggle('menu-open')
-    nav.classList.toggle('menu-open')
+    const isOpen = !mobileMenuBtn.classList.contains('active')
+    mobileMenuBtn.classList.toggle('active', isOpen)
+    navLinks.classList.toggle('active', isOpen)
+    document.body.classList.toggle('menu-open', isOpen)
+    nav.classList.toggle('menu-open', isOpen)
+    mobileMenuBtn.setAttribute('aria-expanded', String(isOpen))
+    mobileMenuBtn.setAttribute('aria-label', isOpen ? 'Close navigation' : 'Open navigation')
   })
+}
+
+const closeMobileMenu = () => {
+  mobileMenuBtn?.classList.remove('active')
+  navLinks?.classList.remove('active')
+  document.body.classList.remove('menu-open')
+  nav?.classList.remove('menu-open')
+  mobileMenuBtn?.setAttribute('aria-expanded', 'false')
+  mobileMenuBtn?.setAttribute('aria-label', 'Open navigation')
 }
 
 // Close mobile menu on link click
 document.querySelectorAll('.nav-links a').forEach(link => {
-  link.addEventListener('click', () => {
-    mobileMenuBtn.classList.remove('active')
-    navLinks.classList.remove('active')
-    document.body.classList.remove('menu-open')
-    nav.classList.remove('menu-open')
-  })
+  link.addEventListener('click', closeMobileMenu)
+})
+
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape') closeMobileMenu()
 })
 
 // Smooth scroll for anchor links
@@ -236,7 +290,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 
       window.scrollTo({
         top: targetPosition,
-        behavior: 'smooth'
+        behavior: prefersReducedMotion ? 'auto' : 'smooth'
       })
     }
   })
@@ -301,22 +355,32 @@ if (starfield) {
     starfield.appendChild(star)
   }
 
-  // Parallax: shift stars opposite to mouse movement
-  let starX = 0, starY = 0
-  let targetX = 0, targetY = 0
+  if (!prefersReducedMotion) {
+    // Parallax: shift stars opposite to mouse movement
+    let starX = 0, starY = 0
+    let targetX = 0, targetY = 0
 
-  window.addEventListener('mousemove', (event) => {
-    targetX = ((event.clientX / window.innerWidth) - 0.5) * -30
-    targetY = ((event.clientY / window.innerHeight) - 0.5) * -30
-  })
+    window.addEventListener('mousemove', (event) => {
+      targetX = ((event.clientX / window.innerWidth) - 0.5) * -30
+      targetY = ((event.clientY / window.innerHeight) - 0.5) * -30
+    })
 
-  const updateStarfield = () => {
-    starX += (targetX - starX) * 0.05
-    starY += (targetY - starY) * 0.05
-    starfield.style.transform = `translate(${starX}px, ${starY}px)`
-    requestAnimationFrame(updateStarfield)
+    let starfieldFrameId = null
+    const updateStarfield = () => {
+      if (!heroIsVisible || document.hidden) {
+        starfieldFrameId = null
+        return
+      }
+      starX += (targetX - starX) * 0.05
+      starY += (targetY - starY) * 0.05
+      starfield.style.transform = `translate(${starX}px, ${starY}px)`
+      starfieldFrameId = window.requestAnimationFrame(updateStarfield)
+    }
+    restartStarfield = () => {
+      if (starfieldFrameId === null) updateStarfield()
+    }
+    restartStarfield()
   }
-  updateStarfield()
 }
 
 // ========================================
@@ -583,4 +647,3 @@ if (gameExit) {
     endGame()
   })
 }
-
