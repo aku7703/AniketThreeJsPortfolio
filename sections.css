@@ -154,46 +154,6 @@
   animation: fadeInUp 1s ease-out 0.5s both;
 }
 
-/* ============ IMPACT STRIP ============ */
-
-.proof-strip {
-  position: relative;
-  z-index: 4;
-  background: #070b09;
-  border-top: 1px solid var(--border-accent);
-  border-bottom: 1px solid var(--border-subtle);
-}
-
-.proof-grid {
-  max-width: 1060px;
-  margin: 0 auto;
-  padding: 1.4rem 2rem;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1rem;
-}
-
-.proof-item {
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-}
-
-.proof-item strong {
-  color: var(--accent-primary);
-  font-size: 1.45rem;
-  line-height: 1.2;
-}
-
-.proof-item span {
-  margin-top: 0.3rem;
-  color: var(--text-secondary);
-  font-size: 0.74rem;
-  line-height: 1.4;
-}
-
 .btn-primary,
 .btn-secondary {
   padding: 0.75rem 1.6rem;
@@ -830,22 +790,37 @@ footer p {
   }
 
   .hero-title {
-    font-size: 2.2rem;
+    font-size: 2rem;
+    margin-bottom: 0.65rem;
   }
 
   .hero-subtitle {
-    font-size: 1rem;
+    font-size: 0.92rem;
+    line-height: 1.45;
+    margin-bottom: 0.65rem;
   }
 
   .hero-summary {
-    max-width: 34rem;
-    font-size: 0.85rem;
+    max-width: 21rem;
+    margin-bottom: 1.35rem;
+    font-size: 0.8rem;
+    line-height: 1.55;
   }
 
-  .proof-grid {
-    grid-template-columns: repeat(2, 1fr);
-    padding: 1.2rem;
-    gap: 1.25rem 0.75rem;
+  .hero-content {
+    width: 100%;
+    max-width: 390px;
+    padding: 1.25rem;
+  }
+
+  .hero-cta {
+    gap: 0.7rem;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    padding: 0.65rem 1.35rem;
+    font-size: 0.82rem;
   }
 
   .about-grid {
@@ -970,7 +945,7 @@ footer p {
 
 @media (max-width: 480px) {
   .hero-title {
-    font-size: 1.8rem;
+    font-size: 1.9rem;
   }
 
   .hero-cta {
@@ -981,7 +956,7 @@ footer p {
   .btn-primary,
   .btn-secondary {
     width: 100%;
-    max-width: 240px;
+    max-width: 210px;
   }
 
   .project-info {
