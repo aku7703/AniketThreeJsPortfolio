@@ -1,0 +1,6 @@
+# Static course prep site. Netlify links this folder as the site's base directory.
+[build]
+  publish = "."
+  command = ""
+  # Only rebuild when files in this folder change.
+  ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- ."
