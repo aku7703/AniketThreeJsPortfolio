@@ -7,6 +7,12 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
   <title>Blog | Aniket Chaudhry</title>
+  <meta name="description" content="Aniket Chaudhry's notes on software engineering, space systems, and technology.">
+  <link rel="canonical" href="https://aniketc.tech/blog">
+  <meta property="og:title" content="Blog | Aniket Chaudhry">
+  <meta property="og:description" content="Notes on software engineering, space systems, and technology.">
+  <meta property="og:url" content="https://aniketc.tech/blog">
+  <meta property="og:type" content="website">
   <link rel="stylesheet" href="blog.css">
 </head>
 
@@ -15,17 +21,17 @@
   <nav id="blog-nav">
     <div class="nav-container">
       <a class="nav-logo" href="/">Aniket Chaudhry</a>
-      <button class="mobile-menu-btn" aria-label="Toggle menu">
+      <button class="mobile-menu-btn" aria-label="Open navigation" aria-expanded="false" aria-controls="blog-navigation">
         <span></span>
         <span></span>
         <span></span>
       </button>
-      <ul class="nav-links">
+      <ul class="nav-links" id="blog-navigation">
         <li><a href="/#about">About</a></li>
         <li><a href="/#experience">Experience</a></li>
         <li><a href="/#projects">Projects</a></li>
         <li><a href="/blog" class="active">Blog</a></li>
-        <li><a href="Resume-AniketChaudhry.pdf" class="nav-cta">Resume</a></li>
+        <li><a href="/Resume-AniketChaudhry.pdf" class="nav-cta" target="_blank" rel="noopener">Resume</a></li>
       </ul>
     </div>
   </nav>
@@ -73,8 +79,8 @@
     <div class="footer-content">
       <p>&copy; 2026 Aniket Chaudhry</p>
       <div class="footer-links">
-        <a href="https://linkedin.com/in/aniketchaudhry" target="_blank"><i class="fab fa-linkedin"></i></a>
-        <a href="https://github.com/aku7703" target="_blank"><i class="fab fa-github"></i></a>
+        <a href="https://linkedin.com/in/aniketchaudhry" target="_blank" rel="noopener" aria-label="Aniket Chaudhry on LinkedIn"><i class="fab fa-linkedin" aria-hidden="true"></i></a>
+        <a href="https://github.com/aku7703" target="_blank" rel="noopener" aria-label="Aniket Chaudhry on GitHub"><i class="fab fa-github" aria-hidden="true"></i></a>
       </div>
     </div>
   </footer>
@@ -125,7 +131,7 @@
       const sorted = [...postsManifest].sort((a, b) => new Date(b.date) - new Date(a.date));
 
       grid.innerHTML = sorted.map((post, index) => `
-        <article class="post-card ${index === 0 ? 'featured' : ''}" onclick="showPost('${post.slug}')">
+        <a class="post-card ${index === 0 ? 'featured' : ''}" href="/blog?post=${post.slug}" data-post-slug="${post.slug}">
           ${post.cover ? `<img src="${post.cover}" alt="${post.title}" class="post-cover">` : ''}
           <div class="post-content">
             <time class="post-meta">${formatDate(post.date)}</time>
@@ -133,8 +139,15 @@
             <p class="post-excerpt">${post.excerpt}</p>
             <span class="read-more">Read article <i class="fas fa-arrow-right"></i></span>
           </div>
-        </article>
+        </a>
       `).join('');
+
+      grid.querySelectorAll('[data-post-slug]').forEach(card => {
+        card.addEventListener('click', (event) => {
+          event.preventDefault();
+          showPost(card.dataset.postSlug);
+        });
+      });
     }
 
     // Show single post
@@ -177,6 +190,8 @@
         document.getElementById('posts-list').style.display = 'none';
         document.getElementById('post-view').style.display = 'block';
 
+        history.replaceState({}, '', `/blog?post=${encodeURIComponent(slug)}`);
+
         window.scrollTo({ top: 0, behavior: 'smooth' });
       } catch (error) {
         console.error('Error loading post:', error);
@@ -187,6 +202,7 @@
     function hidePost() {
       document.getElementById('post-view').style.display = 'none';
       document.getElementById('posts-list').style.display = 'block';
+      history.replaceState({}, '', '/blog');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
@@ -196,21 +212,40 @@
     const blogNav = document.getElementById('blog-nav');
     if (mobileMenuBtn) {
       mobileMenuBtn.addEventListener('click', () => {
-        mobileMenuBtn.classList.toggle('active');
-        navLinks.classList.toggle('active');
-        blogNav.classList.toggle('menu-open');
+        const isOpen = !mobileMenuBtn.classList.contains('active');
+        mobileMenuBtn.classList.toggle('active', isOpen);
+        navLinks.classList.toggle('active', isOpen);
+        blogNav.classList.toggle('menu-open', isOpen);
+        mobileMenuBtn.setAttribute('aria-expanded', String(isOpen));
+        mobileMenuBtn.setAttribute('aria-label', isOpen ? 'Close navigation' : 'Open navigation');
       });
     }
     document.querySelectorAll('.nav-links a').forEach(link => {
       link.addEventListener('click', () => {
-        mobileMenuBtn.classList.remove('active');
-        navLinks.classList.remove('active');
-        blogNav.classList.remove('menu-open');
+        mobileMenuBtn?.classList.remove('active');
+        navLinks?.classList.remove('active');
+        blogNav?.classList.remove('menu-open');
+        mobileMenuBtn?.setAttribute('aria-expanded', 'false');
+        mobileMenuBtn?.setAttribute('aria-label', 'Open navigation');
       });
     });
 
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape') {
+        mobileMenuBtn?.classList.remove('active');
+        navLinks?.classList.remove('active');
+        blogNav?.classList.remove('menu-open');
+        mobileMenuBtn?.setAttribute('aria-expanded', 'false');
+        mobileMenuBtn?.setAttribute('aria-label', 'Open navigation');
+      }
+    });
+
     // Initialize
-    document.addEventListener('DOMContentLoaded', renderPostsList);
+    document.addEventListener('DOMContentLoaded', () => {
+      renderPostsList();
+      const requestedPost = new URLSearchParams(window.location.search).get('post');
+      if (requestedPost && postsManifest.some(post => post.slug === requestedPost)) showPost(requestedPost);
+    });
   </script>
 </body>
 
