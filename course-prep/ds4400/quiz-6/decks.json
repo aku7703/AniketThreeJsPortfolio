@@ -1,0 +1,828 @@
+{
+  "topics": {
+    "vectors": "Read a model: rows, features and a bias",
+    "odds": "Probability, odds and Bayes from counts",
+    "sigmoid": "From log odds to a probability",
+    "loss": "Cross-entropy: reward the true class",
+    "calculus": "Slopes, chain rules and vector gradients",
+    "training": "Train logistic regression, one careful step",
+    "multiclass": "Several classes: one vs rest and one vs one",
+    "softmax": "Softmax: one probability distribution over classes",
+    "homework": "HW6 bridge · recomputed",
+    "formula": "Formula flash"
+  },
+  "cards": [
+    {
+      "id": "vectors-why",
+      "topic": "vectors",
+      "prompt": "Why do we need this idea?",
+      "answer": "A fraud filter needs a compact way to combine purchase amount and an abroad flag. A weighted score lets the same recipe process every transaction. First we must learn to read that recipe.",
+      "explain": "A scalar is one number. A vector is an ordered list. A matrix is a table of numbers. A feature is a measured input; a label is the answer we hope to predict. Here y=1 and y=0 name classes, not good and bad. A hat means an estimate: y is truth, while ŷ is the predicted class. The subscript i names a sample (row); j names a feature (column).",
+      "source": "Day 11 pp. 2, 11–13; Day 12 pp. 16–17; HW6 pp. 1, 3–4",
+      "kind": "flip",
+      "math": "",
+      "teach": "Each row of X describes one sample. Each column has one consistent meaning. A weight says how strongly its feature affects a score. The special input x₀=1 makes a fixed starting score possible. That input is the bias feature; w₀ is its weight (the intercept). A score is not yet a probability.",
+      "must": false
+    },
+    {
+      "id": "vectors-example",
+      "topic": "vectors",
+      "prompt": "Walk through a small example before testing yourself.",
+      "answer": "Worked example: follow each line below.",
+      "explain": "The dot product is a sum, not entrywise output. Do not confuse sample xᵢ with feature xⱼ. Next we learn what probability and odds mean before interpreting that score.",
+      "source": "Day 11 pp. 2, 11–13; Day 12 pp. 16–17; HW6 pp. 1, 3–4",
+      "kind": "flip",
+      "math": "<p>HW6 row 2 is x=[1,4,1]. Compute each product: −3×1=−3, 0.5×4=2, 2×1=2. Add: −3+2+2=1. The abroad flag contributes 2 to the score; it does not multiply the whole score by 2. Replacing the bias 1 by 0 would incorrectly remove the intercept.</p>",
+      "teach": "Read the example as a lesson. Then hide it and explain each operation.",
+      "must": false
+    },
+    {
+      "id": "vectors-check0",
+      "topic": "vectors",
+      "prompt": "Why insert x₀=1?",
+      "answer": "To add a constant intercept",
+      "explain": "Yes. w₀×1 adds the same starting score to each row.",
+      "source": "Day 11 pp. 2, 11–13; Day 12 pp. 16–17; HW6 pp. 1, 3–4",
+      "kind": "choice",
+      "math": "",
+      "options": [
+        "To add a constant intercept",
+        "To make probability equal one",
+        "To label the sample as class one"
+      ],
+      "feedback": [
+        "Yes. w₀×1 adds the same starting score to each row.",
+        "An input of one is not an output probability. The sigmoid converts the complete score.",
+        "The bias is an input. The label y lives separately."
+      ],
+      "teach": "Each row of X describes one sample. Each column has one consistent meaning. A weight says how strongly its feature affects a score. The special input x₀=1 makes a fixed starting score possible. That input is the bias feature; w₀ is its weight (the intercept). A score is not yet a probability.",
+      "must": true
+    },
+    {
+      "id": "vectors-check1",
+      "topic": "vectors",
+      "prompt": "X has 4 rows and 3 columns; w has 3 entries. How many scores does Xw contain?",
+      "answer": "4",
+      "explain": "Yes. Four row dot products give four scores.",
+      "source": "Day 11 pp. 2, 11–13; Day 12 pp. 16–17; HW6 pp. 1, 3–4",
+      "kind": "choice",
+      "math": "",
+      "options": [
+        "3",
+        "4",
+        "12"
+      ],
+      "feedback": [
+        "Three counts features. A score is produced for each sample.",
+        "Yes. Four row dot products give four scores.",
+        "Twelve counts table entries, not row sums."
+      ],
+      "teach": "Each row of X describes one sample. Each column has one consistent meaning. A weight says how strongly its feature affects a score. The special input x₀=1 makes a fixed starting score possible. That input is the bias feature; w₀ is its weight (the intercept). A score is not yet a probability.",
+      "must": false
+    },
+    {
+      "id": "odds-why",
+      "topic": "odds",
+      "prompt": "Why do we need this idea?",
+      "answer": "A priority flag on a phone notification may make it seem important, but the flag alone cannot tell us its probability of truly needing attention. We must combine how common important notifications are with how often each kind gets flagged. Odds make that update a multiplication.",
+      "explain": "A probability is the fraction of a group having a property. P(A|B) reads “probability of A among cases where B is true.” The bar changes the group we count within. P(A|B) usually differs from P(B|A). A complement is “not A,” so its probability is 1−P(A). In HW6 phishing and legitimate exhaust the possibilities. A joint probability P(A,B) counts both properties together.",
+      "source": "Day 11 pp. 5–6, 15; HW6 p. 2 (probability prerequisites unpacked here)",
+      "kind": "flip",
+      "math": "",
+      "teach": "Fresh teaching example, not course data: imagine 100 notifications, 20 important and 80 routine. A priority flag appears on 10 important and 20 routine notifications. Among the 30 flagged notifications, 10 are important. Counting within this new group is Bayes’ rule.",
+      "must": false
+    },
+    {
+      "id": "odds-example",
+      "topic": "odds",
+      "prompt": "Walk through a small example before testing yourself.",
+      "answer": "Worked example: follow each line below.",
+      "explain": "Probability uses total cases in the denominator; odds uses opposite-class cases. Next we take a logarithm of odds so multiplicative evidence can become an additive score.",
+      "source": "Day 11 pp. 5–6, 15; HW6 p. 2 (probability prerequisites unpacked here)",
+      "kind": "flip",
+      "math": "<p>For this teaching example, prior odds=20/80=1/4. The flag likelihood ratio is (10/20)/(20/80)=(1/2)/(1/4)=2. Posterior odds=2×1/4=1/2. Convert to probability: (1/2)/(1+1/2)=(1/2)/(3/2)=1/3. Count check: 10/(10+20)=1/3. “Half of important notifications are flagged” is not “half of flagged notifications are important.” Without a flag, counts are 10 important and 60 routine: odds=1/6 and probability=1/7.</p>",
+      "teach": "Read the example as a lesson. Then hide it and explain each operation.",
+      "must": false
+    },
+    {
+      "id": "odds-check0",
+      "topic": "odds",
+      "prompt": "Odds 3 corresponds to which probability?",
+      "answer": "3/4",
+      "explain": "Yes: 3/(1+3)=3/4.",
+      "source": "Day 11 pp. 5–6, 15; HW6 p. 2 (probability prerequisites unpacked here)",
+      "kind": "choice",
+      "math": "",
+      "options": [
+        "3",
+        "3/4",
+        "1/3"
+      ],
+      "feedback": [
+        "Odds can exceed one; a probability cannot. Divide odds by one plus odds.",
+        "Yes: 3/(1+3)=3/4.",
+        "This reverses the odds and still omits normalization."
+      ],
+      "teach": "Fresh teaching example, not course data: imagine 100 notifications, 20 important and 80 routine. A priority flag appears on 10 important and 20 routine notifications. Among the 30 flagged notifications, 10 are important. Counting within this new group is Bayes’ rule.",
+      "must": true
+    },
+    {
+      "id": "odds-check1",
+      "topic": "odds",
+      "prompt": "60% of phishing emails contain urgent. Is that P(phishing | urgent)?",
+      "answer": "No, it is P(urgent | phishing)",
+      "explain": "Yes. Reversing the condition needs Bayes or a count table.",
+      "source": "Day 11 pp. 5–6, 15; HW6 p. 2 (probability prerequisites unpacked here)",
+      "kind": "choice",
+      "math": "",
+      "options": [
+        "Yes",
+        "No, it is P(urgent | phishing)"
+      ],
+      "feedback": [
+        "The original group is phishing emails. The denominator counts phishing, not urgent emails.",
+        "Yes. Reversing the condition needs Bayes or a count table."
+      ],
+      "teach": "Fresh teaching example, not course data: imagine 100 notifications, 20 important and 80 routine. A priority flag appears on 10 important and 20 routine notifications. Among the 30 flagged notifications, 10 are important. Counting within this new group is Bayes’ rule.",
+      "must": false
+    },
+    {
+      "id": "odds-check2",
+      "topic": "odds",
+      "prompt": "An evidence likelihood ratio of 1 does what?",
+      "answer": "Leaves odds unchanged",
+      "explain": "Correct. Multiplying by one adds no evidence.",
+      "source": "Day 11 pp. 5–6, 15; HW6 p. 2 (probability prerequisites unpacked here)",
+      "kind": "choice",
+      "math": "",
+      "options": [
+        "Leaves odds unchanged",
+        "Makes probability one",
+        "Makes both classes equally likely"
+      ],
+      "feedback": [
+        "Correct. Multiplying by one adds no evidence.",
+        "A multiplier of one preserves the old odds.",
+        "The prior still matters; equal likelihoods do not erase it."
+      ],
+      "teach": "Fresh teaching example, not course data: imagine 100 notifications, 20 important and 80 routine. A priority flag appears on 10 important and 20 routine notifications. Among the 30 flagged notifications, 10 are important. Counting within this new group is Bayes’ rule.",
+      "must": false
+    },
+    {
+      "id": "sigmoid-why",
+      "topic": "sigmoid",
+      "prompt": "Why do we need this idea?",
+      "answer": "A straight regression line can predict values below zero or above one. For a fraud probability that is impossible. Logistic regression keeps a simple weighted score, then bends it into the probability range. Like a dimmer approaching full brightness, its output saturates instead of growing forever.",
+      "explain": "An exponential eᶻ is always positive; e≈2.71828. Multiplication of exponentials adds exponents: eᵃeᵇ=eᵃ⁺ᵇ. The natural log ln reverses an exponential: ln(eᶻ)=z and e^(ln a)=a for a>0. ln(ab)=ln a+ln b. A log can be negative: ln(1/2)=−ln 2. “Linear in features” includes the bias here, so z=w₀+w₁x₁+… .",
+      "source": "Day 11 pp. 3–15; HW6 pp. 1–2",
+      "kind": "flip",
+      "math": "",
+      "teach": "The model assumes log odds equals the weighted score. Score zero means odds one, hence probability one half. Positive scores favor class one; negative scores favor class zero. The curve gets flatter near zero and one. More confidence does not require changing the predicted class.",
+      "must": false
+    },
+    {
+      "id": "sigmoid-example",
+      "topic": "sigmoid",
+      "prompt": "Walk through a small example before testing yourself.",
+      "answer": "Worked example: follow each line below.",
+      "explain": "A probability estimate and a class prediction are different outputs. A weight’s units are per input unit: HW6 amount is hundreds of dollars. Next we score how good the probabilities are.",
+      "source": "Day 11 pp. 3–15; HW6 pp. 1–2",
+      "kind": "flip",
+      "math": "<p>Teaching example: z=ln 3 gives odds e^(ln 3)=3 and p=3/(1+3)=3/4. Add a weight ln 2 from a one-unit feature increase: odds become 3×2=6 and probability becomes 6/7, not 2×3/4. For a second teaching score z=−ln 3, the odds are 1/3 and p=(1/3)/(4/3)=1/4. Its class-0 probability is 3/4.</p><p>A probability threshold is a separate decision rule. HW6 uses p≥0.5, so z≥0 predicts class 1. Day 12 p.20 prints a strict >0 rule; exactly at zero we follow HW6’s ≥ convention.</p>",
+      "teach": "Read the example as a lesson. Then hide it and explain each operation.",
+      "must": false
+    },
+    {
+      "id": "sigmoid-check0",
+      "topic": "sigmoid",
+      "prompt": "A feature weight is ln 2. A one-unit increase does what?",
+      "answer": "Doubles odds",
+      "explain": "Yes, holding other features fixed.",
+      "source": "Day 11 pp. 3–15; HW6 pp. 1–2",
+      "kind": "choice",
+      "math": "",
+      "options": [
+        "Doubles probability",
+        "Doubles odds",
+        "Adds two to probability"
+      ],
+      "feedback": [
+        "The sigmoid is nonlinear. Odds double; probability changes by O/(1+O).",
+        "Yes, holding other features fixed.",
+        "Probabilities cannot receive an unrestricted additive shift."
+      ],
+      "teach": "The model assumes log odds equals the weighted score. Score zero means odds one, hence probability one half. Positive scores favor class one; negative scores favor class zero. The curve gets flatter near zero and one. More confidence does not require changing the predicted class.",
+      "must": true
+    },
+    {
+      "id": "sigmoid-check1",
+      "topic": "sigmoid",
+      "prompt": "Under HW6, z=0 predicts which class?",
+      "answer": "1",
+      "explain": "Yes: σ(0)=1/2 and the threshold includes equality.",
+      "source": "Day 11 pp. 3–15; HW6 pp. 1–2",
+      "kind": "choice",
+      "math": "",
+      "options": [
+        "0",
+        "1",
+        "It is impossible"
+      ],
+      "feedback": [
+        "HW6 uses ≥0.5, so the tie goes to class one.",
+        "Yes: σ(0)=1/2 and the threshold includes equality.",
+        "A zero score is valid and gives equal probabilities."
+      ],
+      "teach": "The model assumes log odds equals the weighted score. Score zero means odds one, hence probability one half. Positive scores favor class one; negative scores favor class zero. The curve gets flatter near zero and one. More confidence does not require changing the predicted class.",
+      "must": false
+    },
+    {
+      "id": "sigmoid-check2",
+      "topic": "sigmoid",
+      "prompt": "If w₁ is negative, increasing x₁ while holding the rest fixed does what?",
+      "answer": "Lowers class-1 probability",
+      "explain": "Yes. The score falls and sigmoid is increasing.",
+      "source": "Day 11 pp. 3–15; HW6 pp. 1–2",
+      "kind": "choice",
+      "math": "",
+      "options": [
+        "Lowers class-1 probability",
+        "Raises it",
+        "Always flips the class"
+      ],
+      "feedback": [
+        "Yes. The score falls and sigmoid is increasing.",
+        "A negative coefficient decreases the score per unit increase.",
+        "It may stay on the same side of the boundary."
+      ],
+      "teach": "The model assumes log odds equals the weighted score. Score zero means odds one, hence probability one half. Positive scores favor class one; negative scores favor class zero. The curve gets flatter near zero and one. More confidence does not require changing the predicted class.",
+      "must": false
+    },
+    {
+      "id": "loss-why",
+      "topic": "loss",
+      "prompt": "Why do we need this idea?",
+      "answer": "Two weather apps both predict rain. One assigns rain 51%, the other 99%. A correct/incorrect mark treats them equally, but their probabilities make different claims. Cross-entropy judges the probability assigned to what actually happened, and strongly penalizes confident mistakes.",
+      "explain": "First identify the true label y. Write p for predicted class-1 probability, and q for predicted probability of the true class. If y=1, q=p; if y=0, q=1−p. Σ means “add one term for each sample.” A product Π multiplies them. A mean is a sum divided by the number of terms n. ln is increasing, so bigger q gives bigger ln q; a minus sign reverses that order.",
+      "source": "Day 11 pp. 13–19; Day 12 pp. 18, 20–23; HW6 pp. 1, 3–4",
+      "kind": "flip",
+      "math": "",
+      "teach": "A true-class probability near one contributes almost zero loss. A tiny true-class probability contributes a large positive loss. “Most correctly classified” in these lectures means highest true-class probability, even when several samples share the same correct/incorrect label.",
+      "must": false
+    },
+    {
+      "id": "loss-example",
+      "topic": "loss",
+      "prompt": "Walk through a small example before testing yourself.",
+      "answer": "Worked example: follow each line below.",
+      "explain": "Do not rank samples by p₁ until you know their labels. Do not silently average a requested sum or mix bits with a natural-log gradient. Next we change weights to lower loss.",
+      "source": "Day 11 pp. 13–19; Day 12 pp. 18, 20–23; HW6 pp. 1, 3–4",
+      "kind": "flip",
+      "math": "<p>Teaching example with two samples: y=[1,0], predicted p=[1/2,1/4]. True-class probabilities are q=[1/2,3/4]. In bits, losses are −log₂(1/2)=1 and −log₂(3/4)≈0.415037. Sum J≈1.415037 bits; mean L≈0.707519 bits. In nats, the sum is ln 2+ln(4/3)=ln(8/3)≈0.980829. The first sample is less correct, because 1/2&lt;3/4.</p>",
+      "teach": "Read the example as a lesson. Then hide it and explain each operation.",
+      "must": false
+    },
+    {
+      "id": "loss-check0",
+      "topic": "loss",
+      "prompt": "Truth y=0; predicted p₁=0.9. What enters −ln(q)?",
+      "answer": "0.1",
+      "explain": "Yes: q=1−0.9=0.1, a confident mistake and large loss.",
+      "source": "Day 11 pp. 13–19; Day 12 pp. 18, 20–23; HW6 pp. 1, 3–4",
+      "kind": "choice",
+      "math": "",
+      "options": [
+        "0.9",
+        "0.1",
+        "0"
+      ],
+      "feedback": [
+        "You chose class one probability, but truth is zero.",
+        "Yes: q=1−0.9=0.1, a confident mistake and large loss.",
+        "An incorrect class prediction does not set probability to zero."
+      ],
+      "teach": "A true-class probability near one contributes almost zero loss. A tiny true-class probability contributes a large positive loss. “Most correctly classified” in these lectures means highest true-class probability, even when several samples share the same correct/incorrect label.",
+      "must": true
+    },
+    {
+      "id": "loss-check1",
+      "topic": "loss",
+      "prompt": "Four per-sample losses are 2 nats each. Mean and sum?",
+      "answer": "Mean 2, sum 8",
+      "explain": "Yes. They differ by n=4.",
+      "source": "Day 11 pp. 13–19; Day 12 pp. 18, 20–23; HW6 pp. 1, 3–4",
+      "kind": "choice",
+      "math": "",
+      "options": [
+        "Mean 2, sum 8",
+        "Mean 8, sum 2",
+        "Both 2"
+      ],
+      "feedback": [
+        "Yes. They differ by n=4.",
+        "You reversed addition and division.",
+        "Only the mean is 2; the sum counts four terms."
+      ],
+      "teach": "A true-class probability near one contributes almost zero loss. A tiny true-class probability contributes a large positive loss. “Most correctly classified” in these lectures means highest true-class probability, even when several samples share the same correct/incorrect label.",
+      "must": false
+    },
+    {
+      "id": "loss-check2",
+      "topic": "loss",
+      "prompt": "Can accuracy stay the same while cross-entropy improves?",
+      "answer": "Yes",
+      "explain": "Yes. Confidence can improve without crossing a classification threshold.",
+      "source": "Day 11 pp. 13–19; Day 12 pp. 18, 20–23; HW6 pp. 1, 3–4",
+      "kind": "choice",
+      "math": "",
+      "options": [
+        "Yes",
+        "No"
+      ],
+      "feedback": [
+        "Yes. Confidence can improve without crossing a classification threshold.",
+        "Accuracy ignores confidence; cross-entropy uses the full probability."
+      ],
+      "teach": "A true-class probability near one contributes almost zero loss. A tiny true-class probability contributes a large positive loss. “Most correctly classified” in these lectures means highest true-class probability, even when several samples share the same correct/incorrect label.",
+      "must": false
+    },
+    {
+      "id": "calculus-why",
+      "topic": "calculus",
+      "prompt": "Why do we need this idea?",
+      "answer": "To improve a recipe, you need to know whether a little more of an ingredient helps or hurts. A derivative measures that local change. A gradient does the same for all weights, so we can improve a model without guessing every possible recipe.",
+      "explain": "A function maps inputs to an output. A derivative f′(a) measures the limiting change in output per unit input near a. A tangent is the line matching the local slope. A partial derivative changes one coordinate while freezing the rest. ∇ (“nabla”) collects those partials in a column. A norm measures vector length: ||[a,b]||₂=√(a²+b²).",
+      "source": "Day 10 pp. 4–19, 29–31; Day 11 pp. 18–19",
+      "kind": "flip",
+      "math": "",
+      "teach": "Positive slope means moving right increases output locally; negative slope means moving right decreases it. The gradient points toward fastest local increase, so descent moves against it. Zero derivative means stationary: it could be a minimum, maximum, or flat non-extremum. The optimization slides use minimum-oriented shorthand; zero slope alone is not a general minimum test.",
+      "must": false
+    },
+    {
+      "id": "calculus-example",
+      "topic": "calculus",
+      "prompt": "Walk through a small example before testing yourself.",
+      "answer": "Worked example: follow each line below.",
+      "explain": "The gradient is a vector of slopes, not a new weight vector. Compute every component at the old weights. Next the chain rule makes cross-entropy training simple.",
+      "source": "Day 10 pp. 4–19, 29–31; Day 11 pp. 18–19",
+      "kind": "flip",
+      "math": "<p>Teaching example: f(w)=w₀²+3w₁² at w=[1,−1]. Partial slopes are 2 and −6; gradient [2,−6] has length √(4+36)=√40. With step α=0.1, new vector=[1,−1]−0.1[2,−6]=[0.8,−0.4]. Old loss=1+3=4. New loss=0.8²+3(−0.4)²=0.64+0.48=1.12.</p>",
+      "teach": "Read the example as a lesson. Then hide it and explain each operation.",
+      "must": false
+    },
+    {
+      "id": "calculus-check0",
+      "topic": "calculus",
+      "prompt": "For (3x−1)², which derivative is complete?",
+      "answer": "6(3x−1)",
+      "explain": "Yes. Outer derivative times inner derivative.",
+      "source": "Day 10 pp. 4–19, 29–31; Day 11 pp. 18–19",
+      "kind": "choice",
+      "math": "",
+      "options": [
+        "2(3x−1)",
+        "6(3x−1)",
+        "(3x−1)²"
+      ],
+      "feedback": [
+        "You missed the inner derivative 3.",
+        "Yes. Outer derivative times inner derivative.",
+        "That is the original function."
+      ],
+      "teach": "Positive slope means moving right increases output locally; negative slope means moving right decreases it. The gradient points toward fastest local increase, so descent moves against it. Zero derivative means stationary: it could be a minimum, maximum, or flat non-extremum. The optimization slides use minimum-oriented shorthand; zero slope alone is not a general minimum test.",
+      "must": true
+    },
+    {
+      "id": "calculus-check1",
+      "topic": "calculus",
+      "prompt": "When finding ∂(w₀²+3w₁²)/∂w₀, what happens to w₁?",
+      "answer": "Hold it fixed",
+      "explain": "Yes. Its term is constant with respect to w₀.",
+      "source": "Day 10 pp. 4–19, 29–31; Day 11 pp. 18–19",
+      "kind": "choice",
+      "math": "",
+      "options": [
+        "Hold it fixed",
+        "Differentiate it as w₀",
+        "Set it to zero"
+      ],
+      "feedback": [
+        "Yes. Its term is constant with respect to w₀.",
+        "Coordinates are independent inputs.",
+        "A constant can be nonzero although its derivative is zero."
+      ],
+      "teach": "Positive slope means moving right increases output locally; negative slope means moving right decreases it. The gradient points toward fastest local increase, so descent moves against it. Zero derivative means stationary: it could be a minimum, maximum, or flat non-extremum. The optimization slides use minimum-oriented shorthand; zero slope alone is not a general minimum test.",
+      "must": false
+    },
+    {
+      "id": "calculus-check2",
+      "topic": "calculus",
+      "prompt": "A derivative is zero. Must this be a minimum?",
+      "answer": "No",
+      "explain": "Correct. x³ at zero is stationary without an extremum.",
+      "source": "Day 10 pp. 4–19, 29–31; Day 11 pp. 18–19",
+      "kind": "choice",
+      "math": "",
+      "options": [
+        "Yes",
+        "No"
+      ],
+      "feedback": [
+        "For example, −x² is stationary at a maximum.",
+        "Correct. x³ at zero is stationary without an extremum."
+      ],
+      "teach": "Positive slope means moving right increases output locally; negative slope means moving right decreases it. The gradient points toward fastest local increase, so descent moves against it. Zero derivative means stationary: it could be a minimum, maximum, or flat non-extremum. The optimization slides use minimum-oriented shorthand; zero slope alone is not a general minimum test.",
+      "must": false
+    },
+    {
+      "id": "training-why",
+      "topic": "training",
+      "prompt": "Why do we need this idea?",
+      "answer": "A nursery has survival labels for seedlings. It wants true outcomes to get higher probability overall. Gradient descent gives one coordinated adjustment from every seedling’s feedback, rather than fixing one case and forgetting the others.",
+      "explain": "Recall pᵢ=σ(xᵢ·w), yᵢ is 0 or 1, and J is a natural-log sum. The residual rᵢ=pᵢ−yᵢ is signed prediction error in probability. Xᵀ swaps rows and columns; multiplying it by residuals adds each feature’s error-weighted values. α (sometimes η in lecture demos) is a positive learning rate.",
+      "source": "Day 10 pp. 23–31; Day 11 pp. 18–19; Day 12 pp. 5–8; day12_ica cells 0–18; HW6 p. 3",
+      "kind": "flip",
+      "math": "",
+      "teach": "A class-1 sample has r<0 and asks to increase its score. A class-0 sample has r>0 and asks to decrease it. Each request is multiplied by the input vector, so input magnitude matters too. Samples can pull the same weights in opposing directions. A step can lower total loss while worsening individual cases.",
+      "must": false
+    },
+    {
+      "id": "training-example",
+      "topic": "training",
+      "prompt": "Walk through a small example before testing yourself.",
+      "answer": "Worked example: follow each line below.",
+      "explain": "Do not update the intercept and use it to recompute the slope gradient within the same step. Lower total loss is a statement about the sum. Next we extend binary classification to several classes.",
+      "source": "Day 10 pp. 23–31; Day 11 pp. 18–19; Day 12 pp. 5–8; day12_ica cells 0–18; HW6 p. 3",
+      "kind": "flip",
+      "math": "<p>Teaching example: one sample x=[1,2], y=1, start w=[0,0]. Score=0×1+0×2=0; p=1/2. Residual=1/2−1=−1/2. Contribution=(−1/2)[1,2]=[−1/2,−1]. At α=0.2, new w=[0,0]−0.2[−1/2,−1]=[0.1,0.2]. New score=0.1+0.2×2=0.5; p≈0.622459. Loss drops from −ln(0.5)=0.693147 to −ln(0.622459)=0.474077 nats.</p><p>For multiple samples, finish the old-gradient sum before changing any weight. ||(p−y)x||₂=|p−y| ||x||₂ measures one sample’s contribution size; confidence alone does not determine it.</p>",
+      "teach": "Read the example as a lesson. Then hide it and explain each operation.",
+      "must": false
+    },
+    {
+      "id": "training-check0",
+      "topic": "training",
+      "prompt": "For y=1 and p=0.2, p−y equals what?",
+      "answer": "−0.8",
+      "explain": "Yes: 0.2−1=−0.8.",
+      "source": "Day 10 pp. 23–31; Day 11 pp. 18–19; Day 12 pp. 5–8; day12_ica cells 0–18; HW6 p. 3",
+      "kind": "choice",
+      "math": "",
+      "options": [
+        "0.8",
+        "−0.8",
+        "0.2"
+      ],
+      "feedback": [
+        "That is unsigned error. The negative sign tells descent to raise this sample’s score.",
+        "Yes: 0.2−1=−0.8.",
+        "You omitted subtraction of truth."
+      ],
+      "teach": "A class-1 sample has r<0 and asks to increase its score. A class-0 sample has r>0 and asks to decrease it. Each request is multiplied by the input vector, so input magnitude matters too. Samples can pull the same weights in opposing directions. A step can lower total loss while worsening individual cases.",
+      "must": true
+    },
+    {
+      "id": "training-check1",
+      "topic": "training",
+      "prompt": "Does lower total loss guarantee every true-class probability increases?",
+      "answer": "No",
+      "explain": "Correct. HW6 P3 gives a counterexample.",
+      "source": "Day 10 pp. 23–31; Day 11 pp. 18–19; Day 12 pp. 5–8; day12_ica cells 0–18; HW6 p. 3",
+      "kind": "choice",
+      "math": "",
+      "options": [
+        "Yes",
+        "No"
+      ],
+      "feedback": [
+        "Shared weights create trade-offs; one term can worsen.",
+        "Correct. HW6 P3 gives a counterexample."
+      ],
+      "teach": "A class-1 sample has r<0 and asks to increase its score. A class-0 sample has r>0 and asks to decrease it. Each request is multiplied by the input vector, so input magnitude matters too. Samples can pull the same weights in opposing directions. A step can lower total loss while worsening individual cases.",
+      "must": false
+    },
+    {
+      "id": "training-check2",
+      "topic": "training",
+      "prompt": "To compare gradient contribution sizes, inspect what?",
+      "answer": "|p−y| times input length",
+      "explain": "Yes, for the size of each sample’s vector contribution.",
+      "source": "Day 10 pp. 23–31; Day 11 pp. 18–19; Day 12 pp. 5–8; day12_ica cells 0–18; HW6 p. 3",
+      "kind": "choice",
+      "math": "",
+      "options": [
+        "Only p₁",
+        "|p−y| times input length",
+        "Only classification correctness"
+      ],
+      "feedback": [
+        "Both label and input matter.",
+        "Yes, for the size of each sample’s vector contribution.",
+        "Correctly classified samples can have different residuals and input lengths."
+      ],
+      "teach": "A class-1 sample has r<0 and asks to increase its score. A class-0 sample has r>0 and asks to decrease it. Each request is multiplied by the input vector, so input magnitude matters too. Samples can pull the same weights in opposing directions. A step can lower total loss while worsening individual cases.",
+      "must": false
+    },
+    {
+      "id": "multiclass-why",
+      "topic": "multiclass",
+      "prompt": "Why do we need this idea?",
+      "answer": "A coffee shop predicts drip, latte, or cold brew. A binary yes/no classifier cannot name all three in one output. We can assemble binary decisions, much as a tournament uses pairwise matches to pick a winner.",
+      "explain": "K is the number of classes. A pair is unordered: A vs B is the same classifier as B vs A. A vote is one classifier’s predicted class. A score is its confidence value. Binary logistic probabilities from separate models need not form a single probability distribution.",
+      "source": "Day 12 pp. 2–4; HW6 p. 4(iv)",
+      "kind": "flip",
+      "math": "",
+      "teach": "One vs rest (OvR) asks one question per class: “this class, or anything else?” Choose the largest score. One vs one (OvO) trains one classifier for each pair, using samples from those two classes, then chooses the class with the most pairwise votes in the course’s scheme.",
+      "must": false
+    },
+    {
+      "id": "multiclass-example",
+      "topic": "multiclass",
+      "prompt": "Walk through a small example before testing yourself.",
+      "answer": "Worked example: follow each line below.",
+      "explain": "OvO uses each pair’s data. OvR uses the other classes as a combined negative group. Next we build one multiclass model rather than combining binary ones.",
+      "source": "Day 12 pp. 2–4; HW6 p. 4(iv)",
+      "kind": "flip",
+      "math": "<p>Three drinks: OvR is drip/rest, latte/rest, cold-brew/rest → 3 models. OvO is drip/latte, drip/cold-brew, latte/cold-brew → 3 models. If drip wins the first two and latte the third, votes are [2,1,0]; choose drip. OvR probabilities 0.7,0.4,0.1 can sum to 1.2: choose the largest, but these are not a normalized class distribution.</p>",
+      "teach": "Read the example as a lesson. Then hide it and explain each operation.",
+      "must": false
+    },
+    {
+      "id": "multiclass-check0",
+      "topic": "multiclass",
+      "prompt": "Four classes require how many OvO models?",
+      "answer": "6",
+      "explain": "Yes: 4×3/2=6.",
+      "source": "Day 12 pp. 2–4; HW6 p. 4(iv)",
+      "kind": "choice",
+      "math": "",
+      "options": [
+        "4",
+        "6",
+        "12"
+      ],
+      "feedback": [
+        "Four is OvR. OvO counts pairs.",
+        "Yes: 4×3/2=6.",
+        "That counts each pair twice."
+      ],
+      "teach": "One vs rest (OvR) asks one question per class: “this class, or anything else?” Choose the largest score. One vs one (OvO) trains one classifier for each pair, using samples from those two classes, then chooses the class with the most pairwise votes in the course’s scheme.",
+      "must": true
+    },
+    {
+      "id": "multiclass-check1",
+      "topic": "multiclass",
+      "prompt": "Must separate OvR probabilities sum to one?",
+      "answer": "No",
+      "explain": "Correct. Softmax provides a single normalized distribution.",
+      "source": "Day 12 pp. 2–4; HW6 p. 4(iv)",
+      "kind": "choice",
+      "math": "",
+      "options": [
+        "Yes",
+        "No"
+      ],
+      "feedback": [
+        "They come from different binary models and were not normalized together.",
+        "Correct. Softmax provides a single normalized distribution."
+      ],
+      "teach": "One vs rest (OvR) asks one question per class: “this class, or anything else?” Choose the largest score. One vs one (OvO) trains one classifier for each pair, using samples from those two classes, then chooses the class with the most pairwise votes in the course’s scheme.",
+      "must": false
+    },
+    {
+      "id": "softmax-why",
+      "topic": "softmax",
+      "prompt": "Why do we need this idea?",
+      "answer": "For a drink order, we want one probability for each possible drink and a total of one. Softmax converts class scores into that distribution. Imagine splitting a fixed pie among competing choices: increasing one share must take share from others.",
+      "explain": "Each class k gets weight vector wₖ and score zₖ=wₖ·x. Σⱼ adds over all classes j. exp(z) means eᶻ. arg max means “the index of the largest value,” not that value itself. The indicator 1(y=k) is one when its statement is true, zero otherwise.",
+      "source": "Day 12 pp. 10–20, 25–26; HW6 p. 4",
+      "kind": "flip",
+      "math": "",
+      "teach": "Exponentiate scores to create positive strengths, then divide by their total. Larger scores get larger probabilities. Adding the same constant to all scores leaves the shares unchanged. Multiplying all scores by a constant generally changes confidence.",
+      "must": false
+    },
+    {
+      "id": "softmax-example",
+      "topic": "softmax",
+      "prompt": "Walk through a small example before testing yourself.",
+      "answer": "Worked example: follow each line below.",
+      "explain": "Normalize across classes within each sample, never down the sample column. Negative scores are allowed; negative probabilities are not. Next apply the chain to HW6 from a blank page.",
+      "source": "Day 12 pp. 10–20, 25–26; HW6 p. 4",
+      "kind": "flip",
+      "math": "<p>Teaching example: scores [0,ln 2,0]. Exponentials [1,2,1]; total=4; probabilities [1/4,1/2,1/4]. Predict class 1, the largest-score class. If truth is class 0, loss=−ln(1/4)=ln 4≈1.386294 nats. Add 7 to all scores: the common e⁷ factor cancels.</p><details><summary>Lecture extension: softmax loss and gradient</summary><p>Expand the log fraction for one true class y:</p><div class=\"equation\"><span class=\"katex-display\"><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><semantics><mrow><mi mathvariant=\"normal\">ℓ</mi><mo>=</mo><mo>−</mo><mi>ln</mi><mo>⁡</mo><mfrac><msup><mi>e</mi><msub><mi>z</mi><mi>y</mi></msub></msup><mrow><munder><mo>∑</mo><mi>j</mi></munder><msup><mi>e</mi><msub><mi>z</mi><mi>j</mi></msub></msup></mrow></mfrac><mo>=</mo><mo>−</mo><msub><mi>z</mi><mi>y</mi></msub><mo>+</mo><mi>ln</mi><mo>⁡</mo><munder><mo>∑</mo><mi>j</mi></munder><msup><mi>e</mi><msub><mi>z</mi><mi>j</mi></msub></msup></mrow><annotation encoding=\"application/x-tex\">\\ell=-\\ln\\frac{e^{z_y}}{\\sum_je^{z_j}}=-z_y+\\ln\\sum_je^{z_j}</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"katex-base\"><span class=\"katex-strut\" style=\"height:0.6944em;\"></span><span class=\"mord\">ℓ</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">=</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span></span><span class=\"katex-base\"><span class=\"katex-strut\" style=\"height:2.4632em;vertical-align:-1.1218em;\"></span><span class=\"mord\">−</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mop\">ln</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord\"><span class=\"mopen nulldelimiter\"></span><span class=\"mfrac\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:1.3414em;\"><span style=\"top:-2.314em;\"><span class=\"pstrut\" style=\"height:3em;\"></span><span class=\"mord\"><span class=\"mop\"><span class=\"mop op-symbol small-op\" style=\"position:relative;top:0em;\">∑</span><span class=\"msupsub\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.162em;\"><span style=\"top:-2.4003em;margin-left:0em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"katex-sizing reset-size6 size3 mtight\"><span class=\"mord mathnormal mtight\" style=\"margin-right:0.0572em;\">j</span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.4358em;\"><span></span></span></span></span></span></span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord\"><span class=\"mord mathnormal\">e</span><span class=\"msupsub\"><span class=\"vlist-t\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.6065em;\"><span style=\"top:-3.0051em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"katex-sizing reset-size6 size3 mtight\"><span class=\"mord mtight\"><span class=\"mord mtight\"><span class=\"mord mathnormal mtight\" style=\"margin-right:0.044em;\">z</span><span class=\"msupsub\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.3281em;\"><span style=\"top:-2.357em;margin-left:-0.044em;margin-right:0.0714em;\"><span class=\"pstrut\" style=\"height:2.5em;\"></span><span class=\"katex-sizing reset-size3 size1 mtight\"><span class=\"mord mathnormal mtight\" style=\"margin-right:0.0572em;\">j</span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.2819em;\"><span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span><span style=\"top:-3.23em;\"><span class=\"pstrut\" style=\"height:3em;\"></span><span class=\"frac-line\" style=\"border-bottom-width:0.04em;\"></span></span><span style=\"top:-3.677em;\"><span class=\"pstrut\" style=\"height:3em;\"></span><span class=\"mord\"><span class=\"mord\"><span class=\"mord mathnormal\">e</span><span class=\"msupsub\"><span class=\"vlist-t\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.6644em;\"><span style=\"top:-3.063em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"katex-sizing reset-size6 size3 mtight\"><span class=\"mord mtight\"><span class=\"mord mtight\"><span class=\"mord mathnormal mtight\" style=\"margin-right:0.044em;\">z</span><span class=\"msupsub\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.1645em;\"><span style=\"top:-2.357em;margin-left:-0.044em;margin-right:0.0714em;\"><span class=\"pstrut\" style=\"height:2.5em;\"></span><span class=\"katex-sizing reset-size3 size1 mtight\"><span class=\"mord mathnormal mtight\" style=\"margin-right:0.0359em;\">y</span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.2819em;\"><span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:1.1218em;\"><span></span></span></span></span></span><span class=\"mclose nulldelimiter\"></span></span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">=</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span></span><span class=\"katex-base\"><span class=\"katex-strut\" style=\"height:0.8694em;vertical-align:-0.2861em;\"></span><span class=\"mord\">−</span><span class=\"mord\"><span class=\"mord mathnormal\" style=\"margin-right:0.044em;\">z</span><span class=\"msupsub\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.1514em;\"><span style=\"top:-2.55em;margin-left:-0.044em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"katex-sizing reset-size6 size3 mtight\"><span class=\"mord mathnormal mtight\" style=\"margin-right:0.0359em;\">y</span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.2861em;\"><span></span></span></span></span></span></span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span><span class=\"mbin\">+</span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span></span><span class=\"katex-base\"><span class=\"katex-strut\" style=\"height:2.4638em;vertical-align:-1.4138em;\"></span><span class=\"mop\">ln</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mop op-limits\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:1.05em;\"><span style=\"top:-1.8723em;margin-left:0em;\"><span class=\"pstrut\" style=\"height:3.05em;\"></span><span class=\"katex-sizing reset-size6 size3 mtight\"><span class=\"mord mathnormal mtight\" style=\"margin-right:0.0572em;\">j</span></span></span><span style=\"top:-3.05em;\"><span class=\"pstrut\" style=\"height:3.05em;\"></span><span><span class=\"mop op-symbol large-op\">∑</span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:1.4138em;\"><span></span></span></span></span></span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord\"><span class=\"mord mathnormal\">e</span><span class=\"msupsub\"><span class=\"vlist-t\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.7144em;\"><span style=\"top:-3.113em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"katex-sizing reset-size6 size3 mtight\"><span class=\"mord mtight\"><span class=\"mord mtight\"><span class=\"mord mathnormal mtight\" style=\"margin-right:0.044em;\">z</span><span class=\"msupsub\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.3281em;\"><span style=\"top:-2.357em;margin-left:-0.044em;margin-right:0.0714em;\"><span class=\"pstrut\" style=\"height:2.5em;\"></span><span class=\"katex-sizing reset-size3 size1 mtight\"><span class=\"mord mathnormal mtight\" style=\"margin-right:0.0572em;\">j</span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.2819em;\"><span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></div><p>The first term differentiates to −1(y=k)x in class k’s weights. For the second, (ln u)′=1/u; only the k-th exponential contains wₖ:</p><div class=\"equation\"><span class=\"katex-display\"><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><semantics><mrow><msub><mi mathvariant=\"normal\">∇</mi><msub><mi>w</mi><mi>k</mi></msub></msub><mi>ln</mi><mo>⁡</mo><munder><mo>∑</mo><mi>j</mi></munder><msup><mi>e</mi><mrow><msub><mi>w</mi><mi>j</mi></msub><mo>⋅</mo><mi>x</mi></mrow></msup><mo>=</mo><mfrac><msup><mi>e</mi><mrow><msub><mi>w</mi><mi>k</mi></msub><mo>⋅</mo><mi>x</mi></mrow></msup><mrow><munder><mo>∑</mo><mi>j</mi></munder><msup><mi>e</mi><mrow><msub><mi>w</mi><mi>j</mi></msub><mo>⋅</mo><mi>x</mi></mrow></msup></mrow></mfrac><mi>x</mi><mo>=</mo><msub><mi>p</mi><mi>k</mi></msub><mi>x</mi></mrow><annotation encoding=\"application/x-tex\">\\nabla_{w_k}\\ln\\sum_je^{w_j\\cdot x}=\\frac{e^{w_k\\cdot x}}{\\sum_je^{w_j\\cdot x}}x=p_kx</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"katex-base\"><span class=\"katex-strut\" style=\"height:2.4638em;vertical-align:-1.4138em;\"></span><span class=\"mord\"><span class=\"mord\">∇</span><span class=\"msupsub\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.1514em;\"><span style=\"top:-2.55em;margin-left:0em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"katex-sizing reset-size6 size3 mtight\"><span class=\"mord mtight\"><span class=\"mord mtight\"><span class=\"mord mathnormal mtight\" style=\"margin-right:0.0269em;\">w</span><span class=\"msupsub\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.3448em;\"><span style=\"top:-2.3488em;margin-left:-0.0269em;margin-right:0.0714em;\"><span class=\"pstrut\" style=\"height:2.5em;\"></span><span class=\"katex-sizing reset-size3 size1 mtight\"><span class=\"mord mathnormal mtight\" style=\"margin-right:0.0315em;\">k</span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.1512em;\"><span></span></span></span></span></span></span></span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.2559em;\"><span></span></span></span></span></span></span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mop\">ln</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mop op-limits\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:1.05em;\"><span style=\"top:-1.8723em;margin-left:0em;\"><span class=\"pstrut\" style=\"height:3.05em;\"></span><span class=\"katex-sizing reset-size6 size3 mtight\"><span class=\"mord mathnormal mtight\" style=\"margin-right:0.0572em;\">j</span></span></span><span style=\"top:-3.05em;\"><span class=\"pstrut\" style=\"height:3.05em;\"></span><span><span class=\"mop op-symbol large-op\">∑</span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:1.4138em;\"><span></span></span></span></span></span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord\"><span class=\"mord mathnormal\">e</span><span class=\"msupsub\"><span class=\"vlist-t\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.7241em;\"><span style=\"top:-3.113em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"katex-sizing reset-size6 size3 mtight\"><span class=\"mord mtight\"><span class=\"mord mtight\"><span class=\"mord mathnormal mtight\" style=\"margin-right:0.0269em;\">w</span><span class=\"msupsub\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.3281em;\"><span style=\"top:-2.357em;margin-left:-0.0269em;margin-right:0.0714em;\"><span class=\"pstrut\" style=\"height:2.5em;\"></span><span class=\"katex-sizing reset-size3 size1 mtight\"><span class=\"mord mathnormal mtight\" style=\"margin-right:0.0572em;\">j</span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.2819em;\"><span></span></span></span></span></span></span><span class=\"mbin mtight\">⋅</span><span class=\"mord mathnormal mtight\">x</span></span></span></span></span></span></span></span></span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">=</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span></span><span class=\"katex-base\"><span class=\"katex-strut\" style=\"height:2.4729em;vertical-align:-1.1218em;\"></span><span class=\"mord\"><span class=\"mopen nulldelimiter\"></span><span class=\"mfrac\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:1.3511em;\"><span style=\"top:-2.314em;\"><span class=\"pstrut\" style=\"height:3em;\"></span><span class=\"mord\"><span class=\"mop\"><span class=\"mop op-symbol small-op\" style=\"position:relative;top:0em;\">∑</span><span class=\"msupsub\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.162em;\"><span style=\"top:-2.4003em;margin-left:0em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"katex-sizing reset-size6 size3 mtight\"><span class=\"mord mathnormal mtight\" style=\"margin-right:0.0572em;\">j</span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.4358em;\"><span></span></span></span></span></span></span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord\"><span class=\"mord mathnormal\">e</span><span class=\"msupsub\"><span class=\"vlist-t\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.6162em;\"><span style=\"top:-3.0051em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"katex-sizing reset-size6 size3 mtight\"><span class=\"mord mtight\"><span class=\"mord mtight\"><span class=\"mord mathnormal mtight\" style=\"margin-right:0.0269em;\">w</span><span class=\"msupsub\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.3281em;\"><span style=\"top:-2.357em;margin-left:-0.0269em;margin-right:0.0714em;\"><span class=\"pstrut\" style=\"height:2.5em;\"></span><span class=\"katex-sizing reset-size3 size1 mtight\"><span class=\"mord mathnormal mtight\" style=\"margin-right:0.0572em;\">j</span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.2819em;\"><span></span></span></span></span></span></span><span class=\"mbin mtight\">⋅</span><span class=\"mord mathnormal mtight\">x</span></span></span></span></span></span></span></span></span></span></span><span style=\"top:-3.23em;\"><span class=\"pstrut\" style=\"height:3em;\"></span><span class=\"frac-line\" style=\"border-bottom-width:0.04em;\"></span></span><span style=\"top:-3.677em;\"><span class=\"pstrut\" style=\"height:3em;\"></span><span class=\"mord\"><span class=\"mord\"><span class=\"mord mathnormal\">e</span><span class=\"msupsub\"><span class=\"vlist-t\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.6741em;\"><span style=\"top:-3.063em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"katex-sizing reset-size6 size3 mtight\"><span class=\"mord mtight\"><span class=\"mord mtight\"><span class=\"mord mathnormal mtight\" style=\"margin-right:0.0269em;\">w</span><span class=\"msupsub\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.3448em;\"><span style=\"top:-2.3488em;margin-left:-0.0269em;margin-right:0.0714em;\"><span class=\"pstrut\" style=\"height:2.5em;\"></span><span class=\"katex-sizing reset-size3 size1 mtight\"><span class=\"mord mathnormal mtight\" style=\"margin-right:0.0315em;\">k</span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.1512em;\"><span></span></span></span></span></span></span><span class=\"mbin mtight\">⋅</span><span class=\"mord mathnormal mtight\">x</span></span></span></span></span></span></span></span></span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:1.1218em;\"><span></span></span></span></span></span><span class=\"mclose nulldelimiter\"></span></span><span class=\"mord mathnormal\">x</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">=</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span></span><span class=\"katex-base\"><span class=\"katex-strut\" style=\"height:0.625em;vertical-align:-0.1944em;\"></span><span class=\"mord\"><span class=\"mord mathnormal\">p</span><span class=\"msupsub\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.3361em;\"><span style=\"top:-2.55em;margin-left:0em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"katex-sizing reset-size6 size3 mtight\"><span class=\"mord mathnormal mtight\" style=\"margin-right:0.0315em;\">k</span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.15em;\"><span></span></span></span></span></span></span><span class=\"mord mathnormal\">x</span></span></span></span></span></div> <div class=\"equation\"><span class=\"katex-display\"><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><semantics><mrow><msub><mi mathvariant=\"normal\">∇</mi><msub><mi>w</mi><mi>k</mi></msub></msub><mi>J</mi><mo>=</mo><munder><mo>∑</mo><mi>i</mi></munder><mo stretchy=\"false\">[</mo><msub><mi>p</mi><mrow><mi>i</mi><mi>k</mi></mrow></msub><mo>−</mo><mn>1</mn><mo stretchy=\"false\">(</mo><msub><mi>y</mi><mi>i</mi></msub><mo>=</mo><mi>k</mi><mo stretchy=\"false\">)</mo><mo stretchy=\"false\">]</mo><msub><mi>x</mi><mi>i</mi></msub></mrow><annotation encoding=\"application/x-tex\">\\nabla_{w_k}J=\\sum_i[p_{ik}-1(y_i=k)]x_i</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"katex-base\"><span class=\"katex-strut\" style=\"height:0.9392em;vertical-align:-0.2559em;\"></span><span class=\"mord\"><span class=\"mord\">∇</span><span class=\"msupsub\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.1514em;\"><span style=\"top:-2.55em;margin-left:0em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"katex-sizing reset-size6 size3 mtight\"><span class=\"mord mtight\"><span class=\"mord mtight\"><span class=\"mord mathnormal mtight\" style=\"margin-right:0.0269em;\">w</span><span class=\"msupsub\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.3448em;\"><span style=\"top:-2.3488em;margin-left:-0.0269em;margin-right:0.0714em;\"><span class=\"pstrut\" style=\"height:2.5em;\"></span><span class=\"katex-sizing reset-size3 size1 mtight\"><span class=\"mord mathnormal mtight\" style=\"margin-right:0.0315em;\">k</span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.1512em;\"><span></span></span></span></span></span></span></span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.2559em;\"><span></span></span></span></span></span></span><span class=\"mord mathnormal\" style=\"margin-right:0.0962em;\">J</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">=</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span></span><span class=\"katex-base\"><span class=\"katex-strut\" style=\"height:2.3277em;vertical-align:-1.2777em;\"></span><span class=\"mop op-limits\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:1.05em;\"><span style=\"top:-1.8723em;margin-left:0em;\"><span class=\"pstrut\" style=\"height:3.05em;\"></span><span class=\"katex-sizing reset-size6 size3 mtight\"><span class=\"mord mathnormal mtight\">i</span></span></span><span style=\"top:-3.05em;\"><span class=\"pstrut\" style=\"height:3.05em;\"></span><span><span class=\"mop op-symbol large-op\">∑</span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:1.2777em;\"><span></span></span></span></span></span><span class=\"mopen\">[</span><span class=\"mord\"><span class=\"mord mathnormal\">p</span><span class=\"msupsub\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.3361em;\"><span style=\"top:-2.55em;margin-left:0em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"katex-sizing reset-size6 size3 mtight\"><span class=\"mord mtight\"><span class=\"mord mathnormal mtight\" style=\"margin-right:0.0315em;\">ik</span></span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.15em;\"><span></span></span></span></span></span></span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span><span class=\"mbin\">−</span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span></span><span class=\"katex-base\"><span class=\"katex-strut\" style=\"height:1em;vertical-align:-0.25em;\"></span><span class=\"mord\">1</span><span class=\"mopen\">(</span><span class=\"mord\"><span class=\"mord mathnormal\" style=\"margin-right:0.0359em;\">y</span><span class=\"msupsub\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.3117em;\"><span style=\"top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"katex-sizing reset-size6 size3 mtight\"><span class=\"mord mathnormal mtight\">i</span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.15em;\"><span></span></span></span></span></span></span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">=</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span></span><span class=\"katex-base\"><span class=\"katex-strut\" style=\"height:1em;vertical-align:-0.25em;\"></span><span class=\"mord mathnormal\" style=\"margin-right:0.0315em;\">k</span><span class=\"mclose\">)]</span><span class=\"mord\"><span class=\"mord mathnormal\">x</span><span class=\"msupsub\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.3117em;\"><span style=\"top:-2.55em;margin-left:0em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"katex-sizing reset-size6 size3 mtight\"><span class=\"mord mathnormal mtight\">i</span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.15em;\"><span></span></span></span></span></span></span></span></span></span></span></div><p>Again: prediction minus truth, times input. In HW6 column orientation, this collects into Xᵀ(P−Y), where each row of Y has one at the true-class column and zeros elsewhere. HW6 itself asks probabilities, loss, boundaries and classifier counts.</p></details>",
+      "teach": "Read the example as a lesson. Then hide it and explain each operation.",
+      "must": false
+    },
+    {
+      "id": "softmax-check0",
+      "topic": "softmax",
+      "prompt": "Add five to every class score. What changes?",
+      "answer": "Probabilities stay the same",
+      "explain": "Yes. The common exponential factor cancels.",
+      "source": "Day 12 pp. 10–20, 25–26; HW6 p. 4",
+      "kind": "choice",
+      "math": "",
+      "options": [
+        "Probabilities stay the same",
+        "Every probability increases",
+        "The winning class changes"
+      ],
+      "feedback": [
+        "Yes. The common exponential factor cancels.",
+        "The shares must still total one.",
+        "Common shifts preserve score ordering and differences."
+      ],
+      "teach": "Exponentiate scores to create positive strengths, then divide by their total. Larger scores get larger probabilities. Adding the same constant to all scores leaves the shares unchanged. Multiplying all scores by a constant generally changes confidence.",
+      "must": true
+    },
+    {
+      "id": "softmax-check1",
+      "topic": "softmax",
+      "prompt": "HW6 X is 4×2, W is 2×3. What is XW?",
+      "answer": "4×3 scores",
+      "explain": "Yes. Four samples, three scores. Apply softmax across each row.",
+      "source": "Day 12 pp. 10–20, 25–26; HW6 p. 4",
+      "kind": "choice",
+      "math": "",
+      "options": [
+        "4×3 scores",
+        "2×4 scores",
+        "3×2 probabilities"
+      ],
+      "feedback": [
+        "Yes. Four samples, three scores. Apply softmax across each row.",
+        "Inner dimensions must match; outer dimensions give output shape.",
+        "The product gives scores, not probabilities."
+      ],
+      "teach": "Exponentiate scores to create positive strengths, then divide by their total. Larger scores get larger probabilities. Adding the same constant to all scores leaves the shares unchanged. Multiplying all scores by a constant generally changes confidence.",
+      "must": false
+    },
+    {
+      "id": "softmax-check2",
+      "topic": "softmax",
+      "prompt": "Two scores tie below a third. Is this a prediction boundary?",
+      "answer": "No, the top score still wins",
+      "explain": "Correct. At 15°C in HW6, drip beats the tied latte and cold brew.",
+      "source": "Day 12 pp. 10–20, 25–26; HW6 p. 4",
+      "kind": "choice",
+      "math": "",
+      "options": [
+        "Always",
+        "No, the top score still wins"
+      ],
+      "feedback": [
+        "A pairwise equality matters only when the tied classes are maximal.",
+        "Correct. At 15°C in HW6, drip beats the tied latte and cold brew."
+      ],
+      "teach": "Exponentiate scores to create positive strengths, then divide by their total. Larger scores get larger probabilities. Adding the same constant to all scores leaves the shares unchanged. Multiplying all scores by a constant generally changes confidence.",
+      "must": false
+    },
+    {
+      "id": "h1",
+      "topic": "homework",
+      "prompt": "HW6 P1: mean cross-entropy in nats?",
+      "answer": 0.6818820926,
+      "explain": "Choose q by truth, sum four losses, divide by four. Recomputed, not official.",
+      "source": "HW6 p.1",
+      "kind": "numeric",
+      "math": "",
+      "tolerance": 1e-05,
+      "teach": "Try the desktop homework bridge and its guided hints first.",
+      "must": false
+    },
+    {
+      "id": "h2",
+      "topic": "homework",
+      "prompt": "HW6 P2: urgent versus absent odds multiplier?",
+      "answer": 6,
+      "explain": "Posterior odds are 3/4 and 1/8. Their ratio is 6, not the urgent likelihood ratio 3. Recomputed, not official.",
+      "source": "HW6 p.2",
+      "kind": "numeric",
+      "math": "",
+      "tolerance": 1e-05,
+      "teach": "Try the desktop homework bridge and its guided hints first.",
+      "must": false
+    },
+    {
+      "id": "h3",
+      "topic": "homework",
+      "prompt": "HW6 P3: new total loss in nats?",
+      "answer": 2.2406487653,
+      "explain": "Use the supplied sum/nats gradient, α=0.1, then recompute all true-class probabilities. Recomputed, not official.",
+      "source": "HW6 p.3",
+      "kind": "numeric",
+      "math": "",
+      "tolerance": 1e-05,
+      "teach": "Try the desktop homework bridge and its guided hints first.",
+      "must": false
+    },
+    {
+      "id": "h4",
+      "topic": "homework",
+      "prompt": "HW6 P4: total cross-entropy in nats?",
+      "answer": 4.0473581226,
+      "explain": "Select true-class columns [1,2,0,2]; sum negative logs without dividing by four. Recomputed, not official.",
+      "source": "HW6 p.4",
+      "kind": "numeric",
+      "math": "",
+      "tolerance": 1e-05,
+      "teach": "Try the desktop homework bridge and its guided hints first.",
+      "must": false
+    },
+    {
+      "id": "f-score",
+      "topic": "formula",
+      "prompt": "Score and sigmoid",
+      "answer": "Inputs make a score; sigmoid converts it to class-one probability.",
+      "explain": "Inputs make a score; sigmoid converts it to class-one probability.",
+      "source": "Day 11 pp.5–8",
+      "kind": "flip",
+      "math": "<div class=\"equation\"><span class=\"katex-display\"><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><semantics><mrow><mi>z</mi><mo>=</mo><mi>w</mi><mo>⋅</mo><mi>x</mi><mo separator=\"true\">,</mo><mspace width=\"1em\"/><msub><mi>p</mi><mn>1</mn></msub><mo>=</mo><mi>σ</mi><mo stretchy=\"false\">(</mo><mi>z</mi><mo stretchy=\"false\">)</mo><mo>=</mo><mn>1</mn><mi mathvariant=\"normal\">/</mi><mo stretchy=\"false\">(</mo><mn>1</mn><mo>+</mo><msup><mi>e</mi><mrow><mo>−</mo><mi>z</mi></mrow></msup><mo stretchy=\"false\">)</mo></mrow><annotation encoding=\"application/x-tex\">z=w\\cdot x,\\quad p_1=\\sigma(z)=1/(1+e^{-z})</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"katex-base\"><span class=\"katex-strut\" style=\"height:0.4306em;\"></span><span class=\"mord mathnormal\" style=\"margin-right:0.044em;\">z</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">=</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span></span><span class=\"katex-base\"><span class=\"katex-strut\" style=\"height:0.4445em;\"></span><span class=\"mord mathnormal\" style=\"margin-right:0.0269em;\">w</span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span><span class=\"mbin\">⋅</span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span></span><span class=\"katex-base\"><span class=\"katex-strut\" style=\"height:0.625em;vertical-align:-0.1944em;\"></span><span class=\"mord mathnormal\">x</span><span class=\"mpunct\">,</span><span class=\"mspace\" style=\"margin-right:1em;\"></span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord\"><span class=\"mord mathnormal\">p</span><span class=\"msupsub\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.3011em;\"><span style=\"top:-2.55em;margin-left:0em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"katex-sizing reset-size6 size3 mtight\"><span class=\"mord mtight\">1</span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.15em;\"><span></span></span></span></span></span></span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">=</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span></span><span class=\"katex-base\"><span class=\"katex-strut\" style=\"height:1em;vertical-align:-0.25em;\"></span><span class=\"mord mathnormal\" style=\"margin-right:0.0359em;\">σ</span><span class=\"mopen\">(</span><span class=\"mord mathnormal\" style=\"margin-right:0.044em;\">z</span><span class=\"mclose\">)</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">=</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span></span><span class=\"katex-base\"><span class=\"katex-strut\" style=\"height:1em;vertical-align:-0.25em;\"></span><span class=\"mord\">1/</span><span class=\"mopen\">(</span><span class=\"mord\">1</span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span><span class=\"mbin\">+</span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span></span><span class=\"katex-base\"><span class=\"katex-strut\" style=\"height:1.0713em;vertical-align:-0.25em;\"></span><span class=\"mord\"><span class=\"mord mathnormal\">e</span><span class=\"msupsub\"><span class=\"vlist-t\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.8213em;\"><span style=\"top:-3.113em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"katex-sizing reset-size6 size3 mtight\"><span class=\"mord mtight\"><span class=\"mord mtight\">−</span><span class=\"mord mathnormal mtight\" style=\"margin-right:0.044em;\">z</span></span></span></span></span></span></span></span></span><span class=\"mclose\">)</span></span></span></span></span></div>",
+      "teach": "Read the formula after naming what each symbol means.",
+      "must": false
+    },
+    {
+      "id": "f-odds",
+      "topic": "formula",
+      "prompt": "Odds and probability",
+      "answer": "Odds compares against the opposite class; probability compares against all cases.",
+      "explain": "Odds compares against the opposite class; probability compares against all cases.",
+      "source": "Day 11 p.6; HW6 p.2",
+      "kind": "flip",
+      "math": "<div class=\"equation\"><span class=\"katex-display\"><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><semantics><mrow><mi>O</mi><mo>=</mo><mi>p</mi><mi mathvariant=\"normal\">/</mi><mo stretchy=\"false\">(</mo><mn>1</mn><mo>−</mo><mi>p</mi><mo stretchy=\"false\">)</mo><mo separator=\"true\">,</mo><mspace width=\"1em\"/><mi>p</mi><mo>=</mo><mi>O</mi><mi mathvariant=\"normal\">/</mi><mo stretchy=\"false\">(</mo><mn>1</mn><mo>+</mo><mi>O</mi><mo stretchy=\"false\">)</mo></mrow><annotation encoding=\"application/x-tex\">O=p/(1-p),\\quad p=O/(1+O)</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"katex-base\"><span class=\"katex-strut\" style=\"height:0.6833em;\"></span><span class=\"mord mathnormal\" style=\"margin-right:0.0278em;\">O</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">=</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span></span><span class=\"katex-base\"><span class=\"katex-strut\" style=\"height:1em;vertical-align:-0.25em;\"></span><span class=\"mord mathnormal\">p</span><span class=\"mord\">/</span><span class=\"mopen\">(</span><span class=\"mord\">1</span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span><span class=\"mbin\">−</span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span></span><span class=\"katex-base\"><span class=\"katex-strut\" style=\"height:1em;vertical-align:-0.25em;\"></span><span class=\"mord mathnormal\">p</span><span class=\"mclose\">)</span><span class=\"mpunct\">,</span><span class=\"mspace\" style=\"margin-right:1em;\"></span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord mathnormal\">p</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">=</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span></span><span class=\"katex-base\"><span class=\"katex-strut\" style=\"height:1em;vertical-align:-0.25em;\"></span><span class=\"mord mathnormal\" style=\"margin-right:0.0278em;\">O</span><span class=\"mord\">/</span><span class=\"mopen\">(</span><span class=\"mord\">1</span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span><span class=\"mbin\">+</span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span></span><span class=\"katex-base\"><span class=\"katex-strut\" style=\"height:1em;vertical-align:-0.25em;\"></span><span class=\"mord mathnormal\" style=\"margin-right:0.0278em;\">O</span><span class=\"mclose\">)</span></span></span></span></span></div>",
+      "teach": "Read the formula after naming what each symbol means.",
+      "must": false
+    },
+    {
+      "id": "f-bayes",
+      "topic": "formula",
+      "prompt": "Bayes in odds form",
+      "answer": "The common evidence denominator cancels.",
+      "explain": "The common evidence denominator cancels.",
+      "source": "HW6 p.2",
+      "kind": "flip",
+      "math": "<div class=\"equation\"><span class=\"katex-display\"><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><semantics><mrow><msub><mi>O</mi><mrow><mi>p</mi><mi>o</mi><mi>s</mi><mi>t</mi></mrow></msub><mo>=</mo><msub><mi>O</mi><mrow><mi>p</mi><mi>r</mi><mi>i</mi><mi>o</mi><mi>r</mi></mrow></msub><mfrac><mrow><mi>P</mi><mo stretchy=\"false\">(</mo><mi>E</mi><mi mathvariant=\"normal\">∣</mi><mn>1</mn><mo stretchy=\"false\">)</mo></mrow><mrow><mi>P</mi><mo stretchy=\"false\">(</mo><mi>E</mi><mi mathvariant=\"normal\">∣</mi><mn>0</mn><mo stretchy=\"false\">)</mo></mrow></mfrac></mrow><annotation encoding=\"application/x-tex\">O_{post}=O_{prior}\\frac{P(E|1)}{P(E|0)}</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"katex-base\"><span class=\"katex-strut\" style=\"height:0.9694em;vertical-align:-0.2861em;\"></span><span class=\"mord\"><span class=\"mord mathnormal\" style=\"margin-right:0.0278em;\">O</span><span class=\"msupsub\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.2806em;\"><span style=\"top:-2.55em;margin-left:-0.0278em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"katex-sizing reset-size6 size3 mtight\"><span class=\"mord mtight\"><span class=\"mord mathnormal mtight\">p</span><span class=\"mord mathnormal mtight\">os</span><span class=\"mord mathnormal mtight\">t</span></span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.2861em;\"><span></span></span></span></span></span></span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">=</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span></span><span class=\"katex-base\"><span class=\"katex-strut\" style=\"height:2.363em;vertical-align:-0.936em;\"></span><span class=\"mord\"><span class=\"mord mathnormal\" style=\"margin-right:0.0278em;\">O</span><span class=\"msupsub\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.3117em;\"><span style=\"top:-2.55em;margin-left:-0.0278em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"katex-sizing reset-size6 size3 mtight\"><span class=\"mord mtight\"><span class=\"mord mathnormal mtight\">p</span><span class=\"mord mathnormal mtight\" style=\"margin-right:0.0278em;\">r</span><span class=\"mord mathnormal mtight\">i</span><span class=\"mord mathnormal mtight\" style=\"margin-right:0.0278em;\">or</span></span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.2861em;\"><span></span></span></span></span></span></span><span class=\"mord\"><span class=\"mopen nulldelimiter\"></span><span class=\"mfrac\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:1.427em;\"><span style=\"top:-2.314em;\"><span class=\"pstrut\" style=\"height:3em;\"></span><span class=\"mord\"><span class=\"mord mathnormal\" style=\"margin-right:0.1389em;\">P</span><span class=\"mopen\">(</span><span class=\"mord mathnormal\" style=\"margin-right:0.0576em;\">E</span><span class=\"mord\">∣0</span><span class=\"mclose\">)</span></span></span><span style=\"top:-3.23em;\"><span class=\"pstrut\" style=\"height:3em;\"></span><span class=\"frac-line\" style=\"border-bottom-width:0.04em;\"></span></span><span style=\"top:-3.677em;\"><span class=\"pstrut\" style=\"height:3em;\"></span><span class=\"mord\"><span class=\"mord mathnormal\" style=\"margin-right:0.1389em;\">P</span><span class=\"mopen\">(</span><span class=\"mord mathnormal\" style=\"margin-right:0.0576em;\">E</span><span class=\"mord\">∣1</span><span class=\"mclose\">)</span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.936em;\"><span></span></span></span></span></span><span class=\"mclose nulldelimiter\"></span></span></span></span></span></span></div>",
+      "teach": "Read the formula after naming what each symbol means.",
+      "must": false
+    },
+    {
+      "id": "f-loss",
+      "topic": "formula",
+      "prompt": "Cross-entropy sum",
+      "answer": "Select the true-class probability before taking logs. A mean divides by n.",
+      "explain": "Select the true-class probability before taking logs. A mean divides by n.",
+      "source": "Day 11 pp.16–19",
+      "kind": "flip",
+      "math": "<div class=\"equation\"><span class=\"katex-display\"><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><semantics><mrow><mi>J</mi><mo>=</mo><mo>−</mo><munder><mo>∑</mo><mi>i</mi></munder><mi>ln</mi><mo>⁡</mo><msub><mi>q</mi><mi>i</mi></msub></mrow><annotation encoding=\"application/x-tex\">J=-\\sum_i\\ln q_i</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"katex-base\"><span class=\"katex-strut\" style=\"height:0.6833em;\"></span><span class=\"mord mathnormal\" style=\"margin-right:0.0962em;\">J</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">=</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span></span><span class=\"katex-base\"><span class=\"katex-strut\" style=\"height:2.3277em;vertical-align:-1.2777em;\"></span><span class=\"mord\">−</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mop op-limits\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:1.05em;\"><span style=\"top:-1.8723em;margin-left:0em;\"><span class=\"pstrut\" style=\"height:3.05em;\"></span><span class=\"katex-sizing reset-size6 size3 mtight\"><span class=\"mord mathnormal mtight\">i</span></span></span><span style=\"top:-3.05em;\"><span class=\"pstrut\" style=\"height:3.05em;\"></span><span><span class=\"mop op-symbol large-op\">∑</span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:1.2777em;\"><span></span></span></span></span></span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mop\">ln</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord\"><span class=\"mord mathnormal\" style=\"margin-right:0.0359em;\">q</span><span class=\"msupsub\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.3117em;\"><span style=\"top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"katex-sizing reset-size6 size3 mtight\"><span class=\"mord mathnormal mtight\">i</span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.15em;\"><span></span></span></span></span></span></span></span></span></span></span></div>",
+      "teach": "Read the formula after naming what each symbol means.",
+      "must": false
+    },
+    {
+      "id": "f-grad",
+      "topic": "formula",
+      "prompt": "Logistic training",
+      "answer": "Natural-log sum; compute the whole old gradient before updating.",
+      "explain": "Natural-log sum; compute the whole old gradient before updating.",
+      "source": "Day 11 p.19; HW6 p.3",
+      "kind": "flip",
+      "math": "<div class=\"equation\"><span class=\"katex-display\"><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><semantics><mrow><mi mathvariant=\"normal\">∇</mi><mi>J</mi><mo>=</mo><msup><mi>X</mi><mi mathvariant=\"normal\">⊤</mi></msup><mo stretchy=\"false\">(</mo><mi>p</mi><mo>−</mo><mi>y</mi><mo stretchy=\"false\">)</mo><mo separator=\"true\">,</mo><mspace width=\"1em\"/><msub><mi>w</mi><mrow><mi>n</mi><mi>e</mi><mi>w</mi></mrow></msub><mo>=</mo><mi>w</mi><mo>−</mo><mi>α</mi><mi mathvariant=\"normal\">∇</mi><mi>J</mi></mrow><annotation encoding=\"application/x-tex\">\\nabla J=X^\\top(p-y),\\quad w_{new}=w-\\alpha\\nabla J</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"katex-base\"><span class=\"katex-strut\" style=\"height:0.6833em;\"></span><span class=\"mord\">∇</span><span class=\"mord mathnormal\" style=\"margin-right:0.0962em;\">J</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">=</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span></span><span class=\"katex-base\"><span class=\"katex-strut\" style=\"height:1.1491em;vertical-align:-0.25em;\"></span><span class=\"mord\"><span class=\"mord mathnormal\" style=\"margin-right:0.0785em;\">X</span><span class=\"msupsub\"><span class=\"vlist-t\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.8991em;\"><span style=\"top:-3.113em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"katex-sizing reset-size6 size3 mtight\"><span class=\"mord mtight\">⊤</span></span></span></span></span></span></span></span><span class=\"mopen\">(</span><span class=\"mord mathnormal\">p</span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span><span class=\"mbin\">−</span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span></span><span class=\"katex-base\"><span class=\"katex-strut\" style=\"height:1em;vertical-align:-0.25em;\"></span><span class=\"mord mathnormal\" style=\"margin-right:0.0359em;\">y</span><span class=\"mclose\">)</span><span class=\"mpunct\">,</span><span class=\"mspace\" style=\"margin-right:1em;\"></span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord\"><span class=\"mord mathnormal\" style=\"margin-right:0.0269em;\">w</span><span class=\"msupsub\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.1514em;\"><span style=\"top:-2.55em;margin-left:-0.0269em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"katex-sizing reset-size6 size3 mtight\"><span class=\"mord mtight\"><span class=\"mord mathnormal mtight\">n</span><span class=\"mord mathnormal mtight\">e</span><span class=\"mord mathnormal mtight\" style=\"margin-right:0.0269em;\">w</span></span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.15em;\"><span></span></span></span></span></span></span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">=</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span></span><span class=\"katex-base\"><span class=\"katex-strut\" style=\"height:0.6667em;vertical-align:-0.0833em;\"></span><span class=\"mord mathnormal\" style=\"margin-right:0.0269em;\">w</span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span><span class=\"mbin\">−</span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span></span><span class=\"katex-base\"><span class=\"katex-strut\" style=\"height:0.6833em;\"></span><span class=\"mord mathnormal\" style=\"margin-right:0.0037em;\">α</span><span class=\"mord\">∇</span><span class=\"mord mathnormal\" style=\"margin-right:0.0962em;\">J</span></span></span></span></span></div>",
+      "teach": "Read the formula after naming what each symbol means.",
+      "must": true
+    },
+    {
+      "id": "f-soft",
+      "topic": "formula",
+      "prompt": "Softmax",
+      "answer": "Normalize across classes in each sample. Common offsets cancel.",
+      "explain": "Normalize across classes in each sample. Common offsets cancel.",
+      "source": "Day 12 pp.11–15",
+      "kind": "flip",
+      "math": "<div class=\"equation\"><span class=\"katex-display\"><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><semantics><mrow><msub><mi>p</mi><mi>k</mi></msub><mo>=</mo><mfrac><msup><mi>e</mi><msub><mi>z</mi><mi>k</mi></msub></msup><mrow><munder><mo>∑</mo><mi>j</mi></munder><msup><mi>e</mi><msub><mi>z</mi><mi>j</mi></msub></msup></mrow></mfrac></mrow><annotation encoding=\"application/x-tex\">p_k=\\frac{e^{z_k}}{\\sum_j e^{z_j}}</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"katex-base\"><span class=\"katex-strut\" style=\"height:0.625em;vertical-align:-0.1944em;\"></span><span class=\"mord\"><span class=\"mord mathnormal\">p</span><span class=\"msupsub\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.3361em;\"><span style=\"top:-2.55em;margin-left:0em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"katex-sizing reset-size6 size3 mtight\"><span class=\"mord mathnormal mtight\" style=\"margin-right:0.0315em;\">k</span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.15em;\"><span></span></span></span></span></span></span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">=</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span></span><span class=\"katex-base\"><span class=\"katex-strut\" style=\"height:2.4632em;vertical-align:-1.1218em;\"></span><span class=\"mord\"><span class=\"mopen nulldelimiter\"></span><span class=\"mfrac\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:1.3414em;\"><span style=\"top:-2.314em;\"><span class=\"pstrut\" style=\"height:3em;\"></span><span class=\"mord\"><span class=\"mop\"><span class=\"mop op-symbol small-op\" style=\"position:relative;top:0em;\">∑</span><span class=\"msupsub\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.162em;\"><span style=\"top:-2.4003em;margin-left:0em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"katex-sizing reset-size6 size3 mtight\"><span class=\"mord mathnormal mtight\" style=\"margin-right:0.0572em;\">j</span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.4358em;\"><span></span></span></span></span></span></span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord\"><span class=\"mord mathnormal\">e</span><span class=\"msupsub\"><span class=\"vlist-t\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.6065em;\"><span style=\"top:-3.0051em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"katex-sizing reset-size6 size3 mtight\"><span class=\"mord mtight\"><span class=\"mord mtight\"><span class=\"mord mathnormal mtight\" style=\"margin-right:0.044em;\">z</span><span class=\"msupsub\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.3281em;\"><span style=\"top:-2.357em;margin-left:-0.044em;margin-right:0.0714em;\"><span class=\"pstrut\" style=\"height:2.5em;\"></span><span class=\"katex-sizing reset-size3 size1 mtight\"><span class=\"mord mathnormal mtight\" style=\"margin-right:0.0572em;\">j</span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.2819em;\"><span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span><span style=\"top:-3.23em;\"><span class=\"pstrut\" style=\"height:3em;\"></span><span class=\"frac-line\" style=\"border-bottom-width:0.04em;\"></span></span><span style=\"top:-3.677em;\"><span class=\"pstrut\" style=\"height:3em;\"></span><span class=\"mord\"><span class=\"mord\"><span class=\"mord mathnormal\">e</span><span class=\"msupsub\"><span class=\"vlist-t\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.6644em;\"><span style=\"top:-3.063em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"katex-sizing reset-size6 size3 mtight\"><span class=\"mord mtight\"><span class=\"mord mtight\"><span class=\"mord mathnormal mtight\" style=\"margin-right:0.044em;\">z</span><span class=\"msupsub\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.3448em;\"><span style=\"top:-2.3488em;margin-left:-0.044em;margin-right:0.0714em;\"><span class=\"pstrut\" style=\"height:2.5em;\"></span><span class=\"katex-sizing reset-size3 size1 mtight\"><span class=\"mord mathnormal mtight\" style=\"margin-right:0.0315em;\">k</span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.1512em;\"><span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:1.1218em;\"><span></span></span></span></span></span><span class=\"mclose nulldelimiter\"></span></span></span></span></span></span></div>",
+      "teach": "Read the formula after naming what each symbol means.",
+      "must": true
+    },
+    {
+      "id": "f-count",
+      "topic": "formula",
+      "prompt": "Binary multiclass model counts",
+      "answer": "Pairs are unordered, so divide by two.",
+      "explain": "Pairs are unordered, so divide by two.",
+      "source": "Day 12 pp.3–4",
+      "kind": "flip",
+      "math": "<div class=\"equation\"><span class=\"katex-display\"><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><semantics><mrow><msub><mi>N</mi><mrow><mi>O</mi><mi>v</mi><mi>R</mi></mrow></msub><mo>=</mo><mi>K</mi><mo separator=\"true\">,</mo><mspace width=\"1em\"/><msub><mi>N</mi><mrow><mi>O</mi><mi>v</mi><mi>O</mi></mrow></msub><mo>=</mo><mi>K</mi><mo stretchy=\"false\">(</mo><mi>K</mi><mo>−</mo><mn>1</mn><mo stretchy=\"false\">)</mo><mi mathvariant=\"normal\">/</mi><mn>2</mn></mrow><annotation encoding=\"application/x-tex\">N_{OvR}=K,\\quad N_{OvO}=K(K-1)/2</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"katex-base\"><span class=\"katex-strut\" style=\"height:0.8333em;vertical-align:-0.15em;\"></span><span class=\"mord\"><span class=\"mord mathnormal\" style=\"margin-right:0.109em;\">N</span><span class=\"msupsub\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.3283em;\"><span style=\"top:-2.55em;margin-left:-0.109em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"katex-sizing reset-size6 size3 mtight\"><span class=\"mord mtight\"><span class=\"mord mathnormal mtight\" style=\"margin-right:0.0278em;\">O</span><span class=\"mord mathnormal mtight\" style=\"margin-right:0.0359em;\">v</span><span class=\"mord mathnormal mtight\" style=\"margin-right:0.0077em;\">R</span></span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.15em;\"><span></span></span></span></span></span></span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">=</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span></span><span class=\"katex-base\"><span class=\"katex-strut\" style=\"height:0.8778em;vertical-align:-0.1944em;\"></span><span class=\"mord mathnormal\" style=\"margin-right:0.0715em;\">K</span><span class=\"mpunct\">,</span><span class=\"mspace\" style=\"margin-right:1em;\"></span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord\"><span class=\"mord mathnormal\" style=\"margin-right:0.109em;\">N</span><span class=\"msupsub\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.3283em;\"><span style=\"top:-2.55em;margin-left:-0.109em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"katex-sizing reset-size6 size3 mtight\"><span class=\"mord mtight\"><span class=\"mord mathnormal mtight\" style=\"margin-right:0.0278em;\">O</span><span class=\"mord mathnormal mtight\" style=\"margin-right:0.0359em;\">v</span><span class=\"mord mathnormal mtight\" style=\"margin-right:0.0278em;\">O</span></span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.15em;\"><span></span></span></span></span></span></span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">=</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span></span><span class=\"katex-base\"><span class=\"katex-strut\" style=\"height:1em;vertical-align:-0.25em;\"></span><span class=\"mord mathnormal\" style=\"margin-right:0.0715em;\">K</span><span class=\"mopen\">(</span><span class=\"mord mathnormal\" style=\"margin-right:0.0715em;\">K</span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span><span class=\"mbin\">−</span><span class=\"mspace\" style=\"margin-right:0.2222em;\"></span></span><span class=\"katex-base\"><span class=\"katex-strut\" style=\"height:1em;vertical-align:-0.25em;\"></span><span class=\"mord\">1</span><span class=\"mclose\">)</span><span class=\"mord\">/2</span></span></span></span></span></div>",
+      "teach": "Read the formula after naming what each symbol means.",
+      "must": false
+    },
+    {
+      "id": "f-bits",
+      "topic": "formula",
+      "prompt": "Units and averaging",
+      "answer": "The objective scale changes gradients and fixed-rate steps too.",
+      "explain": "The objective scale changes gradients and fixed-rate steps too.",
+      "source": "Day 11 p.19; HW6 pp.1,3",
+      "kind": "flip",
+      "math": "<div class=\"equation\"><span class=\"katex-display\"><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><semantics><mrow><msub><mi>J</mi><mrow><mi>b</mi><mi>i</mi><mi>t</mi><mi>s</mi></mrow></msub><mo>=</mo><msub><mi>J</mi><mrow><mi>n</mi><mi>a</mi><mi>t</mi><mi>s</mi></mrow></msub><mi mathvariant=\"normal\">/</mi><mi>ln</mi><mo>⁡</mo><mn>2</mn><mo separator=\"true\">,</mo><mspace width=\"1em\"/><mi>L</mi><mo>=</mo><mi>J</mi><mi mathvariant=\"normal\">/</mi><mi>n</mi></mrow><annotation encoding=\"application/x-tex\">J_{bits}=J_{nats}/\\ln2,\\quad L=J/n</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"katex-base\"><span class=\"katex-strut\" style=\"height:0.8333em;vertical-align:-0.15em;\"></span><span class=\"mord\"><span class=\"mord mathnormal\" style=\"margin-right:0.0962em;\">J</span><span class=\"msupsub\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.3361em;\"><span style=\"top:-2.55em;margin-left:-0.0962em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"katex-sizing reset-size6 size3 mtight\"><span class=\"mord mtight\"><span class=\"mord mathnormal mtight\">bi</span><span class=\"mord mathnormal mtight\">t</span><span class=\"mord mathnormal mtight\">s</span></span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.15em;\"><span></span></span></span></span></span></span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">=</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span></span><span class=\"katex-base\"><span class=\"katex-strut\" style=\"height:1em;vertical-align:-0.25em;\"></span><span class=\"mord\"><span class=\"mord mathnormal\" style=\"margin-right:0.0962em;\">J</span><span class=\"msupsub\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.2806em;\"><span style=\"top:-2.55em;margin-left:-0.0962em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"katex-sizing reset-size6 size3 mtight\"><span class=\"mord mtight\"><span class=\"mord mathnormal mtight\">na</span><span class=\"mord mathnormal mtight\">t</span><span class=\"mord mathnormal mtight\">s</span></span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.15em;\"><span></span></span></span></span></span></span><span class=\"mord\">/</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mop\">ln</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord\">2</span><span class=\"mpunct\">,</span><span class=\"mspace\" style=\"margin-right:1em;\"></span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord mathnormal\">L</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">=</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span></span><span class=\"katex-base\"><span class=\"katex-strut\" style=\"height:1em;vertical-align:-0.25em;\"></span><span class=\"mord mathnormal\" style=\"margin-right:0.0962em;\">J</span><span class=\"mord\">/</span><span class=\"mord mathnormal\">n</span></span></span></span></span></div>",
+      "teach": "Read the formula after naming what each symbol means.",
+      "must": false
+    }
+  ]
+}
