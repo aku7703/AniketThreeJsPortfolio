@@ -1,5 +1,7 @@
 {
   "topics": {
+    "sub": "Subproblem lab · new problems",
+    "shape": "Subproblem shapes",
     "basics": "DP foundations",
     "coin": "Coin change",
     "knapsack": "0/1 knapsack",
@@ -9,6 +11,954 @@
     "formula": "Formula / key facts"
   },
   "cards": [
+    {
+      "id": "lab-robber",
+      "topic": "sub",
+      "prompt": "Street of houses: no two neighbors",
+      "setup": "House i has cash v[i]. Rob a set of houses with the most cash, never two next to each other.",
+      "example": "v = [2, 7, 9, 3, 1] → best 12 (2 + 9 + 1)",
+      "answer": "dp[i] = max(dp[i−1], dp[i−2] + v[i]); dp[0]=0, dp[1]=v[1]; answer dp[n]. Table: 2, 7, 11, 11, 12.",
+      "explain": "One sequence plus \"use some of them\" means a prefix state. Split on the last element: in or out.",
+      "formula": "",
+      "math": "",
+      "kind": "steps",
+      "options": [],
+      "steps": [
+        {
+          "tag": "Visualize",
+          "q": "In the best plan for [2, 7, 9, 3, 1], what can happen to the last house?",
+          "answer": "It is robbed or skipped, and each case leaves a smaller street",
+          "why": "Two cases. Skipping it leaves houses 1..4. Robbing it forbids house 4 and leaves houses 1..3.",
+          "options": [
+            "It depends on every earlier choice, so list the subsets",
+            "It is robbed or skipped, and each case leaves a smaller street",
+            "It is always robbed because it adds cash"
+          ],
+          "miss": {
+            "It is always robbed because it adds cash": "Robbing it can block a bigger neighbor. In [3, 10, 1] the best plan skips the last house.",
+            "It depends on every earlier choice, so list the subsets": "Listing subsets is the 2^n brute force. You only need to decide the last house."
+          }
+        },
+        {
+          "tag": "Subproblem",
+          "q": "Which subproblem makes \"rob or skip the last house\" work?",
+          "answer": "dp[i] = most cash from houses 1..i",
+          "why": "Both cases leave a shorter street that starts at house 1, which is just a smaller prefix.",
+          "options": [
+            "dp[i] = v[i]",
+            "dp[i] = most cash from houses 1..i",
+            "dp[i] = most cash robbing exactly i houses",
+            "dp[i][j] = most cash from houses i..j"
+          ],
+          "miss": {
+            "dp[i] = most cash robbing exactly i houses": "A count does not say which houses were robbed, so you cannot check neighbors.",
+            "dp[i] = v[i]": "That is the input, not a subproblem.",
+            "dp[i][j] = most cash from houses i..j": "This works, but i is always 1, so it wastes a dimension and n² space."
+          }
+        },
+        {
+          "tag": "Relate",
+          "q": "Skipping house i leaves dp[i−1]. Robbing house i gives…",
+          "answer": "dp[i−2] + v[i]",
+          "why": "Robbing house i forbids house i−1. What is left is houses 1..i−2.",
+          "options": [
+            "dp[i−2] + v[i]",
+            "dp[i−1] + v[i]",
+            "max over all j < i of dp[j] + v[i]",
+            "dp[i−2]"
+          ],
+          "miss": {
+            "dp[i−1] + v[i]": "dp[i−1] might already rob house i−1, which is next door.",
+            "dp[i−2]": "You robbed house i, so add its cash v[i].",
+            "max over all j < i of dp[j] + v[i]": "This is correct but slower. dp only grows with i, so j = i−2 is always the best choice."
+          }
+        },
+        {
+          "tag": "Generalize",
+          "q": "dp[0] = 0. What is dp[1]?",
+          "answer": "v[1]",
+          "why": "With one house and no neighbor to worry about, rob it.",
+          "options": [
+            "0",
+            "max(v[1], v[2])",
+            "v[1]"
+          ],
+          "miss": {
+            "0": "That skips the only house even though nothing blocks it.",
+            "max(v[1], v[2])": "That is dp[2]. It looks at two houses."
+          }
+        },
+        {
+          "tag": "Order",
+          "q": "Fill order and final answer?",
+          "answer": "i = 2 up to n, answer dp[n], O(n) time",
+          "why": "dp[i] needs dp[i−1] and dp[i−2], so go left to right. Houses 1..n is the whole street.",
+          "options": [
+            "i = 2 up to n, answer dp[n−1]",
+            "i = n down to 2, answer dp[1]",
+            "i = 2 up to n, answer dp[n], O(n) time"
+          ],
+          "miss": {
+            "i = n down to 2, answer dp[1]": "Under this definition dp[i] depends on smaller i, so those must be filled first.",
+            "i = 2 up to n, answer dp[n−1]": "That never considers the last house."
+          }
+        }
+      ],
+      "must": true,
+      "source": "New practice problem · steps follow the 5-step method (Reducible, \"5 Simple Steps for Solving DP Problems\")"
+    },
+    {
+      "id": "lab-lis",
+      "topic": "sub",
+      "prompt": "Longest increasing subsequence",
+      "setup": "Find the longest subsequence (any elements, kept in order) where each element is larger than the one before.",
+      "example": "a = [3, 1, 4, 2, 5] → length 3 (for example 1, 4, 5)",
+      "answer": "dp[i] = 1 + max{dp[j] : j < i, a[j] < a[i]} (1 if there is no such j); answer max over i of dp[i]. Table: 1, 1, 2, 2, 3.",
+      "explain": "When the next pick depends on the previous pick, make the subproblem \"ends exactly at i.\" The index remembers the last value.",
+      "formula": "",
+      "math": "",
+      "kind": "steps",
+      "options": [],
+      "steps": [
+        {
+          "tag": "Visualize",
+          "q": "Try dp[i] = LIS within the first i elements. To extend it with a[i], what is missing?",
+          "answer": "The last value of that subsequence, which dp[i−1] does not record",
+          "why": "a[i] can be added only if it is larger than the subsequence's last value, and a length alone does not say what that value is.",
+          "options": [
+            "Only the length dp[i−1]",
+            "The last value of that subsequence, which dp[i−1] does not record",
+            "Nothing: dp[i] = dp[i−1] + 1 when a[i] > a[i−1]"
+          ],
+          "miss": {
+            "Nothing: dp[i] = dp[i−1] + 1 when a[i] > a[i−1]": "The best subsequence need not end at a[i−1]. In [1, 5, 2, 3], the first three give length 2 through 1, 5 or 1, 2. Only 1, 2 can take the 3, and the number 2 does not say which one you have.",
+            "Only the length dp[i−1]": "The length is exactly what you have, and it is not enough. You need the last value."
+          }
+        },
+        {
+          "tag": "Subproblem",
+          "q": "Repair the subproblem:",
+          "answer": "dp[i] = longest increasing subsequence that ends at a[i]",
+          "why": "Now the last value is a[i] itself, so you know exactly what can come next.",
+          "options": [
+            "dp[i] = longest one that starts at a[1]",
+            "dp[i][v] = longest in the first i elements whose last value is v",
+            "dp[i] = how many increasing subsequences end at a[i]",
+            "dp[i] = longest increasing subsequence that ends at a[i]"
+          ],
+          "miss": {
+            "dp[i] = longest one that starts at a[1]": "The best subsequence may skip a[1].",
+            "dp[i] = how many increasing subsequences end at a[i]": "That counts subsequences. The question asks for the longest length.",
+            "dp[i][v] = longest in the first i elements whose last value is v": "This is valid, but values can be huge. \"Ends at i\" stores the same fact with n states."
+          }
+        },
+        {
+          "tag": "Relate",
+          "q": "What can come right before a[i] in that subsequence?",
+          "answer": "Any j < i with a[j] < a[i]: dp[i] = 1 + max dp[j]",
+          "why": "The element before a[i] can be any earlier, smaller element. If there is none, a[i] starts alone and dp[i] = 1.",
+          "options": [
+            "Any j < i with a[j] < a[i]: dp[i] = 1 + max dp[j]",
+            "Only j = i−1",
+            "dp[i] = max(dp[i−1], dp[i−1] + 1)"
+          ],
+          "miss": {
+            "Only j = i−1": "Subsequences can skip elements. The previous pick need not be adjacent.",
+            "dp[i] = max(dp[i−1], dp[i−1] + 1)": "That is prefix thinking again. dp[i−1] ends at a[i−1], which may be larger than a[i]."
+          }
+        },
+        {
+          "tag": "Check",
+          "q": "Fill dp for [3, 1, 4, 2, 5] in your head:",
+          "answer": "1, 1, 2, 2, 3",
+          "why": "3 and 1 each start alone. 4 follows 3 or 1, so 2. 2 follows 1, so 2. 5 follows 4 or 2, so 3.",
+          "options": [
+            "1, 1, 2, 2, 3",
+            "1, 1, 2, 1, 3",
+            "1, 2, 3, 4, 5",
+            "1, 1, 2, 3, 4"
+          ],
+          "miss": {
+            "1, 1, 2, 3, 4": "2 cannot follow 4 (it is smaller), so dp at 2 is 1 + dp at 1 = 2.",
+            "1, 1, 2, 1, 3": "2 can follow 1 (1 < 2), so it is 2, not 1.",
+            "1, 2, 3, 4, 5": "1 is smaller than 3, so it cannot extend 3."
+          }
+        },
+        {
+          "tag": "Order",
+          "q": "Where is the final answer?",
+          "answer": "The max of dp[i] over all i, O(n²) total",
+          "why": "The best subsequence can end anywhere. Each of the n entries scans up to n earlier ones.",
+          "options": [
+            "dp[n]",
+            "The max of dp[i] over all i, O(n²) total",
+            "dp[1]"
+          ],
+          "miss": {
+            "dp[n]": "That forces the subsequence to end at the last element. In [1, 2, 0], dp[n] = 1 but the answer is 2.",
+            "dp[1]": "That is a single element."
+          }
+        }
+      ],
+      "must": true,
+      "source": "New practice problem · steps follow the 5-step method (Reducible, \"5 Simple Steps for Solving DP Problems\")"
+    },
+    {
+      "id": "lab-kadane",
+      "topic": "sub",
+      "prompt": "Best contiguous run",
+      "setup": "Find the contiguous subarray with the largest sum. Entries can be negative.",
+      "example": "a = [−2, 3, −1, 4, −6, 2] → best 6 (3, −1, 4)",
+      "answer": "dp[i] = max(a[i], dp[i−1] + a[i]); answer max over i of dp[i]. Table: −2, 3, 2, 6, 0, 2.",
+      "explain": "\"Contiguous\" means an \"ends at i\" state. The only choice is to extend the run or start fresh.",
+      "formula": "",
+      "math": "",
+      "kind": "steps",
+      "options": [],
+      "steps": [
+        {
+          "tag": "Subproblem",
+          "q": "Pick the subproblem.",
+          "answer": "dp[i] = best sum of a run ending exactly at i",
+          "why": "A run that ends at i is either a[i] alone or a run ending at i−1 with a[i] added.",
+          "options": [
+            "dp[i] = best sum of a run ending exactly at i",
+            "dp[i] = best run anywhere in the first i",
+            "dp[i][j] = sum of a[i..j]"
+          ],
+          "miss": {
+            "dp[i] = best run anywhere in the first i": "That best run may stop well before i, so adding a[i] would leave a gap.",
+            "dp[i][j] = sum of a[i..j]": "Filling every pair is O(n²) brute force with no reuse."
+          }
+        },
+        {
+          "tag": "Relate",
+          "q": "Recurrence?",
+          "answer": "dp[i] = max(a[i], dp[i−1] + a[i])",
+          "why": "Either extend the best run ending at i−1, or start a new run at i if that run only hurts.",
+          "options": [
+            "dp[i] = dp[i−1] + a[i]",
+            "dp[i] = max(a[i], dp[i−1] + a[i])",
+            "dp[i] = max(dp[i−1], a[i])"
+          ],
+          "miss": {
+            "dp[i] = dp[i−1] + a[i]": "This always keeps the old run, even when its sum is negative.",
+            "dp[i] = max(dp[i−1], a[i])": "dp[i−1] does not end at i, so this breaks the definition."
+          }
+        },
+        {
+          "tag": "Check",
+          "q": "dp for [−2, 3, −1, 4, −6, 2]:",
+          "answer": "−2, 3, 2, 6, 0, 2",
+          "why": "3 starts fresh (better than 1). Then 2, then 6. −6 drops it to 0. 2 starts fresh or extends 0, giving 2 either way.",
+          "options": [
+            "−2, 3, 3, 6, 6, 6",
+            "−2, 1, 0, 4, −2, 0",
+            "−2, 3, 2, 6, 0, 2"
+          ],
+          "miss": {
+            "−2, 3, 3, 6, 6, 6": "That is the best sum seen so far, which answers a different question than \"ends at i.\"",
+            "−2, 1, 0, 4, −2, 0": "That never starts fresh, so the −2 drags everything down."
+          }
+        },
+        {
+          "tag": "Order",
+          "q": "Final answer for the example?",
+          "answer": "max of dp = 6",
+          "why": "The best run ends at index 4, so take the max over every ending.",
+          "options": [
+            "9, the sum of the positives",
+            "dp[n] = 2",
+            "max of dp = 6"
+          ],
+          "miss": {
+            "dp[n] = 2": "That only looks at runs ending at the last element.",
+            "9, the sum of the positives": "That skips elements, and a subarray must be contiguous."
+          }
+        }
+      ],
+      "must": false,
+      "source": "New practice problem · steps follow the 5-step method (Reducible, \"5 Simple Steps for Solving DP Problems\")"
+    },
+    {
+      "id": "lab-paint",
+      "topic": "sub",
+      "prompt": "Paint the houses",
+      "setup": "Paint n houses red, green or blue. cost[i][c] is the price to paint house i color c. Neighbors cannot share a color. Find the minimum total.",
+      "example": "H1: R1 G5 B3 · H2: R2 G9 B4 · H3: R3 G1 B6 → best 6",
+      "answer": "dp[i][c] = cost[i][c] + min over c′ ≠ c of dp[i−1][c′]; answer min over c of dp[n][c]. Rows: (1,5,3), (5,10,5), (8,6,11).",
+      "explain": "If the recurrence needs a fact about the previous choice, add that fact as an index. A state that is too small gets stuck, so add a parameter.",
+      "formula": "",
+      "math": "",
+      "kind": "steps",
+      "options": [],
+      "steps": [
+        {
+          "tag": "Visualize",
+          "q": "Try dp[i] = cheapest way to paint houses 1..i. Why does the recurrence get stuck?",
+          "answer": "Choosing house i's color needs house i−1's color, and dp[i−1] does not store it",
+          "why": "The cheapest plan for houses 1..i−1 might end in the color you want for house i.",
+          "options": [
+            "It does not: dp[i] = dp[i−1] + the cheapest color for house i",
+            "Choosing house i's color needs house i−1's color, and dp[i−1] does not store it",
+            "There are too many subsets of houses"
+          ],
+          "miss": {
+            "It does not: dp[i] = dp[i−1] + the cheapest color for house i": "That cheapest color may match house i−1. In the example, picking R1 then R2 breaks the rule.",
+            "There are too many subsets of houses": "You paint every house. The trouble is the colors, not choosing houses."
+          }
+        },
+        {
+          "tag": "Subproblem",
+          "q": "Add the missing fact:",
+          "answer": "dp[i][c] = cheapest houses 1..i with house i painted c",
+          "why": "Now the last color is in the index, so you can rule out matching it.",
+          "options": [
+            "dp[i][c] = cost[i][c]",
+            "dp[i][c] = cheapest houses 1..i with house i painted c",
+            "dp[i][S] for every set S of colors used so far",
+            "dp[c] = cost of painting every house c"
+          ],
+          "miss": {
+            "dp[i][c] = cost[i][c]": "That is input, with no subproblem behind it.",
+            "dp[c] = cost of painting every house c": "Neighbors would share a color.",
+            "dp[i][S] for every set S of colors used so far": "Only the last color matters, so the set is extra state you do not need."
+          }
+        },
+        {
+          "tag": "Relate",
+          "q": "Recurrence:",
+          "answer": "cost[i][c] + min over c′ ≠ c of dp[i−1][c′]",
+          "why": "House i−1 can be any color except c.",
+          "options": [
+            "cost[i][c] + dp[i−1][c]",
+            "cost[i][c] + min over all c′ of dp[i−1][c′]",
+            "cost[i][c] + min over c′ ≠ c of dp[i−1][c′]"
+          ],
+          "miss": {
+            "cost[i][c] + min over all c′ of dp[i−1][c′]": "That allows c′ = c, so two neighbors match.",
+            "cost[i][c] + dp[i−1][c]": "That forces the same color as the neighbor, which is exactly what is forbidden."
+          }
+        },
+        {
+          "tag": "Check",
+          "q": "Answer for the example?",
+          "answer": "6 (Blue, Red, Green: 3 + 2 + 1)",
+          "why": "Rows: (1,5,3), then (2+3, 9+1, 4+1) = (5,10,5), then (3+5, 1+5, 6+5) = (8,6,11). The min is 6.",
+          "options": [
+            "4 (Red, Red, Green)",
+            "8",
+            "6 (Blue, Red, Green: 3 + 2 + 1)"
+          ],
+          "miss": {
+            "4 (Red, Red, Green)": "Houses 1 and 2 are both red, and neighbors cannot match.",
+            "8": "That is dp[3][Red]. The answer is the min over all colors of the last house."
+          }
+        },
+        {
+          "tag": "Order",
+          "q": "How big is this DP?",
+          "answer": "3n states, O(1) each, so O(n) total",
+          "why": "Each state checks 2 earlier colors. With k colors it would be O(nk²).",
+          "options": [
+            "O(3^n)",
+            "O(n²)",
+            "3n states, O(1) each, so O(n) total"
+          ],
+          "miss": {
+            "O(3^n)": "That is trying every coloring. DP avoids it by remembering only the last color.",
+            "O(n²)": "No state looks back further than i−1."
+          }
+        }
+      ],
+      "must": false,
+      "source": "New practice problem · steps follow the 5-step method (Reducible, \"5 Simple Steps for Solving DP Problems\")"
+    },
+    {
+      "id": "lab-decode",
+      "topic": "sub",
+      "prompt": "Decode the digits",
+      "setup": "Letters were encoded as A=1 … Z=26. Count the ways to decode a digit string. \"0\" alone is not a letter.",
+      "example": "\"226\" → 3 ways: 2|2|6, 22|6, 2|26",
+      "answer": "dp[i] = (s[i] ≠ 0 ? dp[i−1] : 0) + (s[i−1..i] in 10..26 ? dp[i−2] : 0); dp[0]=1; answer dp[n].",
+      "explain": "Counting adds the separate last-choice cases. The empty prefix has exactly 1 decoding, so dp[0] = 1.",
+      "formula": "",
+      "math": "",
+      "kind": "steps",
+      "options": [],
+      "steps": [
+        {
+          "tag": "Visualize",
+          "q": "In any decoding of the first i digits, the last letter came from…",
+          "answer": "Either the last 1 digit or the last 2 digits",
+          "why": "Each letter uses 1 or 2 digits, so there are two cases for the last letter.",
+          "options": [
+            "Either the last 1 digit or the last 2 digits",
+            "Always the last 1 digit",
+            "Any suffix of the string"
+          ],
+          "miss": {
+            "Always the last 1 digit": "\"26\" can decode as Z, which uses two digits.",
+            "Any suffix of the string": "No letter uses more than two digits."
+          }
+        },
+        {
+          "tag": "Subproblem",
+          "q": "Subproblem?",
+          "answer": "dp[i] = number of ways to decode the first i digits",
+          "why": "Both cases leave a shorter prefix, either i−1 or i−2 digits.",
+          "options": [
+            "dp[i] = can the first i digits be decoded?",
+            "dp[i] = number of letters in a decoding of i digits",
+            "dp[i] = number of ways to decode the first i digits"
+          ],
+          "miss": {
+            "dp[i] = can the first i digits be decoded?": "A yes/no loses the count, and the question asks how many.",
+            "dp[i] = number of letters in a decoding of i digits": "Different decodings use different numbers of letters, and that does not count anything."
+          }
+        },
+        {
+          "tag": "Relate",
+          "q": "Combine the two cases:",
+          "answer": "Add: dp[i−1] (if valid) + dp[i−2] (if valid)",
+          "why": "Every decoding falls into exactly one case, so the counts add.",
+          "options": [
+            "max(dp[i−1], dp[i−2])",
+            "Add: dp[i−1] (if valid) + dp[i−2] (if valid)",
+            "dp[i−1] · dp[i−2]"
+          ],
+          "miss": {
+            "max(dp[i−1], dp[i−2])": "Max is for optimizing. Counting adds the cases.",
+            "dp[i−1] · dp[i−2]": "You multiply independent choices made one after another. These are two alternatives."
+          }
+        },
+        {
+          "tag": "Generalize",
+          "q": "Base case dp[0]?",
+          "answer": "1, since the empty string has one decoding (nothing)",
+          "why": "For \"26\", dp[2] = dp[1] + dp[0] = 1 + 1 = 2. That checks out.",
+          "options": [
+            "0",
+            "1, since the empty string has one decoding (nothing)"
+          ],
+          "miss": {
+            "0": "With dp[0] = 0, \"26\" gets only 1 way, which loses Z."
+          }
+        },
+        {
+          "tag": "Check",
+          "q": "How many decodings for \"2101\"?",
+          "answer": "1",
+          "why": "dp = 1, 1, 2, 1, 1. A \"0\" must pair with the 1 before it (10), so 2|10|1 is the only decoding.",
+          "options": [
+            "3",
+            "1",
+            "2"
+          ],
+          "miss": {
+            "2": "21|0|1 fails because 0 alone is not a letter. 2|1|01 fails because 01 is not a letter.",
+            "3": "Count the decodings with no lone 0 and no leading-zero pair. Only 2|10|1 works."
+          }
+        }
+      ],
+      "must": true,
+      "source": "New practice problem · steps follow the 5-step method (Reducible, \"5 Simple Steps for Solving DP Problems\")"
+    },
+    {
+      "id": "lab-grid",
+      "topic": "sub",
+      "prompt": "Cheapest path through a grid",
+      "setup": "From the top-left to the bottom-right cell, moving only right or down. Minimize the sum of cells visited.",
+      "example": "1 3 1 / 1 5 1 / 4 2 1 → best 7 (1→3→1→1→1)",
+      "answer": "dp[r][c] = grid[r][c] + min(dp[r−1][c], dp[r][c−1]); first row and column are running sums; answer dp[last][last].",
+      "explain": "On a grid the state is the position. Split on the last move into the cell.",
+      "formula": "",
+      "math": "",
+      "kind": "steps",
+      "options": [],
+      "steps": [
+        {
+          "tag": "Visualize",
+          "q": "The last move into the bottom-right cell came from…",
+          "answer": "The cell above or the cell to the left",
+          "why": "Only right and down moves are allowed, so there are two cases.",
+          "options": [
+            "Any neighbor",
+            "The cell above or the cell to the left",
+            "The diagonal cell"
+          ],
+          "miss": {
+            "Any neighbor": "Up and left moves are not allowed.",
+            "The diagonal cell": "Diagonal moves are not allowed."
+          }
+        },
+        {
+          "tag": "Subproblem",
+          "q": "Subproblem?",
+          "answer": "dp[r][c] = cheapest path from the start to cell (r, c)",
+          "why": "Each case leaves a cheapest path to a neighboring cell, which is the same kind of question.",
+          "options": [
+            "dp[r] = cheapest cell in row r",
+            "dp[k] = cheapest path of k steps",
+            "dp[r][c] = cheapest path from the start to cell (r, c)"
+          ],
+          "miss": {
+            "dp[k] = cheapest path of k steps": "Many cells are k steps away, so this does not say where you are.",
+            "dp[r] = cheapest cell in row r": "Paths are not made of the cheapest cell in each row."
+          }
+        },
+        {
+          "tag": "Relate",
+          "q": "Recurrence?",
+          "answer": "grid[r][c] + min(dp[r−1][c], dp[r][c−1])",
+          "why": "Pay for this cell, plus the cheaper of the two ways in.",
+          "options": [
+            "grid[r][c] + min(dp[r−1][c], dp[r][c−1])",
+            "min(dp[r−1][c], dp[r][c−1])",
+            "grid[r][c] + dp[r−1][c−1]"
+          ],
+          "miss": {
+            "min(dp[r−1][c], dp[r][c−1])": "This forgets to pay for the cell itself.",
+            "grid[r][c] + dp[r−1][c−1]": "That jumps diagonally."
+          }
+        },
+        {
+          "tag": "Generalize",
+          "q": "Base cases?",
+          "answer": "First row and first column are running sums",
+          "why": "Those cells have only one way in, from the left or from above.",
+          "options": [
+            "First row and first column are running sums",
+            "All 0",
+            "Only dp[0][0] is needed"
+          ],
+          "miss": {
+            "All 0": "You still pay for those cells.",
+            "Only dp[0][0] is needed": "Cells on the edge would look up a neighbor that does not exist."
+          }
+        },
+        {
+          "tag": "Order",
+          "q": "Fill order?",
+          "answer": "Row by row, left to right",
+          "why": "Each cell needs the one above it and the one to its left, and both are done by then. The answer is 7.",
+          "options": [
+            "Bottom-right back to top-left",
+            "Any order works",
+            "Row by row, left to right"
+          ],
+          "miss": {
+            "Bottom-right back to top-left": "That order fits the other definition (cheapest path from a cell to the end). With start-to-cell, the cells it depends on are not filled yet.",
+            "Any order works": "Only top-down memoization can ignore order. A table must be filled in dependency order."
+          }
+        }
+      ],
+      "must": false,
+      "source": "New practice problem · steps follow the 5-step method (Reducible, \"5 Simple Steps for Solving DP Problems\")"
+    },
+    {
+      "id": "lab-words",
+      "topic": "sub",
+      "prompt": "Split into words",
+      "setup": "Can string s be split into dictionary words, with words allowed to repeat?",
+      "example": "s = \"catsand\", words {cat, cats, sand} → yes (cat|sand)",
+      "answer": "dp[i] = OR over j < i of (dp[j] AND s[j+1..i] is a word); dp[0] = true; answer dp[n].",
+      "explain": "When the last piece can be any length, the recurrence loops over where it starts.",
+      "formula": "",
+      "math": "",
+      "kind": "steps",
+      "options": [],
+      "steps": [
+        {
+          "tag": "Visualize",
+          "q": "In a valid split of the first i letters, the last word is…",
+          "answer": "Some word ending at i, starting anywhere",
+          "why": "Words have different lengths, so try every start j+1.",
+          "options": [
+            "The longest dictionary word that fits",
+            "Exactly the last letter",
+            "Some word ending at i, starting anywhere"
+          ],
+          "miss": {
+            "The longest dictionary word that fits": "Greedy fails here: \"cats\" leaves \"and\", which is not a word, but cat|sand works.",
+            "Exactly the last letter": "Words are usually longer than one letter."
+          }
+        },
+        {
+          "tag": "Subproblem",
+          "q": "Subproblem?",
+          "answer": "dp[i] = can the first i letters be split?",
+          "why": "Removing the last word leaves a shorter prefix, the same question.",
+          "options": [
+            "One entry per dictionary word",
+            "dp[i] = does a word start at letter i?",
+            "dp[i] = can the first i letters be split?"
+          ],
+          "miss": {
+            "dp[i] = does a word start at letter i?": "That describes one spot, not whether the whole prefix splits.",
+            "One entry per dictionary word": "The string is what gets shorter, not the dictionary."
+          }
+        },
+        {
+          "tag": "Relate",
+          "q": "Recurrence?",
+          "answer": "OR over j of (dp[j] AND s[j+1..i] is a word)",
+          "why": "One valid split is enough, so ask whether any last word works.",
+          "options": [
+            "AND over j of (…)",
+            "dp[i−1] AND s[i] is a word",
+            "OR over j of (dp[j] AND s[j+1..i] is a word)"
+          ],
+          "miss": {
+            "dp[i−1] AND s[i] is a word": "That allows only one-letter words.",
+            "AND over j of (…)": "That would require every possible split to work."
+          }
+        },
+        {
+          "tag": "Generalize",
+          "q": "dp[0]?",
+          "answer": "true",
+          "why": "The empty prefix is trivially split, and it lets the first word count.",
+          "options": [
+            "true",
+            "false"
+          ],
+          "miss": {
+            "false": "Then every OR is false and nothing could ever be split."
+          }
+        }
+      ],
+      "must": false,
+      "source": "New practice problem · steps follow the 5-step method (Reducible, \"5 Simple Steps for Solving DP Problems\")"
+    },
+    {
+      "id": "lab-pal",
+      "topic": "sub",
+      "prompt": "Fewest insertions to a palindrome",
+      "setup": "Insert letters anywhere in s to make it a palindrome. Find the minimum number of insertions.",
+      "example": "s = \"abca\" → 1 insertion (e.g. \"abcba\")",
+      "answer": "dp[i][j] = s[i]=s[j] ? dp[i+1][j−1] : 1 + min(dp[i+1][j], dp[i][j−1]); length ≤ 1 → 0; fill by increasing length; answer dp[1][n].",
+      "explain": "When both ends matter (palindromes, taking from either end, merging), use intervals i..j and fill them by length.",
+      "formula": "",
+      "math": "",
+      "kind": "steps",
+      "options": [],
+      "steps": [
+        {
+          "tag": "Visualize",
+          "q": "Look at the two ends of s[i..j]. What is the case split?",
+          "answer": "Equal ends pair up; otherwise one end gets a new partner inserted",
+          "why": "If s[i] = s[j], only the middle is left. If not, insert a copy of one end next to the other side and solve what remains.",
+          "options": [
+            "Only the last letter matters",
+            "Equal ends pair up; otherwise one end gets a new partner inserted",
+            "Delete the last letter"
+          ],
+          "miss": {
+            "Only the last letter matters": "A palindrome compares both ends, so the first letter matters just as much.",
+            "Delete the last letter": "You can only insert, not delete."
+          }
+        },
+        {
+          "tag": "Subproblem",
+          "q": "Subproblem?",
+          "answer": "dp[i][j] = fewest insertions for s[i..j]",
+          "why": "Every case trims one or both ends, so what remains is always an interval.",
+          "options": [
+            "dp[i][j] = 1 if s[i..j] is a palindrome, else 0",
+            "dp[i] = fewest insertions for the prefix s[1..i]",
+            "dp[i][j] = fewest insertions for s[i..j]"
+          ],
+          "miss": {
+            "dp[i] = fewest insertions for the prefix s[1..i]": "Trimming the left end breaks the prefix.",
+            "dp[i][j] = 1 if s[i..j] is a palindrome, else 0": "Yes/no does not count insertions."
+          }
+        },
+        {
+          "tag": "Relate",
+          "q": "If s[i] ≠ s[j]:",
+          "answer": "1 + min(dp[i+1][j], dp[i][j−1])",
+          "why": "One insertion matches one end, and the rest of the interval is still to solve.",
+          "options": [
+            "1 + min(dp[i+1][j], dp[i][j−1])",
+            "2 + dp[i+1][j−1]",
+            "1 + dp[i+1][j−1]"
+          ],
+          "miss": {
+            "1 + dp[i+1][j−1]": "That fixes both ends with one change, which is a substitution, not an insertion.",
+            "2 + dp[i+1][j−1]": "This is valid but never better than the min above, so it is not the recurrence."
+          }
+        },
+        {
+          "tag": "Order",
+          "q": "Fill order?",
+          "answer": "By increasing interval length",
+          "why": "Each interval needs shorter intervals inside it. The answer is dp[1][n]. That is n² states at O(1) each.",
+          "options": [
+            "By increasing interval length",
+            "Left to right by j only",
+            "i from 1 up to n, then j from i up to n"
+          ],
+          "miss": {
+            "i from 1 up to n, then j from i up to n": "dp[i][j] needs dp[i+1][·], and that row would not be filled yet.",
+            "Left to right by j only": "That is two indices squeezed into one. The table is 2D."
+          }
+        }
+      ],
+      "must": false,
+      "source": "New practice problem · steps follow the 5-step method (Reducible, \"5 Simple Steps for Solving DP Problems\")"
+    },
+    {
+      "id": "recipe",
+      "topic": "shape",
+      "prompt": "Facing a new DP problem: what are the 5 steps?",
+      "answer": "1 Visualize a tiny example and spot the last decision. 2 Name the subproblem in words. 3 Relate it to smaller subproblems, one case per option of that last decision. 4 Generalize: base cases and the full recurrence. 5 Order: fill smaller first, then say where the answer lives.",
+      "explain": "Step 2 is where problems are won. If step 3 gets stuck because you need a fact the subproblem does not hold, go back to step 2 and add that fact as an index.",
+      "formula": "",
+      "math": "",
+      "kind": "flip",
+      "options": [],
+      "must": true,
+      "source": "Subproblem shapes · study answer checked against the Quiz 5 lessons"
+    },
+    {
+      "id": "sanity",
+      "topic": "shape",
+      "prompt": "How do you test a subproblem before writing the recurrence?",
+      "answer": "Three checks: the original problem is one of them (or the best of them); each one is solved by one last decision plus smaller ones; there are only polynomially many.",
+      "explain": "Say it in words first, like \"dp[i] = the best total using only the first i houses.\" If you cannot say what one entry means, the recurrence will not come.",
+      "formula": "",
+      "math": "",
+      "kind": "flip",
+      "options": [],
+      "must": true,
+      "source": "Subproblem shapes · study answer checked against the Quiz 5 lessons"
+    },
+    {
+      "id": "cheat",
+      "topic": "shape",
+      "prompt": "Input shape → first subproblem to try?",
+      "answer": "One sequence: prefix dp[i]. Two sequences: dp[i][j] over both prefixes. Budget or capacity: add the remaining budget as an index. Must link to the previous pick, or contiguous: ends exactly at i. Both ends matter: interval dp[i][j]. Grid: the cell (r, c).",
+      "explain": "These are starting guesses, not rules. Each one keeps the fact the next decision needs.",
+      "formula": "",
+      "math": "",
+      "kind": "flip",
+      "options": [],
+      "must": true,
+      "source": "Subproblem shapes · study answer checked against the Quiz 5 lessons"
+    },
+    {
+      "id": "shape-adjacent",
+      "topic": "shape",
+      "prompt": "One list of numbers. Pick some to maximize the sum, never two neighbors. First subproblem to try?",
+      "answer": "dp[i] = best using the first i numbers",
+      "explain": "Prefixes shrink cleanly: the last number is either picked or not, and each case leaves a smaller prefix.",
+      "formula": "",
+      "math": "",
+      "kind": "choice",
+      "options": [
+        "dp[i][j] = best using numbers i..j",
+        "dp[i] = best using the first i numbers",
+        "Try every subset and keep the best",
+        "dp[i] = best using exactly i numbers"
+      ],
+      "miss": {
+        "dp[i] = best using exactly i numbers": "A count does not say which numbers were used, so you cannot check the no-neighbors rule.",
+        "dp[i][j] = best using numbers i..j": "This works, but the left end is always 1, so the extra index is wasted.",
+        "Try every subset and keep the best": "That is the 2^n brute force DP is meant to replace."
+      },
+      "must": false,
+      "source": "Subproblem shapes · study answer checked against the Quiz 5 lessons"
+    },
+    {
+      "id": "shape-two",
+      "topic": "shape",
+      "prompt": "Two strings. You compare or align them letter by letter. Subproblem?",
+      "answer": "dp[i][j] over the first i of one and the first j of the other",
+      "explain": "The last decision touches the end of one or both strings, so you need a position in each. LCS and edit distance both work this way.",
+      "formula": "",
+      "math": "",
+      "kind": "choice",
+      "options": [
+        "dp[i][j] over the first i of one and the first j of the other",
+        "dp[i] = do the strings match up to i?",
+        "dp[i] over the first i letters of the longer string"
+      ],
+      "miss": {
+        "dp[i] over the first i letters of the longer string": "This forgets where you are in the other string, and the answer depends on both.",
+        "dp[i] = do the strings match up to i?": "A yes/no for one shared index cannot hold insertions, which shift one string against the other."
+      },
+      "must": false,
+      "source": "Subproblem shapes · study answer checked against the Quiz 5 lessons"
+    },
+    {
+      "id": "shape-budget",
+      "topic": "shape",
+      "prompt": "Items with weights, each used at most once, total weight ≤ W. Why is dp[i] (first i items) not enough?",
+      "answer": "Same i, different remaining capacity → different answers",
+      "explain": "Whether item i fits depends on how much room is left, so the capacity must be an index: dp[i][w].",
+      "formula": "",
+      "math": "",
+      "kind": "choice",
+      "options": [
+        "You need dp[w] only, with no items index",
+        "It is enough; take the item if it fits",
+        "Same i, different remaining capacity → different answers"
+      ],
+      "miss": {
+        "It is enough; take the item if it fits": "Fitting is not the question. Taking item i can block better items, and dp[i] cannot compare those cases.",
+        "You need dp[w] only, with no items index": "Without i you cannot stop an item being used twice. The 1D trick works only because of a careful reverse loop."
+      },
+      "must": false,
+      "source": "Subproblem shapes · study answer checked against the Quiz 5 lessons"
+    },
+    {
+      "id": "shape-unlimited",
+      "topic": "shape",
+      "prompt": "Unlimited copies of each coin or piece. Smallest useful subproblem?",
+      "answer": "dp[a] = best for the remaining amount a",
+      "explain": "Using a coin leaves the same choices as before, just for a smaller amount. Only the amount changes.",
+      "formula": "",
+      "math": "",
+      "kind": "choice",
+      "options": [
+        "dp[k] = best using k coins",
+        "dp[a] = best for the remaining amount a",
+        "dp[i][a] is required"
+      ],
+      "miss": {
+        "dp[i][a] is required": "This also works, but with unlimited reuse the amount alone describes what is left.",
+        "dp[k] = best using k coins": "Knowing how many coins you used does not tell you how much is left to make."
+      },
+      "must": false,
+      "source": "Subproblem shapes · study answer checked against the Quiz 5 lessons"
+    },
+    {
+      "id": "shape-increasing",
+      "topic": "shape",
+      "prompt": "Longest subsequence where each pick must be larger than the previous pick. Subproblem?",
+      "answer": "dp[i] = best that ends exactly at element i",
+      "explain": "To add element i you must know the previous pick's value. \"Ends at j\" puts that value, a[j], in the index.",
+      "formula": "",
+      "math": "",
+      "kind": "choice",
+      "options": [
+        "dp[i] = best within the first i elements",
+        "dp[i] = best that starts at element 1",
+        "dp[i] = best that ends exactly at element i"
+      ],
+      "miss": {
+        "dp[i] = best within the first i elements": "The best within the prefix might end on a huge value, so you cannot tell whether a[i] extends it.",
+        "dp[i] = best that starts at element 1": "The best subsequence need not use the first element at all."
+      },
+      "must": false,
+      "source": "Subproblem shapes · study answer checked against the Quiz 5 lessons"
+    },
+    {
+      "id": "shape-contig",
+      "topic": "shape",
+      "prompt": "Best contiguous subarray or substring. Subproblem?",
+      "answer": "dp[i] = best that ends exactly at i",
+      "explain": "Contiguous means the only thing you can extend is a piece ending at i−1. So extend it or start fresh at i.",
+      "formula": "",
+      "math": "",
+      "kind": "choice",
+      "options": [
+        "dp[i] = best anywhere in the first i",
+        "dp[i] = best that ends exactly at i",
+        "dp[i][j] = sum of i..j for every pair"
+      ],
+      "miss": {
+        "dp[i] = best anywhere in the first i": "The best piece so far may stop far from i, and then extending it would leave a gap.",
+        "dp[i][j] = sum of i..j for every pair": "That is O(n²) entries with no reuse, really just brute force in a table."
+      },
+      "must": false,
+      "source": "Subproblem shapes · study answer checked against the Quiz 5 lessons"
+    },
+    {
+      "id": "shape-ends",
+      "topic": "shape",
+      "prompt": "The rule involves both ends at once, as in palindromes, removing from either end, or merging neighbors. Subproblem?",
+      "answer": "Interval dp[i][j] for the piece i..j",
+      "explain": "Each step removes the left end, the right end, or both, so what remains is always a contiguous interval.",
+      "formula": "",
+      "math": "",
+      "kind": "choice",
+      "options": [
+        "Interval dp[i][j] for the piece i..j",
+        "Prefix dp[i]",
+        "Suffix dp[i]"
+      ],
+      "miss": {
+        "Prefix dp[i]": "Removing from the left end of a prefix leaves something that is not a prefix.",
+        "Suffix dp[i]": "Same problem on the other side. Removing from the right end of a suffix breaks it."
+      },
+      "must": false,
+      "source": "Subproblem shapes · study answer checked against the Quiz 5 lessons"
+    },
+    {
+      "id": "shape-stuck",
+      "topic": "shape",
+      "prompt": "Your recurrence needs to know the previous color, whether you hold a stock, or the last item taken. Fix?",
+      "answer": "Add that fact as another index",
+      "explain": "For example dp[i][c] means \"first i houses, house i painted c.\" The state must hold everything the next decision depends on.",
+      "formula": "",
+      "math": "",
+      "kind": "choice",
+      "options": [
+        "Add that fact as another index",
+        "Switch to greedy",
+        "Store the whole history of choices"
+      ],
+      "miss": {
+        "Switch to greedy": "Greedy needs its own exchange proof, and it is usually wrong exactly when the state is missing something.",
+        "Store the whole history of choices": "Histories grow exponentially. Keep only the one fact the next step needs."
+      },
+      "must": false,
+      "source": "Subproblem shapes · study answer checked against the Quiz 5 lessons"
+    },
+    {
+      "id": "shape-combine",
+      "topic": "shape",
+      "prompt": "You have one case per option of the last decision. How do you combine them?",
+      "answer": "max/min to optimize, + to count, OR for yes/no",
+      "explain": "The cases split the possible solutions into separate groups. Take the best group, add up the groups, or ask whether any group works.",
+      "formula": "",
+      "math": "",
+      "kind": "choice",
+      "options": [
+        "max/min to optimize, + to count, OR for yes/no",
+        "Multiply the cases",
+        "Always max"
+      ],
+      "miss": {
+        "Always max": "Counting decodings or paths adds the cases. Taking a max undercounts.",
+        "Multiply the cases": "Multiplying is for independent choices made one after another. Here the cases are alternatives."
+      },
+      "must": false,
+      "source": "Subproblem shapes · study answer checked against the Quiz 5 lessons"
+    },
+    {
+      "id": "shape-where",
+      "topic": "shape",
+      "prompt": "Where is the final answer?",
+      "answer": "Prefix: dp[n]. Ends-at-i: the max over all i.",
+      "explain": "A prefix state for n already covers the whole input. An \"ends at i\" state fixes the ending, so you have to check every ending.",
+      "formula": "",
+      "math": "",
+      "kind": "choice",
+      "options": [
+        "Prefix: dp[n]. Ends-at-i: the max over all i.",
+        "Always dp[n]",
+        "Always dp[0] or dp[1]"
+      ],
+      "miss": {
+        "Always dp[n]": "With \"ends at i\" the best answer may end earlier. In [1, 2, 0] the longest increasing run ends at index 2, not 3.",
+        "Always dp[0] or dp[1]": "Those are base cases, the smallest subproblems, not the full problem."
+      },
+      "must": false,
+      "source": "Subproblem shapes · study answer checked against the Quiz 5 lessons"
+    },
     {
       "id": "state",
       "topic": "basics",
