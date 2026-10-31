@@ -89,7 +89,7 @@
           }
         },
         {
-          "tag": "Order",
+          "tag": "Implement",
           "q": "Fill order and final answer?",
           "answer": "i = 2 up to n, answer dp[n], O(n) time",
           "why": "dp[i] needs dp[i−1] and dp[i−2], so go left to right. Houses 1..n is the whole street.",
@@ -185,7 +185,7 @@
           }
         },
         {
-          "tag": "Order",
+          "tag": "Implement",
           "q": "Where is the final answer?",
           "answer": "The max of dp[i] over all i, O(n²) total",
           "why": "The best subsequence can end anywhere. Each of the n entries scans up to n earlier ones.",
@@ -197,6 +197,98 @@
           "miss": {
             "dp[n]": "That forces the subsequence to end at the last element. In [1, 2, 0], dp[n] = 1 but the answer is 2.",
             "dp[1]": "That is a single element."
+          }
+        }
+      ],
+      "must": true,
+      "source": "New practice problem · steps follow the 5-step method (Reducible, \"5 Simple Steps for Solving DP Problems\")"
+    },
+    {
+      "id": "lab-boxes",
+      "topic": "sub",
+      "prompt": "Tallest stack of boxes",
+      "setup": "Each box has length, width and height and cannot rotate. A box can sit on another only if its length and width are both strictly smaller. Find the tallest stack.",
+      "example": "P 1×1 h2 · O 2×3 h2 · B 3×2 h1 · R 4×4 h3 → best 7 (P on O on R)",
+      "answer": "best[X] = h(X) + max{best[Y] : Y fits on X} (just h(X) if none); sort by length first; answer max over X. Values: P2, O4, B3, R7.",
+      "explain": "This is LIS on boxes. The graph shows that a stack is a path, the subproblem is a partial path (box X forced at the base), and sorting gives a safe order.",
+      "formula": "",
+      "math": "",
+      "kind": "steps",
+      "options": [],
+      "steps": [
+        {
+          "tag": "Visualize",
+          "q": "Draw an edge X → Y whenever X can sit on Y. What is a valid stack?",
+          "answer": "A path in that graph, so the tallest stack is the tallest path",
+          "why": "Each edge is one legal \"sits on\" step, so following edges builds a legal stack. Here P → O → R is a path, and O → B is not an edge.",
+          "options": [
+            "A cycle through the boxes",
+            "Any subset of the boxes",
+            "A path in that graph, so the tallest stack is the tallest path"
+          ],
+          "miss": {
+            "Any subset of the boxes": "Not every subset stacks. O (2×3) and B (3×2) cannot go on each other.",
+            "A cycle through the boxes": "Each step goes to a strictly bigger box, so you can never come back. That is why the graph has no cycles."
+          }
+        },
+        {
+          "tag": "Subproblem",
+          "q": "Partial paths are natural subproblems. Which one?",
+          "answer": "best[X] = tallest stack with box X forced at the bottom",
+          "why": "A partial path ending at X is a stack with X as its base. The final answer is the best of these over all X.",
+          "options": [
+            "best[k] = tallest stack using exactly k boxes",
+            "best[X] = total height of every box that fits on X",
+            "best[X] = tallest stack with box X forced at the bottom"
+          ],
+          "miss": {
+            "best[k] = tallest stack using exactly k boxes": "A count does not tell you which box is on the bottom, so you cannot check what fits.",
+            "best[X] = total height of every box that fits on X": "Boxes that each fit on X may not fit on each other, like O and B on R."
+          }
+        },
+        {
+          "tag": "Relate",
+          "q": "To solve best[R], which subproblems do you need, and how do you combine them?",
+          "answer": "h(R) + the max of best[Y] over boxes Y that fit on R",
+          "why": "P, O and B all fit on R, with best values 2, 4 and 3. Only one stack can sit on R, so take the best one (4) and add R's height.",
+          "options": [
+            "h(R) + the max of best[Y] over boxes Y that fit on R",
+            "h(R) + the sum of best[Y] over boxes that fit",
+            "The max of best[Y], without h(R)"
+          ],
+          "miss": {
+            "h(R) + the sum of best[Y] over boxes that fit": "Only one stack sits directly on R, so you cannot add several of them.",
+            "The max of best[Y], without h(R)": "R is in the stack, so its height counts."
+          }
+        },
+        {
+          "tag": "Implement",
+          "q": "The boxes arrive in random order. How do you make sure prerequisites are solved first?",
+          "answer": "Sort by length first; anything that fits on X then comes before X",
+          "why": "A box that fits on X has a strictly smaller length, so after sorting, a left-to-right pass is safe. Sorting by width works too.",
+          "options": [
+            "Sort by height",
+            "No order needed with a table",
+            "Sort by length first; anything that fits on X then comes before X"
+          ],
+          "miss": {
+            "Sort by height": "Height has nothing to do with what fits.",
+            "No order needed with a table": "Tabulation needs dependency order. Only memoized recursion can skip this."
+          }
+        },
+        {
+          "tag": "Check",
+          "q": "best values: P = 2, O = 4, B = 3. What is the final answer?",
+          "answer": "7: best[R] = 3 + 4, and that is the max over all boxes",
+          "why": "best[R] = 3 + max(2, 4, 3) = 7. The answer is the max over every base box, which is R here.",
+          "options": [
+            "8 (P, O, B, R)",
+            "7: best[R] = 3 + 4, and that is the max over all boxes",
+            "4, the best at O"
+          ],
+          "miss": {
+            "8 (P, O, B, R)": "O and B cannot both be in one stack, since neither fits on the other.",
+            "4, the best at O": "Stacks can have any base. Take the max over all X, not one middle entry."
           }
         }
       ],
@@ -262,7 +354,7 @@
           }
         },
         {
-          "tag": "Order",
+          "tag": "Implement",
           "q": "Final answer for the example?",
           "answer": "max of dp = 6",
           "why": "The best run ends at index 4, so take the max over every ending.",
@@ -356,7 +448,7 @@
           }
         },
         {
-          "tag": "Order",
+          "tag": "Implement",
           "q": "How big is this DP?",
           "answer": "3n states, O(1) each, so O(n) total",
           "why": "Each state checks 2 earlier colors. With k colors it would be O(nk²).",
@@ -538,7 +630,7 @@
           }
         },
         {
-          "tag": "Order",
+          "tag": "Implement",
           "q": "Fill order?",
           "answer": "Row by row, left to right",
           "why": "Each cell needs the one above it and the one to its left, and both are done by then. The answer is 7.",
@@ -690,7 +782,7 @@
           }
         },
         {
-          "tag": "Order",
+          "tag": "Implement",
           "q": "Fill order?",
           "answer": "By increasing interval length",
           "why": "Each interval needs shorter intervals inside it. The answer is dp[1][n]. That is n² states at O(1) each.",
@@ -712,7 +804,7 @@
       "id": "recipe",
       "topic": "shape",
       "prompt": "Facing a new DP problem: what are the 5 steps?",
-      "answer": "1 Visualize a tiny example and spot the last decision. 2 Name the subproblem in words. 3 Relate it to smaller subproblems, one case per option of that last decision. 4 Generalize: base cases and the full recurrence. 5 Order: fill smaller first, then say where the answer lives.",
+      "answer": "1 Visualize: draw a tiny example, often as a graph with an edge for each legal \"next\" step. 2 Subproblem: fix one endpoint or prefix and name it in words. 3 Relate: ask \"which smaller subproblems does this one need?\", one case per option of the last decision. 4 Generalize: write that relation for any index, plus base cases. 5 Implement: solve in an order where every prerequisite is already done, then say where the answer lives.",
       "explain": "Step 2 is where problems are won. If step 3 gets stuck because you need a fact the subproblem does not hold, go back to step 2 and add that fact as an index.",
       "formula": "",
       "math": "",
@@ -956,6 +1048,82 @@
         "Always dp[n]": "With \"ends at i\" the best answer may end earlier. In [1, 2, 0] the longest increasing run ends at index 2, not 3.",
         "Always dp[0] or dp[1]": "Those are base cases, the smallest subproblems, not the full problem."
       },
+      "must": false,
+      "source": "Subproblem shapes · study answer checked against the Quiz 5 lessons"
+    },
+    {
+      "id": "shape-dag",
+      "topic": "shape",
+      "prompt": "Draw each element as a node, with an edge whenever one element may come right after another. What does the DP become?",
+      "answer": "A best path in this DAG, with one subproblem per node: the best path ending there",
+      "explain": "In LIS an increasing subsequence is a path. In box stacking a path is a stack. The subproblems are partial paths, and the edges into a node are exactly the subproblems it needs.",
+      "formula": "",
+      "math": "",
+      "kind": "choice",
+      "options": [
+        "A shortest path from the first node to the last",
+        "A search over every cycle",
+        "A best path in this DAG, with one subproblem per node: the best path ending there"
+      ],
+      "miss": {
+        "A shortest path from the first node to the last": "The best path can start and end at any node, and you usually want the longest or tallest path, not the shortest.",
+        "A search over every cycle": "The edges only go one way (to a larger element), so there are no cycles. That is what makes it a DAG."
+      },
+      "must": false,
+      "source": "Subproblem shapes · study answer checked against the Quiz 5 lessons"
+    },
+    {
+      "id": "shape-endpoint",
+      "topic": "shape",
+      "prompt": "The answer is some subset of a sequence. What is the quickest way to get a subproblem?",
+      "answer": "Fix one endpoint: the best answer ending at k (or starting at k)",
+      "explain": "Every candidate subset has a start and an end. Pinning one of them gives n subproblems, and each one only looks at earlier endpoints.",
+      "formula": "",
+      "math": "",
+      "kind": "choice",
+      "options": [
+        "Fix the size: the best answer with exactly k elements",
+        "Fix one endpoint: the best answer ending at k (or starting at k)",
+        "One subproblem per subset"
+      ],
+      "miss": {
+        "Fix the size: the best answer with exactly k elements": "The size does not tell you which element came last, so you cannot check whether the next one is allowed.",
+        "One subproblem per subset": "That gives 2^n subproblems, which is just brute force."
+      },
+      "must": false,
+      "source": "Subproblem shapes · study answer checked against the Quiz 5 lessons"
+    },
+    {
+      "id": "shape-sort",
+      "topic": "shape",
+      "prompt": "Items arrive in random order, and one can sit on or follow another only if it is smaller (boxes, envelopes). Before the DP, what do you do?",
+      "answer": "Sort so every possible predecessor comes earlier, then use \"ends at i\"",
+      "explain": "After sorting by length, anything that fits on box i appears before i. So a left-to-right pass solves each prerequisite before it is needed.",
+      "formula": "",
+      "math": "",
+      "kind": "choice",
+      "options": [
+        "Sort by height, the value you are maximizing",
+        "Sort so every possible predecessor comes earlier, then use \"ends at i\"",
+        "Use the order you were given"
+      ],
+      "miss": {
+        "Use the order you were given": "A box that fits on top of i might come after i, so its subproblem would not be solved yet.",
+        "Sort by height, the value you are maximizing": "Height does not decide what fits. Only length and width do."
+      },
+      "must": false,
+      "source": "Subproblem shapes · study answer checked against the Quiz 5 lessons"
+    },
+    {
+      "id": "rebuild",
+      "topic": "shape",
+      "prompt": "You computed only the lengths. How do you recover the actual sequence or stack?",
+      "answer": "Store prev[i] = the j that gave dp[i] its max (−1 if none). Start at the best i and follow prev back.",
+      "explain": "This works for any \"1 + max over j\" recurrence. If several j tie, any of them gives a valid answer.",
+      "formula": "",
+      "math": "",
+      "kind": "flip",
+      "options": [],
       "must": false,
       "source": "Subproblem shapes · study answer checked against the Quiz 5 lessons"
     },
