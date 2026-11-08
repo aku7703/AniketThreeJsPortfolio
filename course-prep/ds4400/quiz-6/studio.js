@@ -1,9 +1,10 @@
 ﻿const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
-const KEY='ds4400-q6-studio-v1';let current=0,saved={done:[],notes:{},ratings:{},answers:{}},storageOK=true;
+const KEY='ds4400-q6-studio-v2';let current=0,saved={done:[],notes:{},ratings:{},answers:{}},storageOK=true;
 try{saved={...saved,...JSON.parse(localStorage.getItem(KEY)||'{}')}}catch{storageOK=false}
+try{if(!localStorage.getItem(KEY)){const old=JSON.parse(localStorage.getItem('ds4400-q6-studio-v1')||'{}');saved.notes=old.notes||{}}}catch{}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(saved))}catch{storageOK=false}$('#storage-status').textContent=storageOK?'Notes, ratings and progress saved on this browser.':'Storage unavailable: export notes before closing.'}
 const sections=$$('main>section'),nav=$$('nav button'),jump=$('.mobile-jump');
-nav.forEach((b,i)=>{jump.add(new Option(`${i}. ${b.textContent.slice(2)}`,i));b.onclick=()=>show(i)});
+nav.forEach((b,i)=>{jump.add(new Option(`${i}. ${b.textContent.replace(/^\d{2}/,'')}`,i));b.onclick=()=>show(i)});
 function refresh(){nav.forEach((b,i)=>{b.setAttribute('aria-current',String(i===current));b.classList.toggle('done',saved.done.includes(i))});$('.progress div').style.width=100*saved.done.length/sections.length+'%';$$('.complete').forEach(b=>b.textContent=saved.done.includes(+b.dataset.complete)?'Understood ✓ · undo':'Mark understood')}
 function show(i){current=Math.max(0,Math.min(sections.length-1,i));sections.forEach((s,j)=>s.hidden=j!==current);jump.value=current;history.replaceState(null,'','#lesson-'+current);refresh();window.scrollTo({top:0,behavior:'instant'});parent.postMessage({type:'q6-full-hash',hash:location.hash},location.origin)}
 jump.onchange=()=>show(+jump.value);$$('.next').forEach(b=>b.onclick=()=>show(+b.dataset.next%sections.length));$$('.complete').forEach(b=>b.onclick=()=>{const i=+b.dataset.complete;saved.done=saved.done.includes(i)?saved.done.filter(x=>x!==i):[...saved.done,i];save();refresh()});
