@@ -4,6 +4,7 @@
     "penalty": "Ridge and lasso: fit plus a price on size",
     "lassosel": "HW7 Q1: lasso as a feature detective",
     "correlated": "HW7 Q2: correlated features, bootstrap and ridge",
+    "choose": "Which tool, and why? Lasso vs ridge from the context",
     "gini": "Gini impurity: score a classification split",
     "mse": "Regression trees: split by variance (MSE)",
     "forest": "Forests and feature importance: when to trust the bars",
@@ -322,6 +323,94 @@
         "Yes: rows can repeat and some are left out.",
         "That describes CV folds, which never repeat rows.",
         "Bootstraps resample the training data."
+      ],
+      "must": false
+    },
+    {
+      "id": "choose-why",
+      "topic": "choose",
+      "source": "Prof. Higger, Nov 6 lecture (quiz7 hint); Piazza @50; HW7 prog Q1–Q2; Day 13",
+      "math": "",
+      "teach": "Lasso → too many features, throw some out. It “induces zeros”: it says a feature is not important and drops it. Reach for it when there are many more features than samples, or you believe only a few features matter (HW7 Q1: 3 of 20 powers). Ridge → correlated features. When X has correlated columns (his example: height, weight and shoe size), OLS can trade one for another, so its weights have high variance. Ridge shrinks them, adding a little bias to cut that variance (HW7 Q2: rooms vs area).",
+      "prompt": "Why do we need this idea?",
+      "answer": "In the Nov 6 lecture Prof. Higger said that if Quiz 7 tests the HW7 programming, it will give you a context and ask which tool you would reach for and why : lasso or ridge. No code, no syntax.",
+      "explain": "Lessons 2–4: lasso’s L1 penalty sets weights to exactly zero; ridge’s squared L2 penalty shrinks weights smoothly and splits credit between correlated features.",
+      "kind": "flip",
+      "must": false
+    },
+    {
+      "id": "choose-example",
+      "topic": "choose",
+      "source": "Prof. Higger, Nov 6 lecture (quiz7 hint); Piazza @50; HW7 prog Q1–Q2; Day 13",
+      "math": "<p><b>Context:</b> A lab measures 5,000 gene-expression levels on 80 patients and wants to know which genes predict blood pressure.</p><p><b>Answer:</b> Lasso. With far more features (5,000) than samples (80), OLS has no unique fit, and we want a few genes, not 5,000; lasso’s L1 penalty zeros most weights and keeps a small set. Choose λ by cross-validation, then refit OLS on the kept genes for unshrunk sizes.</p>\n<p><b>Context:</b> A clinic predicts dosage from a patient’s height, weight and shoe size; refitting on a new month of data flips the sign of the shoe-size weight.</p><p><b>Answer:</b> Ridge. The three features are strongly correlated, so OLS can swap credit among them and its weights vary wildly across samples; ridge’s penalty shrinks and steadies them, adding a little bias for a large cut in variance.</p>",
+      "teach": "Lasso → too many features, throw some out. It “induces zeros”: it says a feature is not important and drops it. Reach for it when there are many more features than samples, or you believe only a few features matter (HW7 Q1: 3 of 20 powers). Ridge → correlated features. When X has correlated columns (his example: height, weight and shoe size), OLS can trade one for another, so its weights have high variance. Ridge shrinks them, adding a little bias to cut that variance (HW7 Q2: rooms vs area).",
+      "prompt": "Walk through the worked example before testing yourself.",
+      "answer": "Worked example: follow each line below.",
+      "explain": "Lasso with correlated features tends to keep one and drop the others arbitrarily, which is not a statement that the dropped ones are useless. Always say why from the context: name the clue (p ≫ N, or correlated columns), the mechanism (zeros, or shrinking/steadying), and the trade-off (bias for variance).",
+      "kind": "flip",
+      "must": false
+    },
+    {
+      "id": "choose-check0",
+      "topic": "choose",
+      "source": "Prof. Higger, Nov 6 lecture (quiz7 hint); Piazza @50; HW7 prog Q1–Q2; Day 13",
+      "math": "",
+      "teach": "Lasso → too many features, throw some out. It “induces zeros”: it says a feature is not important and drops it. Reach for it when there are many more features than samples, or you believe only a few features matter (HW7 Q1: 3 of 20 powers). Ridge → correlated features. When X has correlated columns (his example: height, weight and shoe size), OLS can trade one for another, so its weights have high variance. Ridge shrinks them, adding a little bias to cut that variance (HW7 Q2: rooms vs area).",
+      "prompt": "300 features, 40 samples, “find the handful that matter.”",
+      "answer": "Lasso",
+      "explain": "Yes: more features than samples, and you want zeros.",
+      "kind": "choice",
+      "options": [
+        "Lasso",
+        "Ridge",
+        "OLS"
+      ],
+      "feedback": [
+        "Yes: more features than samples, and you want zeros.",
+        "Ridge keeps all 300 non-zero.",
+        "OLS has no unique solution when p > N."
+      ],
+      "must": true
+    },
+    {
+      "id": "choose-check1",
+      "topic": "choose",
+      "source": "Prof. Higger, Nov 6 lecture (quiz7 hint); Piazza @50; HW7 prog Q1–Q2; Day 13",
+      "math": "",
+      "teach": "Lasso → too many features, throw some out. It “induces zeros”: it says a feature is not important and drops it. Reach for it when there are many more features than samples, or you believe only a few features matter (HW7 Q1: 3 of 20 powers). Ridge → correlated features. When X has correlated columns (his example: height, weight and shoe size), OLS can trade one for another, so its weights have high variance. Ridge shrinks them, adding a little bias to cut that variance (HW7 Q2: rooms vs area).",
+      "prompt": "Weights of temperature and heat-index flip sign between refits.",
+      "answer": "Ridge",
+      "explain": "Yes: correlated features → high-variance OLS weights → ridge shrinks them.",
+      "kind": "choice",
+      "options": [
+        "Lasso",
+        "Ridge"
+      ],
+      "feedback": [
+        "Lasso may arbitrarily drop one; the lecture ties correlated features to ridge.",
+        "Yes: correlated features → high-variance OLS weights → ridge shrinks them."
+      ],
+      "must": true
+    },
+    {
+      "id": "choose-check2",
+      "topic": "choose",
+      "source": "Prof. Higger, Nov 6 lecture (quiz7 hint); Piazza @50; HW7 prog Q1–Q2; Day 13",
+      "math": "",
+      "teach": "Lasso → too many features, throw some out. It “induces zeros”: it says a feature is not important and drops it. Reach for it when there are many more features than samples, or you believe only a few features matter (HW7 Q1: 3 of 20 powers). Ridge → correlated features. When X has correlated columns (his example: height, weight and shoe size), OLS can trade one for another, so its weights have high variance. Ridge shrinks them, adding a little bias to cut that variance (HW7 Q2: rooms vs area).",
+      "prompt": "Ridge’s price for steadier weights is…",
+      "answer": "Some bias",
+      "explain": "Yes: it pulls weights toward 0 away from the OLS fit.",
+      "kind": "choice",
+      "options": [
+        "Some bias",
+        "More variance",
+        "Exact zeros"
+      ],
+      "feedback": [
+        "Yes: it pulls weights toward 0 away from the OLS fit.",
+        "It lowers variance.",
+        "That is lasso’s behavior."
       ],
       "must": false
     },
