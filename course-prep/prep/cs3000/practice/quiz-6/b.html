@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CS 3000 Quiz 6 · Practice B</title>
+<link rel="stylesheet" href="paper.css">
+</head>
+<body class="exam">
+<main>
+<nav aria-label="Practice navigation"><a href="/">Prep hub</a><a href="b-key.html">Answer key</a></nav>
+<header><p>CS 3000 · Quiz 6</p><h1>Practice B</h1><p>40 minutes · 3 questions. Use scratch paper. Show the steps that justify each answer.</p></header>
+<section><h2>1. Huffman coding</h2>
+<p>Build a Huffman tree for the frequencies below. Label the lighter child 0 and the heavier child 1 at each merge.</p>
+<table><thead><tr><th scope="row">Symbol</th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th></tr></thead>
+<tbody><tr><th scope="row">Frequency</th><td>3</td><td>5</td><td>12</td><td>18</td><td>40</td></tr></tbody></table>
+<p>Show the merge sequence, give the five codes, encode <code>ECA</code>, and compute the number of bits to encode the entire message represented by the frequency table.</p></section>
+<section><h2>2. Check a one-pass rule</h2>
+<p>An array contains positive side lengths in descending order. A proposed algorithm checks only the first three lengths. If they form a triangle, it returns their perimeter. Otherwise, it returns 0. Give a four-element counterexample and explain what the algorithm can safely discard when that first triple fails. Handle the equality case explicitly.</p></section>
+<section><h2>3. Assign carts</h2>
+<p>Each crate has positive weight at most <code>L</code>. A cart holds at most two crates and their combined weight cannot exceed <code>L</code>. Every crate must be assigned to exactly one cart. Given an array of crate weights, return the minimum number of carts.</p>
+<p>Give a greedy rule and complete pseudocode. Trace your code with <code>L = 10</code> and weights <code>[7,2,9,5,4,3,8]</code>. Your trace should show which crates each cart carries. Prove optimality and state the running time. Explain what your code does when exactly one crate remains.</p></section>
+</main>
+</body>
+</html>

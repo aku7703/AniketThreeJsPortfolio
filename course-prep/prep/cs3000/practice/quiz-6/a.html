@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CS 3000 Quiz 6 · Practice A</title>
+<link rel="stylesheet" href="paper.css">
+</head>
+<body class="exam">
+<main>
+<nav aria-label="Practice navigation"><a href="/">Prep hub</a><a href="a-key.html">Answer key</a></nav>
+<header><p>CS 3000 · Quiz 6</p><h1>Practice A</h1><p>40 minutes · 3 questions. Use scratch paper. Show the steps that justify each answer.</p></header>
+<section><h2>1. Huffman coding</h2>
+<p>Build a Huffman tree for the frequencies below. Label the lighter child 0 and the heavier child 1 at each merge.</p>
+<table><thead><tr><th scope="row">Symbol</th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th></tr></thead>
+<tbody><tr><th scope="row">Frequency</th><td>2</td><td>4</td><td>9</td><td>16</td><td>35</td></tr></tbody></table>
+<p>Show the merge sequence, give the five codes, encode <code>BED</code>, and compute the number of bits to encode the entire message represented by the frequency table.</p></section>
+<section><h2>2. Test a greedy rule</h2>
+<p>With unlimited coins of denominations 1, 3, and 4, a proposed algorithm repeatedly takes the largest coin that fits the remaining amount. Find the smallest positive target where this rule uses more coins than necessary. Show both solutions and justify why all smaller targets work.</p></section>
+<section><h2>3. Schedule inspections</h2>
+<p>Each job has a closed time interval <code>[start, end]</code>, with <code>start ≤ end</code>. An inspection at time <code>t</code> covers every job whose interval contains <code>t</code>, including endpoints. Given an array of intervals, return a list of inspection times that covers all jobs using the fewest inspections.</p>
+<p>Give your greedy rule and complete pseudocode. Trace your code on <code>[(7,9), (2,5), (6,8), (3,4), (1,3), (4,6)]</code>. Prove optimality and state the running time.</p></section>
+</main>
+</body>
+</html>

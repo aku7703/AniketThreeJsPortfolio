@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CS 3000 Quiz 6 · Practice A answer key</title>
+<link rel="stylesheet" href="paper.css">
+</head>
+<body class="key">
+<main>
+<nav aria-label="Practice navigation"><a href="/">Prep hub</a><a href="a.html">Practice A</a></nav>
+<header><p>CS 3000 · Quiz 6</p><h1>Practice A answer key</h1><p>Worked solutions. Check the trace against your own pseudocode.</p></header>
+<section><h2>1. Huffman coding</h2>
+<p>Merge <code>A+B=6</code>, <code>6+C=15</code>, <code>15+D=31</code>, then <code>31+E=66</code>.</p>
+<p><code>A=0000, B=0001, C=001, D=01, E=1</code>. The encoding of <code>BED</code> is <code>0001101</code>.</p>
+<p>Total length is <code>2×4 + 4×4 + 9×3 + 16×2 + 35×1 = 118</code> bits. This equals the sum of the four merge weights.</p></section>
+<section><h2>2. Test a greedy rule</h2>
+<p><strong>Target 6.</strong> Greedy takes <code>4+1+1</code>, while <code>3+3</code> uses two coins. No single coin has value 6. For targets 1 through 5 the greedy counts are <code>1, 2, 1, 1, 2</code>. Targets 1, 3, and 4 are single denominations, and 2 and 5 need at least two coins because neither is a denomination.</p></section>
+<section><h2>3. Schedule inspections</h2>
+<p>Process jobs by increasing end time. If the most recent inspection misses the next job, place a new inspection at that job’s end.</p>
+<pre><code>sort jobs by increasing end
+times = []
+for (start, end) in jobs:
+    if times is empty or times[-1] &lt; start:
+        append end to times
+return times</code></pre>
+<p><strong>Trace.</strong> Add 3 for <code>(1,3)</code>. It covers <code>(3,4)</code> and <code>(2,5)</code>. Add 6 for <code>(4,6)</code>. It covers <code>(6,8)</code>. Add 9 for <code>(7,9)</code>. Return <code>[3,6,9]</code>. The empty input returns an empty list.</p>
+<p><strong>Proof.</strong> Let <code>I</code> be an interval with the smallest end <code>e</code>. An optimal solution has some time <code>t</code> in <code>I</code>, so <code>t ≤ e</code>. Every interval containing <code>t</code> starts at or before <code>t</code> and ends at or after <code>e</code>. Moving that inspection to <code>e</code> therefore preserves coverage and uses at most the same number of inspections. Some optimum thus includes <code>e</code>. Remove the intervals it covers and apply the same argument to the remainder. In the sorted scan, any earlier inspection is at or before the most recent one, and the most recent one is at or before the current interval’s end. So the code adds a time exactly when the current interval is uncovered.</p>
+<p><strong>Time.</strong> O(n log n) to sort and O(n) to scan. Check that the condition uses strict <code>&lt;</code>, since a time equal to the next start already covers that interval.</p></section>
+</main>
+</body>
+</html>

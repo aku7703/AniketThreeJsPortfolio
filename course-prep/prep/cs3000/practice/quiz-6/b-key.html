@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CS 3000 Quiz 6 · Practice B answer key</title>
+<link rel="stylesheet" href="paper.css">
+</head>
+<body class="key">
+<main>
+<nav aria-label="Practice navigation"><a href="/">Prep hub</a><a href="b.html">Practice B</a></nav>
+<header><p>CS 3000 · Quiz 6</p><h1>Practice B answer key</h1><p>Worked solutions. Check the trace against your own pseudocode.</p></header>
+<section><h2>1. Huffman coding</h2>
+<p>Merge <code>A+B=8</code>, <code>8+C=20</code>, <code>D+20=38</code>, then <code>38+E=78</code>.</p>
+<p><code>A=0100, B=0101, C=011, D=00, E=1</code>. The encoding of <code>ECA</code> is <code>10110100</code>.</p>
+<p>Total length is <code>3×4 + 5×4 + 12×3 + 18×2 + 40×1 = 144</code> bits.</p></section>
+<section><h2>2. Check a one-pass rule</h2>
+<p>Use <code>[10,6,4,3]</code>. The first triple has <code>6+4=10</code>, which is degenerate. The triple <code>(6,4,3)</code> is valid with perimeter 13. The algorithm can discard the first element only. For a triangle containing 10, the largest possible partners are 6 and 4, and even they fail the strict inequality <code>b+c&gt;a</code>. Equality gives zero area.</p></section>
+<section><h2>3. Assign carts</h2>
+<p>Process the heaviest remaining crate. Pair it with the lightest remaining crate if they fit together. Otherwise send the heaviest alone.</p>
+<pre><code>sort weights in increasing order
+light = 0
+heavy = length(weights) - 1
+carts = 0
+while light &lt;= heavy:
+    if light &lt; heavy and weights[light] + weights[heavy] &lt;= L:
+        light = light + 1
+    heavy = heavy - 1
+    carts = carts + 1
+return carts</code></pre>
+<p><strong>Trace.</strong> Sorted weights are <code>[2,3,4,5,7,8,9]</code>. The carts are <code>(9)</code>, <code>(2,8)</code>, <code>(3,7)</code>, and <code>(4,5)</code>. Return <strong>4</strong>. If <code>light == heavy</code>, the pairing condition is false, one cart is counted, and the loop ends.</p>
+<p><strong>Proof.</strong> Let <code>h</code> be the heaviest and <code>l</code> the lightest of at least two remaining crates. If <code>h+l &gt; L</code>, no remaining partner can fit with <code>h</code>, so it must travel alone. Otherwise take an optimal packing. If it already pairs <code>h</code> with <code>l</code>, keep that pair. If both have other partners <code>x</code> and <code>y</code>, replace <code>(h,x)</code> and <code>(l,y)</code> with <code>(h,l)</code> and <code>(x,y)</code>. The second pair fits because <code>y ≤ h</code> and <code>x+h ≤ L</code>. If only one of <code>h</code> and <code>l</code> has a partner, put that displaced partner alone. If both are alone, combine them. Each case uses at most the original number of carts, so some optimum takes the greedy pair. Remove the chosen crate or pair and repeat on the remaining crates. Zero crates need zero carts, and one crate needs one cart.</p>
+<p><strong>Time.</strong> O(n log n) for sorting and O(n) for the two-pointer scan. Check that a crate is never paired with itself and that equality at capacity is allowed.</p></section>
+</main>
+</body>
+</html>
