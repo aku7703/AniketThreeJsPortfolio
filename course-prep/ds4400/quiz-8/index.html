@@ -1,0 +1,471 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<link rel="canonical" href="https://ds4400.aniketc.tech/quiz-8/">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Quiz 8 Studio</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<script>
+window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] }, svg: { fontCache: 'global' } };
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.min.js" async></script>
+<style>
+/* Layout: one reading column; sticky chip bar of lessons; each lesson = idea, math, worked HW8 example, "watch out" */
+:root{
+  --bg:#f6f7f4; --paper:#ffffff; --fg:#1d2427; --muted:#5b666b; --line:#d9dfdc;
+  --accent:#0f6e6a; --accent-soft:#e1f0ee; --pos:#0f6e6a; --neg:#b4561b; --neg-soft:#f7e9df;
+  --warn:#8a5a00; --warn-soft:#fbf1d9; --street:#cfe8df;
+  --f-display:"Space Grotesk", "Segoe UI", system-ui, sans-serif;
+  --f-body:"Inter", "Segoe UI", system-ui, sans-serif;
+  --f-mono:"JetBrains Mono", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#131819; --paper:#1b2224; --fg:#e4ebe8; --muted:#9aa8a5; --line:#2f3a3c;
+  --accent:#5cc2b9; --accent-soft:#1d3634; --pos:#5cc2b9; --neg:#e99a63; --neg-soft:#3a2a20;
+  --warn:#e8c36a; --warn-soft:#352c17; --street:#1f3a33; color-scheme:dark }}
+:root[data-theme="dark"]{
+  --bg:#131819; --paper:#1b2224; --fg:#e4ebe8; --muted:#9aa8a5; --line:#2f3a3c;
+  --accent:#5cc2b9; --accent-soft:#1d3634; --pos:#5cc2b9; --neg:#e99a63; --neg-soft:#3a2a20;
+  --warn:#e8c36a; --warn-soft:#352c17; --street:#1f3a33; color-scheme:dark }
+body{background:var(--bg);color:var(--fg);font:16px/1.6 var(--f-body);}
+.wrap{max-width:780px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:24px 80px;}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;line-height:1.2}
+h1{font-size:2rem;margin:0 0 4px}
+h2{font-size:1.45rem;margin:0 0 10px}
+h3{font-size:1.08rem;margin:22px 0 6px}
+p,li{max-width:68ch}
+.sub{color:var(--muted);margin:0 0 16px}
+nav.chips{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);display:flex;gap:6px;overflow-x:auto;padding:10px 0;border-bottom:1px solid var(--line);margin-bottom:18px;scrollbar-width:thin}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+nav.chips a{flex:none;font:500 .82rem var(--f-body);color:var(--fg);text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:5px 11px;background:var(--paper)}
+nav.chips a:hover,nav.chips a:focus-visible{border-color:var(--accent);outline:none}
+nav.chips a.done{background:var(--accent-soft);border-color:var(--accent)}
+section{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:20px 20px 14px;margin-bottom:18px;scroll-margin-top:64px}
+.tag{font:600 .7rem var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.box{border-left:3px solid var(--accent);background:var(--accent-soft);padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0}
+.warn{border-left:3px solid var(--warn);background:var(--warn-soft);padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0}
+.prof{border-left:3px solid var(--neg);background:var(--neg-soft);padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0}
+.box p,.warn p,.prof p{margin:4px 0}
+.box strong:first-child,.warn strong:first-child,.prof strong:first-child{font-family:var(--f-display)}
+.scroll{overflow-x:auto;margin:10px 0}
+table{border-collapse:collapse;font-size:.92rem;font-variant-numeric:tabular-nums}
+th,td{border-bottom:1px solid var(--line);padding:6px 10px;text-align:left;vertical-align:top}
+th{font-family:var(--f-display);font-weight:600}
+code,.mono{font-family:var(--f-mono);font-size:.88em}
+details{border:1px solid var(--line);border-radius:8px;margin:10px 0;background:var(--bg)}
+summary{cursor:pointer;padding:9px 12px;font-weight:600;font-family:var(--f-display)}
+summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+details>div{padding:0 14px 10px}
+.plan{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.plan>div{min-width:0}
+.plan ol{padding-left:0;list-style:none;margin:0}
+.plan li{display:grid;grid-template-columns:86px 1fr;gap:8px;padding:6px 0;border-bottom:1px dashed var(--line)}
+.plan .t{font:600 .78rem var(--f-mono);color:var(--accent);padding-top:2px}
+.check{display:flex;align-items:center;gap:8px;margin-top:10px;font-size:.9rem;color:var(--muted)}
+.check input{width:18px;height:18px;accent-color:var(--accent)}
+svg.fig{max-width:100%;height:auto;display:block;margin:10px auto}
+.fig text{font:12px var(--f-body);fill:var(--fg)}
+.cap{font-size:.85rem;color:var(--muted);text-align:center;margin-top:-4px}
+.qhead{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;align-items:baseline}
+.pts{font:600 .78rem var(--f-mono);color:var(--muted)}
+mjx-container{overflow-x:auto;overflow-y:hidden;max-width:100%}
+@media (prefers-reduced-motion: reduce){*{scroll-behavior:auto!important}}
+html{scroll-behavior:smooth}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+<header>
+  <div class="tag">DS 4400 · Quiz 8 · Tue Nov 17</div>
+  <h1>Quiz 8 Studio</h1>
+  <p class="sub">Lagrange multipliers and SVMs (HW8). Intuition first, then the HW8 problems, then two timed practice quizzes.</p>
+</header>
+
+<nav class="chips" aria-label="Lessons">
+  <a href="#plan">Plan</a><a href="#scope">0 · What's on it</a><a href="#lagrange">1 · Lagrange idea</a><a href="#recipe">2 · Lagrange recipe</a><a href="#svm">3 · SVM geometry</a><a href="#byhand">4 · SVM by hand</a><a href="#slack">5 · Slack and C</a><a href="#quizA">6 · Practice 8A</a><a href="#quizB">7 · Practice 8B</a><a href="#final">8 · Final review</a>
+</nav>
+
+<!-- PLAN -->
+<section id="plan">
+  <div class="tag">Your 5 hours</div>
+  <h2>Study plan</h2>
+  <p>Do the work on paper. Prof. Higger's bar: you're done with a problem when you can reproduce it with every support put away. Tick each lesson as you finish it; the ticks are saved in this browser only.</p>
+  <div class="plan">
+    <div>
+      <h3>Tonight · 2 h</h3>
+      <ol>
+        <li><span class="t">0:00–0:10</span><span>Lesson 0: the equation sheet, and what you must memorize.</span></li>
+        <li><span class="t">0:10–0:35</span><span>Lessons 1–2. Then do HW8 P1 i and ii cold.</span></li>
+        <li><span class="t">0:35–0:55</span><span>HW8 P2 (matrix form) cold. Check against Lesson 2.</span></li>
+        <li><span class="t">0:55–1:30</span><span>Lessons 3–4. Then do HW8 P3 i and iii cold.</span></li>
+        <li><span class="t">1:30–1:50</span><span>Lesson 5. Do the HW8 P3 ii slack table, then say the C answer out loud.</span></li>
+        <li><span class="t">1:50–2:00</span><span>Practice 8A, Problem 1 only. Grade it. Sleep.</span></li>
+      </ol>
+    </div>
+    <div>
+      <h3>Morning · 3 h</h3>
+      <ol>
+        <li><span class="t">0:00–0:15</span><span>Blank-page drill (Lesson 8): write the formulas you must know from memory.</span></li>
+        <li><span class="t">0:15–0:55</span><span>Practice 8A, all of it, with a 30-minute timer. Grade it.</span></li>
+        <li><span class="t">0:55–1:35</span><span>Practice 8B, with a 30-minute timer. Grade it.</span></li>
+        <li><span class="t">1:35–2:20</span><span>Redo whatever you missed. For extra SVM reps, do the 22-sample ICA (day16.pdf, p. 23; solution on p. 24).</span></li>
+        <li><span class="t">2:20–2:45</span><span>Read the mistakes list. Explain small C versus large C out loud.</span></li>
+        <li><span class="t">2:45–3:00</span><span>Read the morning checklist and stop.</span></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- 0 SCOPE -->
+<section id="scope">
+  <div class="tag">Lesson 0</div>
+  <h2>What's on Quiz 8</h2>
+  <ul>
+    <li><strong>Quiz 8 assesses HW8's written problems</strong> (P1–P3). The HW says the quiz <em>won't ask you to code</em>. The course schedule lists quiz8 for Tue Nov 17.</li>
+    <li><strong>The format, based on Quizzes 6 and 7:</strong> two problems of about 20 points each. One is <strong>FAMILIAR</strong> (an HW problem with new numbers) and one is <strong>FRESH</strong> (the same ideas in a new setup). You must show your work.</li>
+    <li><strong>My guess:</strong> FAMILIAR is likely an SVM by hand (P3) or a Lagrange problem (P1/P2). FRESH could be the other one, or a soft-margin / C interpretation question. This is a guess from the pattern; prepare for all three.</li>
+  </ul>
+
+  <h3>The reminders you'll be given (Piazza @53, Prof. Higger)</h3>
+  <div class="box">
+    <p>Gradient rules: \(\nabla(a^\top x)=a,\ \ \nabla(x^\top A x)=(A+A^\top)x\)</p>
+    <p>Lagrange: a max or min of \(f(x)\) subject to \(g(x)=0\) solves \(\nabla f(x)=\lambda\nabla g(x)\) and \(g(x)=0\).</p>
+    <p>SVM labels \(y\in\{-1,+1\}\); \(\hat y=\operatorname{sign}(w\cdot x+b)\); the margin of \(x\) is \(\frac{w\cdot x+b}{\|w\|}\). The margin lines (edges of the street) are \(w\cdot x+b=\pm1\).</p>
+    <p>Soft-margin SVM: \(\min_{w,b,\xi}\ \tfrac12\|w\|^2+C\sum_i\xi_i\) subject to \(y_i(w\cdot x_i+b)\ge 1-\xi_i\) and \(\xi_i\ge0\) for every \(i\).</p>
+    <p>Its solution: \(w=\sum_i\alpha_i y_i x_i,\ \sum_i\alpha_i y_i=0,\ 0\le\alpha_i\le C\), and \(\alpha_i=0\) unless \(y_i(w\cdot x_i+b)\le1\).</p>
+  </div>
+
+  <h3>Not on the sheet, so memorize these</h3>
+  <ul>
+    <li>Street width \(=\dfrac{2}{\|w\|}\). Each edge is \(\dfrac{1}{\|w\|}\) from the boundary.</li>
+    <li>Slack \(\xi_i=\max\big(0,\ 1-y_i(w\cdot x_i+b)\big)\), and the four cases: out, on, in, wrong.</li>
+    <li>\(\nabla\|x-p\|^2=2(x-p)\). This is the \(A=I\) case of the sheet's rule.</li>
+    <li>The hard-margin check: every \(y_i(w\cdot x_i+b)\ge1\) <em>and</em> every \(\alpha_i\ge0\).</li>
+  </ul>
+  <label class="check"><input type="checkbox" data-done="scope" id="ck-scope"> I've read this</label>
+</section>
+
+<!-- 1 LAGRANGE IDEA -->
+<section id="lagrange">
+  <div class="tag">Lesson 1 · Intuition</div>
+  <h2>Why \(\nabla f=\lambda\nabla g\)</h2>
+  <p>You walk along the constraint path \(g(x)=0\) and watch \(f\). Three facts give the whole method:</p>
+  <ol>
+    <li><strong>Walking with \(\nabla f\), \(f\) goes up. Walking against it, \(f\) goes down. Walking perpendicular to it, \(f\) doesn't change.</strong> (The change along a unit direction \(u\) is \(u\cdot\nabla f\).)</li>
+    <li><strong>At a constrained max or min, a step along the path can't raise or lower \(f\).</strong> So \(\nabla f\) is perpendicular to the path there.</li>
+    <li><strong>\(\nabla g\) is always perpendicular to the path.</strong> \(g\) stays at 0 along it, so \(\nabla g\) can't have a component along it.</li>
+  </ol>
+  <p>Both gradients are perpendicular to the path, and in 2-D only one direction is. So they lie on the same line: \(\nabla f=\lambda\nabla g\). <strong>\(\lambda\) is just the stretch factor from \(\nabla g\) to \(\nabla f\).</strong> It can be negative (the two point opposite ways) and it can be 0.</p>
+  <div class="prof"><strong>From lecture (Nov 3)</strong>
+    <p>"This is probably the big one for today": you're at a constrained optimum when the gradient is orthogonal to the path you walk on.</p>
+    <p>He also said: <em>stay in symbols (\(w, b, p\)) until the very end</em>. It's less writing, and the work carries over when the numbers change.</p>
+  </div>
+  <h3>Three things that confuse people</h3>
+  <ul>
+    <li><strong>Why \(\|x\|^2\) instead of \(\|x\|\)?</strong> Both have the same minimizer, and the squared version has a clean gradient (\(2x\)). It's purely a convenience.</li>
+    <li><strong>Why must \(g(x)=0\)?</strong> It's a convention. "\(x_0+2x_1=5\)" becomes \(g(x)=x_0+2x_1-5\). Moving the constant over changes nothing.</li>
+    <li><strong>A negative \(\lambda\) is fine</strong> for an equality constraint (HW8 P1 ii has \(\lambda=-4\)). Only the SVM's \(\alpha_i\), which come from inequality constraints, must be \(\ge0\).</li>
+  </ul>
+  <p>To see it move, open the demo's Walk tab: <a href="https://matthigger.github.io/lagrange/#walk">matthigger.github.io/lagrange</a>.</p>
+  <label class="check"><input type="checkbox" data-done="lagrange" id="ck-lagrange"> I could explain this to a friend</label>
+</section>
+
+<!-- 2 LAGRANGE RECIPE -->
+<section id="recipe">
+  <div class="tag">Lesson 2 · HW8 P1 and P2</div>
+  <h2>The Lagrange recipe</h2>
+  <div class="box"><strong>Four steps</strong>
+    <p>1. Write \(f\) and \(g\), with \(g(x)=0\).</p>
+    <p>2. Take both gradients (sheet rules, or partial derivatives).</p>
+    <p>3. From \(\nabla f=\lambda\nabla g\), solve for \(x\) <em>in terms of \(\lambda\)</em>.</p>
+    <p>4. Substitute into \(g(x)=0\) to get \(\lambda\), then \(x\). Check: does \(x\) satisfy the constraint?</p>
+  </div>
+  <p>That gives 3 equations (2 from the vector equation, 1 from the constraint) in 3 unknowns \(x_0, x_1, \lambda\).</p>
+
+  <h3>HW8 P1 i · The fence (max area)</h3>
+  <p>\(f=x_0x_1\), \(g=x_0+2x_1-8\). \(\nabla f=(x_1,x_0)=\lambda(1,2)\), so \(x_1=\lambda\) and \(x_0=2\lambda\). Then \(2\lambda+2\lambda=8\), so \(\lambda=2\), \(x=(4,2)\), and the area is \(8\ \text{m}^2\).</p>
+  <p><strong>Why it's a max:</strong> it's the only critical point, and the area is 0 at either end (\(x_0=0\) or \(x_1=0\)).</p>
+
+  <h3>HW8 P1 ii · The closest point on a line (the general pattern)</h3>
+  <p>\(f=\|x-p\|^2\), \(g=w\cdot x+b\). \(\nabla f=2(x-p)=\lambda w\), so \(x=p+\tfrac{\lambda}{2}w\): <strong>you move from \(p\) straight along \(w\)</strong>, perpendicular to the line. Put that into \(g=0\):</p>
+  \[ w\cdot p+\tfrac{\lambda}{2}\,w\cdot w+b=0\ \Rightarrow\ \lambda=\frac{-2(w\cdot p+b)}{w\cdot w},\qquad x=p-\frac{w\cdot p+b}{w\cdot w}\,w,\qquad \text{dist}=\frac{|w\cdot p+b|}{\|w\|} \]
+  <p>With \(p=(5,5)\), \(w=(1,2)\), \(b=-5\): \(w\cdot p+b=10\) and \(w\cdot w=5\), so \(\lambda=-4\), \(x=(5,5)-2(1,2)=(3,1)\), and the distance is \(10/\sqrt5=2\sqrt5\approx4.47\).</p>
+  <div class="box"><strong>The bridge to SVMs</strong>
+    <p>\(\dfrac{|w\cdot p+b|}{\|w\|}\) is exactly the SVM margin formula. Lagrange and the "margin of \(x\)" are the same calculation. That's why this lesson came right before SVMs.</p>
+  </div>
+
+  <h3>HW8 P2 · Matrix form</h3>
+  <p>\(f=x^\top A x+x^\top(5,6)+123\) with \(A=\begin{bmatrix}1&2\\3&4\end{bmatrix}\), and \(g=(2,1)\cdot x\).</p>
+  <p>\(\nabla f=(A+A^\top)x+(5,6)=\begin{bmatrix}2&5\\5&8\end{bmatrix}x+\begin{bmatrix}5\\6\end{bmatrix}\). \(\nabla g=(2,1)\).</p>
+  <p><strong>Trick:</strong> use the constraint first. \(x_1=-2x_0\) turns both rows into one-variable equations: \(-8x_0+5=2\lambda\) and \(-11x_0+6=\lambda\). So \(-8x_0+5=-22x_0+12\), giving \(x_0=\tfrac12\), \(x=(\tfrac12,-1)\), and \(\lambda=\tfrac12\).</p>
+  <div class="warn"><strong>Watch out</strong>
+    <p>\(A\) is not symmetric, so \(A+A^\top\ne 2A\). Here \(2A\) would wrongly give \(\begin{bmatrix}2&4\\6&8\end{bmatrix}\). The constant 123 disappears from \(\nabla f\).</p>
+    <p>With a <em>quadratic</em> constraint (for example a circle), you can get several solutions. Work case by case, and throw out any that aren't on the constraint (Day 15's \(x_1=0\) case).</p>
+  </div>
+  <label class="check"><input type="checkbox" data-done="recipe" id="ck-recipe"> I did HW8 P1 and P2 cold</label>
+</section>
+
+<!-- 3 SVM GEOMETRY -->
+<section id="svm">
+  <div class="tag">Lesson 3 · Intuition</div>
+  <h2>SVM geometry: the widest street</h2>
+  <ul>
+    <li><strong>Labels \(\pm1\)</strong> give one test for "correct": \(y_i(w\cdot x_i+b)\ge0\). A matching sign means the classification is correct.</li>
+    <li><strong>Many lines separate the data</strong> (the perceptron stops at any one of them). The SVM picks the one whose <strong>closest sample is as far away as possible</strong>, so no sample is a close call.</li>
+    <li><strong>\(w\) is perpendicular to the boundary.</strong> For two points on the line, \(w\cdot(x_A-x_B)=0\). This is how you get \(w\)'s direction in HW8 P3 iii.</li>
+    <li><strong>Scaling \(w\) and \(b\) together doesn't move the line.</strong> The SVM picks the scale where the closest samples have \(y(w\cdot x+b)=1\). Then each edge is \(1/\|w\|\) away, the street is \(2/\|w\|\) wide, and <strong>maximizing the street means minimizing \(\|w\|\)</strong>:</li>
+  </ul>
+  \[ \min_{w,b}\ \tfrac12\|w\|^2\quad\text{s.t.}\quad y_i(w\cdot x_i+b)\ge1\ \text{ for every } i \]
+  <div class="warn"><strong>Watch out</strong>
+    <p>\(y_i(w\cdot x_i+b)\) is a <em>scaled score</em>, not a distance. The distance (the margin) is that score divided by \(\|w\|\).</p>
+  </div>
+  <h3>Quick check (Day 16 ICA)</h3>
+  <p>The line has \(w=(3,4)\) and \(b=-5\). What's the margin of \((2,-1)\)?</p>
+  <details><summary>Answer</summary><div><p>\(\|w\|=5\). \(w\cdot x+b=6-4-5=-3\), so the margin is \(-3/5=-0.6\): it's on the side \(w\) points away from (\(\hat y=-1\)). Doubling \(w\) and \(b\) changes neither the line nor the margin.</p></div></details>
+  <label class="check"><input type="checkbox" data-done="svm" id="ck-svm"> I can say why min ‖w‖ = widest street</label>
+</section>
+
+<!-- 4 SVM BY HAND -->
+<section id="byhand">
+  <div class="tag">Lesson 4 · HW8 P3</div>
+  <h2>An SVM by hand: guess, solve, check</h2>
+  <p>Lagrange applied to the support vectors \(S\) gives three facts:</p>
+  \[ (1)\ w=\sum_{i\in S}\alpha_i y_i x_i \qquad (2)\ \sum_{i\in S}\alpha_i y_i=0 \qquad (3)\ y_i(w\cdot x_i+b)=1 \text{ for } i\in S \]
+  <div class="box"><strong>What each one means</strong>
+    <p>(1) \(w\) is built only from the support vectors: add the + ones, subtract the − ones. Move any other sample (off the street) and nothing changes.</p>
+    <p>(2) The + side and the − side pull with equal total \(\alpha\).</p>
+    <p>(3) Every support vector sits exactly on its edge of the street.</p>
+  </div>
+  <div class="box"><strong>The algorithm</strong>
+    <p><strong>Guess</strong> \(S\) (the samples nearest the gap). <strong>Solve</strong>: with 3 support vectors in 2-D, (3) alone gives \(w\) and \(b\) (3 equations, 3 unknowns), then (1) and (2) give the \(\alpha\)'s. <strong>Check</strong>: every sample has \(y(w\cdot x+b)\ge1\) <em>and</em> every \(\alpha\ge0\). If either fails, the guess was wrong.</p>
+  </div>
+
+  <h3>The 2-support-vector shortcut (HW8 P3 i)</h3>
+  <p>With one + sample and one −, (2) forces \(\alpha_+=\alpha_-=\alpha\), so \(w=\alpha(x_+-x_-)\). The boundary is the perpendicular bisector of the pair:</p>
+  \[ w=\frac{2(x_+-x_-)}{\|x_+-x_-\|^2},\qquad \alpha=\frac{2}{\|x_+-x_-\|^2} \]
+  <p>For \(B=(1,3)\) and \(D=(1,1)\): \(x_+-x_-=(0,2)\), so \(w=(0,1)\) and \(\alpha=\tfrac12\). From B on its edge: \(3+b=1\), so \(b=-2\). The boundary is \(x_1=2\).</p>
+
+  <svg class="fig" viewBox="0 0 340 250" role="img" aria-label="HW8 problem 3: the six samples, the wrong guess x1 = 2, and the true SVM boundary x0 + x1 = 3 with its street">
+    <!-- scale: x0 0..5 -> 40..320 (56/unit), x1 -0.5..4 -> 222..? use 50/unit, x1=0 at y=200 -->
+    <polygon points="40,32 40,200 76,200 236,200 320,200 320,61" fill="none"/>
+    <!-- street of true SVM: x0+x1 between 2 and 4; clip box x0 0..5, x1 -0.4..3.6 -->
+    <polygon points="40,100 152,200 264,200 40,0" fill="var(--street)" opacity="0.85"/>
+    <line x1="40" y1="200" x2="320" y2="200" stroke="var(--muted)" stroke-width="1"/>
+    <line x1="40" y1="20" x2="40" y2="220" stroke="var(--muted)" stroke-width="1"/>
+    <!-- true boundary x0+x1=3 : (0,3)->(40,50), (3,0)->(208,200) -->
+    <line x1="40" y1="50" x2="230" y2="220" stroke="var(--accent)" stroke-width="2"/>
+    <!-- wrong guess x1=2 -->
+    <line x1="40" y1="100" x2="320" y2="100" stroke="var(--neg)" stroke-width="1.6" stroke-dasharray="6 4"/>
+    <text x="250" y="94">guess i: x₁ = 2</text>
+    <text x="150" y="168" fill="var(--accent)">x₀+x₁=3</text>
+    <!-- ticks -->
+    <text x="92" y="215">1</text><text x="148" y="215">2</text><text x="204" y="215">3</text><text x="260" y="215">4</text>
+    <text x="28" y="154">1</text><text x="28" y="104">2</text><text x="28" y="54">3</text>
+    <!-- + samples filled: A(4,0) B(1,3) C(3,3) -->
+    <circle cx="264" cy="200" r="7" fill="var(--pos)"/><text x="274" y="194">A</text>
+    <circle cx="96" cy="50" r="7" fill="var(--pos)"/><text x="104" y="44">B</text>
+    <circle cx="208" cy="50" r="7" fill="var(--pos)"/><text x="218" y="44">C</text>
+    <!-- - samples open: D(1,1) E(0,0) F(0,1) -->
+    <circle cx="96" cy="150" r="6.5" fill="var(--paper)" stroke="var(--neg)" stroke-width="2"/><text x="104" y="165">D</text>
+    <circle cx="40" cy="200" r="6.5" fill="var(--paper)" stroke="var(--neg)" stroke-width="2"/><text x="48" y="194">E</text>
+    <circle cx="40" cy="150" r="6.5" fill="var(--paper)" stroke="var(--neg)" stroke-width="2"/><text x="48" y="144">F</text>
+  </svg>
+  <p class="cap">HW8 P3. Filled = +1, open = −1. Shaded: the true street (A, B, D on its edges). Dashed: guess i, which puts A on the wrong side.</p>
+
+  <h3>Why the closest pair failed (HW8 P3 ii)</h3>
+  <p>For \(x_1=2\), A=(4,0) has \(y(w\cdot x+b)=1\cdot(0-2)=-2\), so it's misclassified. A sits low and to the right, "behind" the − class's height. <strong>Before you commit to a guess, look for a sample that a line through the closest pair would cut off.</strong></p>
+
+  <h3>HW8 P3 iii · S = {A, B, D}</h3>
+  <ol>
+    <li><strong>A and B are both on the + edge</strong>, so \(w\cdot(x_A-x_B)=0\): \(w\cdot(3,-3)=0\), so \(w=s(1,1)\).</li>
+    <li><strong>On the edges:</strong> A gives \(4s+b=1\). D gives \(-(2s+b)=1\). So \(s=1\), \(b=-3\), and \(w=(1,1)\).</li>
+    <li><strong>The \(\alpha\)'s:</strong> (2) gives \(\alpha_D=\alpha_A+\alpha_B\). (1) gives \(\alpha_A(4,0)+\alpha_B(1,3)-\alpha_D(1,1)=(3\alpha_A,\ 2\alpha_B-\alpha_A)=(1,1)\). So \(\alpha_A=\tfrac13\), \(\alpha_B=\tfrac23\), \(\alpha_D=1\).</li>
+    <li><strong>Check:</strong> C, E, F score 3, 3, 2 (all \(\ge1\)), and every \(\alpha\ge0\). This is the SVM. The street is \(2/\sqrt2=\sqrt2\approx1.41\) wide.</li>
+  </ol>
+  <div class="box"><strong>A sanity check I derived (not from class)</strong>
+    <p>For a hard margin, \(\sum_i\alpha_i=\|w\|^2\). (Dot (1) with \(w\), then use (3) and (2).) In HW8: \(\tfrac13+\tfrac23+1=2=\|(1,1)\|^2\). In part i: \(\tfrac12+\tfrac12=1=\|(0,1)\|^2\). It's a 10-second check of your arithmetic. Don't present it as a required step.</p>
+  </div>
+  <div class="warn"><strong>Watch out</strong>
+    <p>A negative \(\alpha\) means that sample "wants off" the edge: drop it from \(S\) and re-guess. A violated constraint means a sample you left out belongs in \(S\).</p>
+  </div>
+  <label class="check"><input type="checkbox" data-done="byhand" id="ck-byhand"> I did HW8 P3 i and iii cold</label>
+</section>
+
+<!-- 5 SLACK and C -->
+<section id="slack">
+  <div class="tag">Lesson 5 · HW8 P3 ii and P4 (the notebook)</div>
+  <h2>Slack, the four cases, and choosing C</h2>
+  <p>When no line separates the classes, give each sample a slack \(\xi_i\ge0\): how far it falls short of its edge. At the optimum \(\xi_i=\max(0,\,1-y_i(w\cdot x_i+b))\).</p>
+  <div class="scroll"><table>
+    <thead><tr><th>Case</th><th>\(y(w\cdot x+b)\)</th><th>\(\xi\)</th><th>Meaning</th><th>Support vector?</th></tr></thead>
+    <tbody>
+      <tr><td>out</td><td>\(\gt 1\)</td><td>0</td><td>correct, outside the street</td><td>no, \(\alpha=0\)</td></tr>
+      <tr><td>on</td><td>\(=1\)</td><td>0</td><td>exactly on its edge</td><td>yes, \(0\le\alpha\le C\)</td></tr>
+      <tr><td>in</td><td>\([0,1)\)</td><td>\((0,1]\)</td><td>correct, inside the street</td><td>yes, \(\alpha=C\)</td></tr>
+      <tr><td>wrong</td><td>\(\lt 0\)</td><td>\(\gt1\)</td><td>misclassified</td><td>yes, \(\alpha=C\)</td></tr>
+    </tbody></table></div>
+  <p><strong>HW8 P3 ii</strong> (line \(x_1=2\)): A scores \(-2\), so \(\xi=3\) (wrong). B, C, D, F are on (\(\xi=0\)). E is out (score 2). The street is \(2/\|w\|=2\) wide. It's not the hard-margin SVM, because a hard margin allows no slack.</p>
+
+  <h3>What C does (Piazza @55: "study all the impacts")</h3>
+  <div class="scroll"><table>
+    <thead><tr><th></th><th>Small C (slack is cheap)</th><th>Large C (slack is expensive)</th></tr></thead>
+    <tbody>
+      <tr><td>Street (margin)</td><td>wide</td><td>narrow</td></tr>
+      <tr><td>Support vectors</td><td>many</td><td>few</td></tr>
+      <tr><td>Violations</td><td>many in / wrong</td><td>few</td></tr>
+      <tr><td>Failure mode</td><td>underfits: the boundary barely responds to the data</td><td>overfits: it bends to a few hard training points</td></tr>
+      <tr><td>As C → ∞</td><td colspan="1"></td><td>approaches the hard-margin SVM</td></tr>
+    </tbody></table></div>
+  <div class="prof"><strong>Prof. Higger (Piazza @55)</strong>
+    <p>Study the margin size and the number of support vectors. <strong>All else equal, prefer a smaller C:</strong> more support vectors means the boundary is built from more samples, so it's a "simpler" model, much like choosing a larger \(k\) in k-NN.</p>
+  </div>
+  <p><strong>HW8 notebook result</strong> (breast cancer, 30 features): cross-validated accuracy is 0.652 at \(C=10^{-4}\) (422 of 569 samples are support vectors), peaks at 0.975 at \(C=0.1\) (60 support vectors), and slips to 0.956 at \(C=1000\) (32 support vectors). Pick <strong>\(C=0.1\)</strong>: it's tied for best, and it's the smaller C, so the wider street. Choose C by <strong>cross-validation</strong>, never by training accuracy, because training accuracy only improves as C grows.</p>
+  <h3>Say it in two sentences (practice out loud)</h3>
+  <details><summary>Why does accuracy fall at small C? At large C?</summary><div>
+    <p><strong>Small C:</strong> slack is nearly free, so the street is so wide that most samples sit inside it. The boundary is averaged over almost everything and barely uses the data, so it underfits.</p>
+    <p><strong>Large C:</strong> slack is expensive, so the boundary contorts to keep a few hard training samples correct. That doesn't carry over to held-out data, so it overfits.</p>
+  </div></details>
+  <label class="check"><input type="checkbox" data-done="slack" id="ck-slack"> I can explain C both ways</label>
+</section>
+
+<!-- 6 PRACTICE A -->
+<section id="quizA">
+  <div class="tag">Lesson 6 · Timed, 30 minutes</div>
+  <h2>Practice Quiz 8A</h2>
+  <p>Work on paper with only the Lesson 0 reminders. I checked every answer with a script.</p>
+
+  <div class="qhead"><h3>Problem 1 · FAMILIAR · Lagrange</h3><span class="pts">20 pts (10, 10)</span></div>
+  <p><strong>i.</strong> A rectangular garden bed has sides \(x_0\) and \(x_1\). Edging costs \$2/m on the \(x_0\) side and \$3/m on the \(x_1\) side, and you spend exactly \$12: \(g(x)=2x_0+3x_1-12=0\). Use Lagrange multipliers to maximize the area \(f(x)=x_0x_1\). Give \(x\), \(\lambda\) and the area.</p>
+  <p><strong>ii.</strong> Find the point on the line \(x_0-x_1=1\) closest to \(p=(3,0)\). Give \(x\), \(\lambda\) and the distance. Then compute the margin \(\frac{w\cdot p+b}{\|w\|}\) of \(p\) for \(w=(1,-1)\), \(b=-1\), and compare it to the distance.</p>
+  <details><summary>Solution 1</summary><div>
+    <p><strong>i.</strong> \(\nabla f=(x_1,x_0)=\lambda(2,3)\), so \(x_1=2\lambda\) and \(x_0=3\lambda\). The constraint gives \(6\lambda+6\lambda=12\), so \(\lambda=1\). Then \(x=(3,2)\) and the area is \(6\). It's a max because the area is 0 at either end of the constraint.</p>
+    <p><strong>ii.</strong> \(\nabla f=2(x-p)=\lambda w\), so \(x=p+\tfrac{\lambda}{2}(1,-1)=(3+\tfrac\lambda2,\ -\tfrac\lambda2)\). The constraint gives \(3+\tfrac\lambda2+\tfrac\lambda2-1=0\), so \(\lambda=-2\) and \(x=(2,1)\). Check: \(2-1=1\). The distance is \(\|(-1,1)\|=\sqrt2\).</p>
+    <p>Margin: \(w\cdot p+b=3-0-1=2\), so the margin is \(2/\sqrt2=\sqrt2\), the same as the distance. The margin formula <em>is</em> the closest-point distance, signed. (It's positive because \(p\) is on the side \(w\) points to.)</p>
+  </div></details>
+
+  <div class="qhead"><h3>Problem 2 · FRESH · An SVM by hand</h3><span class="pts">20 pts (6, 6, 8)</span></div>
+  <div class="scroll"><table>
+    <thead><tr><th>sample</th><th>P</th><th>Q</th><th>R</th><th>S</th><th>T</th><th>U</th></tr></thead>
+    <tbody><tr><td>\(x\)</td><td>(1,2)</td><td>(2,1)</td><td>(3,1)</td><td>(1,4)</td><td>(0,3)</td><td>(0,2)</td></tr>
+    <tr><td>\(y\)</td><td>+1</td><td>+1</td><td>+1</td><td>−1</td><td>−1</td><td>−1</td></tr></tbody></table></div>
+  <p><strong>i.</strong> The closest opposite pair is P and U (distance 1). Guess \(S=\{P,U\}\) and find \(w\), \(b\) and \(\alpha\).</p>
+  <p><strong>ii.</strong> Compute \(y(w\cdot x+b)\) for every sample. Is the guess the hard-margin SVM? Which sample breaks it, and in which case (out, on, in or wrong) is it?</p>
+  <p><strong>iii.</strong> Guess \(S=\{P,S,U\}\). Solve for \(w\), \(b\) and the three \(\alpha\)'s, check both conditions, and give the street width.</p>
+  <details><summary>Solution 2</summary><div>
+    <p><strong>i.</strong> \(x_+-x_-=(1,0)\), so \(w=\frac{2(1,0)}{1}=(2,0)\) and \(\alpha_P=\alpha_U=2\). From P on its edge: \(2+b=1\), so \(b=-1\). The boundary is \(x_0=\tfrac12\).</p>
+    <p><strong>ii.</strong> The scores \(y(2x_0-1)\) are P 1, Q 3, R 5, S \(-(2-1)=-1\), T 1, U 1. S is <strong>wrong</strong> (\(\xi=2\)), so this isn't the hard-margin SVM. S=(1,4) sits to the right of \(x_0=\tfrac12\), on the + side.</p>
+    <p><strong>iii.</strong> S and U are both on the − edge, so \(w\cdot(x_S-x_U)=w\cdot(1,2)=0\), giving \(w=s(2,-1)\). P: \(s(2-2)+b=1\), so \(b=1\). U: \(-(s(0-2)+1)=1\), so \(2s=2\) and \(s=1\). That gives \(w=(2,-1)\), \(b=1\), and the boundary \(2x_0-x_1+1=0\).</p>
+    <p>For the \(\alpha\)'s: (2) gives \(\alpha_P=\alpha_S+\alpha_U\). (1) gives \(\alpha_P(1,2)-\alpha_S(1,4)-\alpha_U(0,2)=(2,-1)\). The first coordinate gives \(\alpha_P-\alpha_S=2\), so \(\alpha_U=2\). The second gives \(2\alpha_P-4\alpha_S-4=-1\). With \(\alpha_P=\alpha_S+2\): \(-2\alpha_S=-1\), so \(\alpha_S=\tfrac12\) and \(\alpha_P=\tfrac52\).</p>
+    <p><strong>Check:</strong> Q scores \(4-1+1=4\), R scores 6, T scores \(-(0-3+1)=2\), all \(\ge1\). Every \(\alpha\gt0\), so this is the SVM. Sanity check: \(\sum\alpha=5=\|w\|^2\). The street is \(2/\sqrt5\approx0.89\) wide.</p>
+  </div></details>
+  <label class="check"><input type="checkbox" data-done="quizA" id="ck-quizA"> Done and graded</label>
+</section>
+
+<!-- 7 PRACTICE B -->
+<section id="quizB">
+  <div class="tag">Lesson 7 · Timed, 30 minutes</div>
+  <h2>Practice Quiz 8B</h2>
+
+  <div class="qhead"><h3>Problem 1 · FAMILIAR · Lagrange in matrix form</h3><span class="pts">20 pts (12, 8)</span></div>
+  <p><strong>i.</strong> Find every critical point of \(f(x)=x^\top\begin{bmatrix}2&1\\3&1\end{bmatrix}x+x^\top\begin{bmatrix}1\\-2\end{bmatrix}+7\) subject to \(g(x)=\begin{bmatrix}1\\1\end{bmatrix}\cdot x=0\), and give \(\lambda\) at each.</p>
+  <p><strong>ii.</strong> Find the max and the min of \(f(x)=x_0+2x_1\) on the circle \(x_0^2+x_1^2=5\). Give \(\lambda\) at each, and say how you know which is which.</p>
+  <details><summary>Solution 1</summary><div>
+    <p><strong>i.</strong> \(A+A^\top=\begin{bmatrix}4&4\\4&2\end{bmatrix}\), so \(\nabla f=(4x_0+4x_1+1,\ 4x_0+2x_1-2)\) and \(\nabla g=(1,1)\). The constraint gives \(x_1=-x_0\), so \(\nabla f=(1,\ 2x_0-2)=\lambda(1,1)\). That gives \(\lambda=1\), then \(2x_0-2=1\), so \(x=(\tfrac32,-\tfrac32)\). It's the only critical point.</p>
+    <p><strong>ii.</strong> \(g=x_0^2+x_1^2-5\) and \(\nabla g=(2x_0,2x_1)\). \((1,2)=\lambda(2x_0,2x_1)\) gives \(x=(\tfrac1{2\lambda},\tfrac1\lambda)\). On the circle, \(\tfrac{1}{4\lambda^2}+\tfrac1{\lambda^2}=5\), so \(\lambda^2=\tfrac14\) and \(\lambda=\pm\tfrac12\).</p>
+    <p>\(\lambda=\tfrac12\): \(x=(1,2)\), \(f=5\), the <strong>max</strong>. \(\lambda=-\tfrac12\): \(x=(-1,-2)\), \(f=-5\), the <strong>min</strong>. Compare the values of \(f\) at the candidates: the circle is closed and bounded, so the largest value is the max. (\(\lambda\)'s sign shows whether \(\nabla f\) points outward along \(\nabla g\) or inward; here outward is uphill.)</p>
+  </div></details>
+
+  <div class="qhead"><h3>Problem 2 · FRESH · Soft margin and C</h3><span class="pts">20 pts (10, 4, 6)</span></div>
+  <p>A soft-margin SVM produced \(w=(1,1)\), \(b=-4\). The samples:</p>
+  <div class="scroll"><table>
+    <thead><tr><th>sample</th><th>P</th><th>Q</th><th>R</th><th>S</th><th>T</th><th>U</th><th>V</th></tr></thead>
+    <tbody><tr><td>\(x\)</td><td>(4,2)</td><td>(2,3)</td><td>(2,2.5)</td><td>(1,2)</td><td>(1,1)</td><td>(3,2)</td><td>(2,1)</td></tr>
+    <tr><td>\(y\)</td><td>+1</td><td>+1</td><td>+1</td><td>+1</td><td>−1</td><td>−1</td><td>−1</td></tr></tbody></table></div>
+  <p><strong>i.</strong> For each sample, compute \(y(w\cdot x+b)\), \(\xi\), and its case. Which samples are support vectors, and which have \(\alpha_i=C\)?</p>
+  <p><strong>ii.</strong> How wide is the street? What is the total slack penalty \(C\sum\xi_i\) when \(C=2\)?</p>
+  <p><strong>iii.</strong> A colleague refits with a much larger C. Predict what happens to the street width, the number of support vectors, and the training errors, and say which C you'd pick and how.</p>
+  <details><summary>Solution 2</summary><div>
+    <div class="scroll"><table>
+      <thead><tr><th></th><th>P</th><th>Q</th><th>R</th><th>S</th><th>T</th><th>U</th><th>V</th></tr></thead>
+      <tbody>
+        <tr><td>\(w\cdot x+b\)</td><td>2</td><td>1</td><td>0.5</td><td>−1</td><td>−2</td><td>1</td><td>−1</td></tr>
+        <tr><td>\(y(w\cdot x+b)\)</td><td>2</td><td>1</td><td>0.5</td><td>−1</td><td>2</td><td>−1</td><td>1</td></tr>
+        <tr><td>\(\xi\)</td><td>0</td><td>0</td><td>0.5</td><td>2</td><td>0</td><td>2</td><td>0</td></tr>
+        <tr><td>case</td><td>out</td><td>on</td><td>in</td><td>wrong</td><td>out</td><td>wrong</td><td>on</td></tr>
+      </tbody></table></div>
+    <p>The support vectors are the samples with \(y(w\cdot x+b)\le1\): Q, R, S, U, V. Those with slack (R, S, U) have \(\alpha=C\). P and T have \(\alpha=0\): moving them a little changes nothing.</p>
+    <p><strong>ii.</strong> The street is \(2/\|w\|=2/\sqrt2=\sqrt2\approx1.41\) wide. \(\sum\xi=0.5+2+2=4.5\), so the penalty is \(2\times4.5=9\).</p>
+    <p><strong>iii.</strong> With a larger C, slack costs more, so the street narrows, there are fewer support vectors, and fewer training samples are in or wrong. Training accuracy can't tell you whether that helps on new data. Pick C by cross-validation, and among C values that score about the same, prefer the smaller one (a wider street, built from more samples, which is simpler, like a larger \(k\) in k-NN).</p>
+  </div></details>
+  <label class="check"><input type="checkbox" data-done="quizB" id="ck-quizB"> Done and graded</label>
+</section>
+
+<!-- 8 FINAL -->
+<section id="final">
+  <div class="tag">Lesson 8 · Morning of</div>
+  <h2>Final review</h2>
+  <h3>Blank-page drill (write these from memory)</h3>
+  <ol>
+    <li>The two Lagrange equations, and why \(\nabla f\parallel\nabla g\) (one sentence).</li>
+    <li>\(\nabla\|x-p\|^2\), \(\nabla(x^\top Ax)\), and the closest point / distance to \(w\cdot x+b=0\).</li>
+    <li>The hard-margin SVM objective and constraint, plus (1), (2), (3) for a guessed \(S\).</li>
+    <li>The 2-support-vector shortcut, and street width \(=2/\|w\|\).</li>
+    <li>\(\xi=\max(0,1-y(w\cdot x+b))\), the four cases, and which samples are support vectors.</li>
+    <li>Small C versus large C: margin, number of support vectors, underfit or overfit, and how to choose.</li>
+  </ol>
+  <h3>Mistakes that cost points</h3>
+  <ul>
+    <li>Using \(2A\) instead of \(A+A^\top\) for a non-symmetric \(A\).</li>
+    <li>Forgetting to substitute back into \(g(x)=0\). \(\nabla f=\lambda\nabla g\) alone doesn't give \(\lambda\).</li>
+    <li>Writing \(g\) without the "\(=0\)" form (for example \(b=+5\) instead of \(-5\)). Check the sign of \(b\).</li>
+    <li>Thinking \(\lambda\) must be positive. Only the SVM \(\alpha\)'s must be \(\ge0\).</li>
+    <li>Dropping \(y_i\) for the − samples: (3) for a − sample is \(-(w\cdot x+b)=1\).</li>
+    <li>Stopping after the solve. Without the check (every score \(\ge1\), every \(\alpha\ge0\)), you lose the "is this the SVM?" points.</li>
+    <li>Saying the street is \(1/\|w\|\) wide. That's half of it; the width is \(2/\|w\|\).</li>
+    <li>Saying "pick the C with the best training accuracy". Use cross-validation.</li>
+    <li>Not showing your work. The quiz requires it.</li>
+  </ul>
+  <h3>Checklist</h3>
+  <ul>
+    <li>Name and NUID on <em>every</em> page. Keep each question's work on its own page.</li>
+    <li>Stay in symbols, then plug in numbers at the end (Prof. Higger's tip).</li>
+    <li>For any SVM guess, draw a quick sketch first, and look for a sample the closest-pair line would cut off.</li>
+    <li>End every SVM answer with the check and the street width.</li>
+  </ul>
+  <label class="check"><input type="checkbox" data-done="final" id="ck-final"> Ready</label>
+</section>
+
+<p class="sub" style="font-size:.85rem">Sources: hw8.pdf and hw8_sol.pdf, day15.pdf and day16.pdf, the hw8_prog_sol notebook, Piazza @53 (Quiz 8 reminders) and @55 (choosing C), and the Nov 3 and Nov 6 lecture recordings. Practice problems are new and were verified with sympy and sklearn.</p>
+</div>
+
+<script>
+(function(){
+  var KEY='q8studio-done';
+  var done={};
+  try{ done=JSON.parse(localStorage.getItem(KEY)||'{}')||{}; }catch(e){ done={}; }
+  function paint(){
+    document.querySelectorAll('nav.chips a').forEach(function(a){
+      var id=a.getAttribute('href').slice(1);
+      a.classList.toggle('done',!!done[id]);
+    });
+  }
+  document.querySelectorAll('input[data-done]').forEach(function(box){
+    var id=box.getAttribute('data-done');
+    box.checked=!!done[id];
+    box.addEventListener('change',function(){
+      done[id]=box.checked;
+      try{ localStorage.setItem(KEY,JSON.stringify(done)); }catch(e){}
+      paint();
+    });
+  });
+  paint();
+})();
+</script>
+</body>
+</html>
